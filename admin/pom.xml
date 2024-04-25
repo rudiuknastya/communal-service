@@ -109,6 +109,13 @@
             <scope>test</scope>
         </dependency>
         <!-- Security -->
+
+        <!-- Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- Validation -->
     </dependencies>
 
     <build>

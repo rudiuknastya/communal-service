@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Профіль</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form enctype="multipart/form-data" id="form" class="row g-3">
+        <div class="col-md-6">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <img  src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                          style="width:200px; height:200px;"
+                          class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img"
+                          id="avatar-img">
+                    <input type="file" accept=".jpeg, .jpg, .png" class="form-control d-none"  id="avatar" name="avatar">
+                </div>
+                <div class="col-auto">
+                    <label class="input-group-text col-form-label ms-3" for="avatar">Завантажити</label>
+                    <div class="text-danger" id="avatarValidation"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div>
+                <label for="lastName" class="form-label">Прізвище</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Прізвище"
+                       maxlength="50">
+            </div>
+            <div>
+                <label for="firstName" class="form-label mt-3">Ім'я</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Ім'я"
+                       maxlength="50">
+            </div>
+            <div>
+                <label for="middleName" class="form-label mt-3">По батькові</label>
+                <input type="text" class="form-control" id="middleName" name="middleName" placeholder="По батькові"
+                       maxlength="50">
+            </div>
+            <div>
+                <label for="phoneNumber" class="form-label mt-3">Номер телефону</label>
+                <input type="text" class="form-control phoneNumber" id="phoneNumber" name="phoneNumber"
+                       placeholder="+380994445566" maxlength="13">
+            </div>
+            <div class="mt-3">
+                <input class="form-check-input" type="checkbox" id="faAuthentication">
+                <label class="form-check-label ms-1" for="faAuthentication">
+                    Увімкнути двофакторну автентифікацію
+                </label>
+            </div>
+        </div>
+
+        <div class="mt-5 d-flex justify-content-end gap-3">
+            <button type="button" class="btn btn-primary" id="save-button">Зберегти</button>
+        </div>
+    </form>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pages/profile/profile.js}"></script>
+</html>
