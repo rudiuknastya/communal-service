@@ -13,7 +13,7 @@ function getProfile() {
             setFields(response);
         },
         error: function () {
-            toastr.error("Виникла помилка");
+            toastr.error(errorMessage);
         }
     });
 }
@@ -59,11 +59,14 @@ function sendData(formData) {
         data: formData,
         contentType: false,
         processData: false,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
         success: function () {
-            toastr.success("Оновлення успішне!");
+            toastr.success(updateSuccessMessage);
         },
         error: function (error) {
-            toastr.error("Виникла помилка");
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });
@@ -96,6 +99,9 @@ function verifyCode() {
         data: {
             code: $("#code").val()
         },
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
         success: function () {
             toastr.success("Двофакторна автентифікація вимкнена");
             $("#authentication").empty();
@@ -103,7 +109,7 @@ function verifyCode() {
 
         },
         error: function (error) {
-            toastr.error("Виникла помилка");
+            toastr.error(errorMessage);
             if (error.status === 400){
                 $("#code-div").append(
                     `<p class="text-danger" id="code-error">Невірний код</p>`
@@ -123,7 +129,7 @@ function getQRCode() {
             setQrCode(response);
         },
         error: function () {
-            toastr.error("Виникла помилка");
+            toastr.error(errorMessage);
         }
     });
 }
@@ -148,13 +154,16 @@ function saveSecretKey() {
         data: {
             secretKey: $("#secret-key").text()
         },
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
         success: function () {
             toastr.success("Двофакторна автентифікація увімкнена");
             $("#authentication").empty();
             $("#faAuthentication").prop("checked", true);
         },
         error: function (error) {
-            toastr.error("Виникла помилка");
+            toastr.error(errorMessage);
         }
     });
 }

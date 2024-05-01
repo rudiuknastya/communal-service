@@ -1,3 +1,8 @@
+
+const errorMessage = "Виникла помилка!";
+const updateSuccessMessage = "Оновлення успішне!";
+const saveSuccessMessage = "Збереження успішне!";
+let token = $("meta[name='_csrf']").attr("content");
 $(document).ready(function () {
     const currHref = window.location.pathname;
     $('.menu-item a').each(function (i, item) {
