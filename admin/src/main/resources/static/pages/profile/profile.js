@@ -1,4 +1,4 @@
-
+let secretKey;
 $(document).ready(function () {
     getProfile();
 });
@@ -61,10 +61,104 @@ function sendData(formData) {
         processData: false,
         success: function () {
             toastr.success("Оновлення успішне!");
-            setTimeout(() => location.reload(), 6000)
         },
         error: function (error) {
+            toastr.error("Виникла помилка");
             printErrorMessageToField(error);
         }
     });
 }
+
+$("#faAuthentication").on("change", function () {
+    $(this).prop("checked", !$(this).is(':checked'));
+    if($(this).is(':checked')){
+        showCodeInput();
+    } else {
+        getQRCode();
+    }
+});
+
+function showCodeInput() {
+    $("#authentication").append(
+        `<label for="code" class="form-label mt-3">Код</label>
+        <div id="code-div">
+         <input type="text" class="form-control" id="code" name="code" placeholder="Введіть код"
+                       maxlength="32">
+         </div>
+         <button type="button" class="btn btn-primary mt-3" onclick="verifyCode()">Надіслати</button>
+         `);
+}
+
+function verifyCode() {
+    $.ajax({
+        type: "POST",
+        url: "profile/verify-code",
+        data: {
+            code: $("#code").val()
+        },
+        success: function () {
+            toastr.success("Двофакторна автентифікація вимкнена");
+            $("#authentication").empty();
+            $("#faAuthentication").prop("checked", false);
+
+        },
+        error: function (error) {
+            toastr.error("Виникла помилка");
+            if (error.status === 400){
+                $("#code-div").append(
+                    `<p class="text-danger" id="code-error">Невірний код</p>`
+                );
+            }
+        }
+    });
+}
+
+function getQRCode() {
+    blockCardDody();
+    $.ajax({
+        type: "GET",
+        url: "profile/getQR",
+        success: function (response) {
+            console.log(response)
+            setQrCode(response);
+        },
+        error: function () {
+            toastr.error("Виникла помилка");
+        }
+    });
+}
+
+function setQrCode(response) {
+    secretKey = response.qrCodeKey;
+    $("#authentication").append(
+        `<p class="mt-3">Проскануйте QR код за допомогою Google Authenticator та збережіть код</p>
+         <img src="${response.qrCode}" alt="qr code"/>
+         <p class="mt-3">Якщо не маєте можливості сканувати QR код скопіюйте цей код: 
+         <br><span id="secret-key">${response.qrCodeKey}</span></br></p>
+         <button type="button" class="btn btn-primary" onclick="saveSecretKey()">OK</button>
+        `
+    );
+}
+
+function saveSecretKey() {
+    blockCardDody();
+    $.ajax({
+        type: "POST",
+        url: "profile/save-secret-key",
+        data: {
+            secretKey: $("#secret-key").text()
+        },
+        success: function () {
+            toastr.success("Двофакторна автентифікація увімкнена");
+            $("#authentication").empty();
+            $("#faAuthentication").prop("checked", true);
+        },
+        error: function (error) {
+            toastr.error("Виникла помилка");
+        }
+    });
+}
+
+
+
+

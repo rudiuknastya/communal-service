@@ -19,8 +19,7 @@ public record ProfileRequest(
         @Size(max = 13, message = "Розмір поля може бути не більше 13 символів")
         @Pattern(regexp = "\\+?380(50)?(66)?(95)?(99)?(67)?(68)?(96)?(97)?(98)?(63)?(93)?(73)?[0-9]{0,7}", message = "Телефон не відповідає формату")
         String phoneNumber,
-        MultipartFile avatar,
-        boolean faAuthentication
+        MultipartFile avatar
 ) {
 
 }

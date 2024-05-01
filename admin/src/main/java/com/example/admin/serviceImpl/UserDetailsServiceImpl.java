@@ -1,4 +1,4 @@
-package com.example.admin.service.serviceImpl;
+package com.example.admin.serviceImpl;
 
 import com.example.admin.entity.Admin;
 import com.example.admin.model.admin.AdminDetails;

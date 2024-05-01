@@ -1,4 +1,4 @@
-package com.example.admin.service.serviceImpl;
+package com.example.admin.serviceImpl;
 
 import com.example.admin.entity.Admin;
 import com.example.admin.mapper.AdminMapper;
@@ -9,6 +9,8 @@ import com.example.admin.service.AdminService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class AdminServiceImpl implements AdminService {
             Admin admin = adminMapper.createFirstAdmin("Адмін", "Адмін",
                     "Адмінович", passwordEncoder.encode("admin"),
                     "admin@gmail.com", "+380991111111", "avatar");
-            adminRepository.save(admin);
+            saveAdmin(admin);
             logger.info("createAdminIfNotExist() - Admin was created");
         } else {
             logger.info("createAdminIfNotExist() - Admin has already been created");
@@ -47,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ProfileResponse getProfileResponse() {
         logger.info("getProfileResponse() - Getting profile response");
-        Admin admin = getAdmin();
+        Admin admin = getAuthenticatedAdmin();
         ProfileResponse profileResponse = adminMapper.adminToProfileResponse(admin);
         logger.info("getProfileResponse() - Profile response has been got");
         return profileResponse;
@@ -55,13 +57,41 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void updateProfile(ProfileRequest profileRequest) {
-        Admin admin = getAdmin();
+        logger.info("updateProfile() - Updating profile");
+        Admin admin = getAuthenticatedAdmin();
         adminMapper.setAdmin(admin, profileRequest, "avatar");
-        adminRepository.save(admin);
+        saveAdmin(admin);
+        logger.info("updateProfile() - Profile has been updated");
     }
 
-    private Admin getAdmin(){
-        return adminRepository.findByEmail("admin@gmail.com")
-                .orElseThrow(()-> new EntityNotFoundException("Admin was not found by email admin@gmail.com"));
+    @Override
+    public void saveSecretKey(String secretKey) {
+        logger.info("saveSecretKey() - Saving secret key");
+        Admin admin = getAuthenticatedAdmin();
+        admin.setSecret(secretKey);
+        admin.setFaAuthentication(true);
+        saveAdmin(admin);
+        logger.info("saveSecretKey() - Secret key has been saved");
+    }
+
+    @Override
+    public Admin getAuthenticatedAdmin() {
+        logger.info("getAdminByEmail() - Getting authenticated admin");
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Admin admin = adminRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(()-> new EntityNotFoundException("Admin was not found by email "+userDetails.getUsername()));
+        logger.info("getAdminByEmail() - Admin has been got");
+        return admin;
+    }
+
+    @Override
+    public void disableFaAuthentication() {
+        Admin admin = getAuthenticatedAdmin();
+        admin.setFaAuthentication(false);
+        admin.setSecret(null);
+        saveAdmin(admin);
+    }
+    private void saveAdmin(Admin admin){
+        adminRepository.save(admin);
     }
 }

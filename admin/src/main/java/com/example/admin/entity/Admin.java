@@ -23,6 +23,7 @@ public class Admin {
     @Column(length = 250, nullable = false)
     private String avatar;
     private boolean faAuthentication;
+    private String secret;
 
     public Long getId() {
         return id;
@@ -94,5 +95,13 @@ public class Admin {
 
     public void setFaAuthentication(boolean faAuthentication) {
         this.faAuthentication = faAuthentication;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 }
