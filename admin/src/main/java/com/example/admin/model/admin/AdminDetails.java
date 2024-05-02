@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class AdminDetails implements UserDetails {
-    private final Admin admin;
+    private Admin admin;
 
     public AdminDetails(Admin admin) {
         this.admin = admin;
@@ -58,5 +58,7 @@ public class AdminDetails implements UserDetails {
     public String getAvatar() {
         return admin.getAvatar();
     }
-
+    public void setAdmin(Admin admin){
+        this.admin = admin;
+    }
 }

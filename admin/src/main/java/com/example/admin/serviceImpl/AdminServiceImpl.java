@@ -2,40 +2,46 @@ package com.example.admin.serviceImpl;
 
 import com.example.admin.entity.Admin;
 import com.example.admin.mapper.AdminMapper;
+import com.example.admin.model.admin.AdminDetails;
 import com.example.admin.model.admin.ProfileRequest;
 import com.example.admin.model.admin.ProfileResponse;
 import com.example.admin.repository.AdminRepository;
 import com.example.admin.service.AdminService;
+import com.example.admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final AdminMapper adminMapper;
     private final PasswordEncoder passwordEncoder;
+    private final UploadFileUtil uploadFileUtil;
     private final Logger logger = LogManager.getLogger(AdminServiceImpl.class);
 
     public AdminServiceImpl(AdminRepository adminRepository, AdminMapper adminMapper,
-                            PasswordEncoder passwordEncoder) {
+                            PasswordEncoder passwordEncoder, UploadFileUtil uploadFileUtil) {
         this.adminRepository = adminRepository;
         this.adminMapper = adminMapper;
         this.passwordEncoder = passwordEncoder;
+        this.uploadFileUtil = uploadFileUtil;
     }
 
     @Override
     public void createAdminIfNotExist() {
         logger.info("createAdminIfNotExist() - Creating admin");
         if (tableEmpty()) {
-            // todo saving default image
+            String avatar = uploadFileUtil.saveDefaultAvatar();
             Admin admin = adminMapper.createFirstAdmin("Адмін", "Адмін",
                     "Адмінович", passwordEncoder.encode("admin"),
-                    "admin@gmail.com", "+380991111111", "avatar");
+                    "admin@gmail.com", "+380991111111", avatar);
             saveAdmin(admin);
             logger.info("createAdminIfNotExist() - Admin was created");
         } else {
@@ -59,9 +65,26 @@ public class AdminServiceImpl implements AdminService {
     public void updateProfile(ProfileRequest profileRequest) {
         logger.info("updateProfile() - Updating profile");
         Admin admin = getAuthenticatedAdmin();
-        adminMapper.setAdmin(admin, profileRequest, "avatar");
+        String avatar = updateAvatar(profileRequest.avatar(),admin);
+        adminMapper.setAdmin(admin, profileRequest, avatar);
+        updateAdminInSecurityContext(admin);
         saveAdmin(admin);
         logger.info("updateProfile() - Profile has been updated");
+    }
+    private void updateAdminInSecurityContext(Admin admin){
+        AdminDetails adminDetails = (AdminDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        adminDetails.setAdmin(admin);
+    }
+
+    private String updateAvatar(MultipartFile avatar, Admin admin) {
+        String currentAvatar = admin.getAvatar();
+        if (avatar.isEmpty()){
+            return currentAvatar;
+        } else {
+            uploadFileUtil.deleteFile(currentAvatar);
+            String newAvatar = uploadFileUtil.saveMultipartFile(avatar);
+            return newAvatar;
+        }
     }
 
     @Override
@@ -73,6 +96,13 @@ public class AdminServiceImpl implements AdminService {
         saveAdmin(admin);
         logger.info("saveSecretKey() - Secret key has been saved");
     }
+    @Override
+    public void disableFaAuthentication() {
+        Admin admin = getAuthenticatedAdmin();
+        admin.setFaAuthentication(false);
+        admin.setSecret(null);
+        saveAdmin(admin);
+    }
 
     @Override
     public Admin getAuthenticatedAdmin() {
@@ -82,14 +112,6 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(()-> new EntityNotFoundException("Admin was not found by email "+userDetails.getUsername()));
         logger.info("getAdminByEmail() - Admin has been got");
         return admin;
-    }
-
-    @Override
-    public void disableFaAuthentication() {
-        Admin admin = getAuthenticatedAdmin();
-        admin.setFaAuthentication(false);
-        admin.setSecret(null);
-        saveAdmin(admin);
     }
     private void saveAdmin(Admin admin){
         adminRepository.save(admin);

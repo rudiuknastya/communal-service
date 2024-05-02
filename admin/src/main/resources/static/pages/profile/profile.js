@@ -25,6 +25,7 @@ function setFields(response) {
             $("#" + key).val(value);
     });
     $("#faAuthentication").prop("checked", response.faAuthentication);
+    $("#avatar-img").attr("src", "../uploads/"+response.avatar);
 }
 
 $("#save-button").on("click", function () {
@@ -64,6 +65,7 @@ function sendData(formData) {
         },
         success: function () {
             toastr.success(updateSuccessMessage);
+            setTimeout(() => location.reload(), 6000)
         },
         error: function (error) {
             toastr.error(errorMessage);
@@ -168,6 +170,22 @@ function saveSecretKey() {
     });
 }
 
-
+$("#avatar").on("change", function () {
+    var myFile = $(this).prop('files');
+    if(validateFile(myFile[0].name) != false){
+        $("#avatar-img").attr("src", window.URL.createObjectURL(myFile[0]));
+    } else {
+        $("#avatarValidation").text(fileValidation);
+        $(this).val('');
+    }
+});
+function validateFile(value){
+    var ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();
+    if($.inArray(ext, ['png','jpg','jpeg']) == -1 && value != "") {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 

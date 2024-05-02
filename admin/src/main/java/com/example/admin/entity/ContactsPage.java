@@ -9,11 +9,11 @@ public class ContactsPage {
     private Long id;
     @Column(length = 100, nullable = false)
     private String firstTitle;
-    @Column(length = 10000, nullable = false)
+    @Column(length = 8000, nullable = false)
     private String firstText;
     @Column(length = 100, nullable = false)
     private String secondTitle;
-    @Column(length = 10000, nullable = false)
+    @Column(length = 8000, nullable = false)
     private String secondText;
 
     public Long getId() {
