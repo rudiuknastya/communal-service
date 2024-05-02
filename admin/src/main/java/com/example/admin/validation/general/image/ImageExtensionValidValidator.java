@@ -13,7 +13,7 @@ public class ImageExtensionValidValidator implements ConstraintValidator<ImageEx
     private final Logger logger = LogManager.getLogger(ImageExtensionValidValidator.class);
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext constraintValidatorContext) {
-        if (!multipartFile.isEmpty()) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
             Tika tika = new Tika();
             String detectedType = null;
             try {
