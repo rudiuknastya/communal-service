@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Голови</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between mb-3">
+        <h3 class="mb-0">Голови</h3>
+        <a th:href="@{chairmen/new}" type="button" class="btn btn-label-primary">
+            <i class="ti ti-plus me-1"></i>
+            Створити
+        </a>
+    </div>
+    <div class="d-flex justify-content-end" style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
+        <button type="button" class="btn btn-outline-secondary m-1" id="clear-filters">
+            Очистити
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="dropdownParent">
+            <thead>
+            <tr class="table-primary text-center">
+                <th>#</th>
+                <th>ПІБ</th>
+                <th>Номер телефону</th>
+                <th>Статус</th>
+                <th>Дії</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="search" id="filter-by-fullName" class="form-control">
+                </td>
+                <td>
+                    <input type="search" id="filter-by-phoneNumber" class="form-control">
+                </td>
+                <td>
+                    <select class="form-select select2" id="filter-by-status"></select>
+                </td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between mt-4">
+        <div class="d-flex justify-content-start align-items-center" id="paginationElements"></div>
+        <ul class="pagination justify-content-end"></ul>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/chairmen/chairmen.js}"></script>
+</html>

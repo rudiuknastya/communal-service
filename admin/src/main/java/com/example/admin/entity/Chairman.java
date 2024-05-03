@@ -27,6 +27,7 @@ public class Chairman {
     private String username;
     @Column(length = 72, nullable = false)
     private String password;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -106,5 +107,13 @@ public class Chairman {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
