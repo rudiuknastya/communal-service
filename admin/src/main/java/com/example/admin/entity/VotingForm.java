@@ -26,6 +26,7 @@ public class VotingForm {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private VotingResultStatus resultStatus;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -89,5 +90,13 @@ public class VotingForm {
 
     public void setResultStatus(VotingResultStatus resultStatus) {
         this.resultStatus = resultStatus;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

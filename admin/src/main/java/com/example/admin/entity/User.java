@@ -38,6 +38,7 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "house_id", referencedColumnName = "id", nullable = false)
     private House house;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -149,5 +150,13 @@ public class User {
 
     public void setHouse(House house) {
         this.house = house;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

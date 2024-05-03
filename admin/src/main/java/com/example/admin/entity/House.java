@@ -20,6 +20,7 @@ public class House {
     @ManyToOne
     @JoinColumn(name = "chairman_id", referencedColumnName = "id", nullable = false)
     private Chairman chairman;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -67,5 +68,13 @@ public class House {
 
     public void setChairman(Chairman chairman) {
         this.chairman = chairman;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

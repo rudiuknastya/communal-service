@@ -19,6 +19,7 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -58,5 +59,13 @@ public class Invoice {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
