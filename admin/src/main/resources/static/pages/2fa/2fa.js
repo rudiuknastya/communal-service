@@ -6,6 +6,9 @@ $("#send-button").on("click", function () {
         data: {
             code: $("#code").val()
         },
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
         success: function () {
             window.location = "../users";
         },
