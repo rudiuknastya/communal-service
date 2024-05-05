@@ -51,10 +51,20 @@ public class AdminController {
     public @ResponseBody ResponseEntity<?> verifyCode(@RequestParam(name = "code") String code) {
         Admin admin = adminService.getAuthenticatedAdmin();
         if(mfaTokenService.verifyTotp(code, admin.getSecret())) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/disable-faAuthentication")
+    public @ResponseBody ResponseEntity<?> disableFaAuthentication(@RequestParam(name = "code") String code) {
+        Admin admin = adminService.getAuthenticatedAdmin();
+        if(mfaTokenService.verifyTotp(code, admin.getSecret())) {
             adminService.disableFaAuthentication();
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 }

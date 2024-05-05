@@ -1,4 +1,5 @@
 let secretKey;
+let authenticationOn = false;
 $(document).ready(function () {
     getProfile();
 });
@@ -21,11 +22,11 @@ function getProfile() {
 function setFields(response) {
     const responseMap = new Map(Object.entries((response)));
     responseMap.forEach((value, key) => {
-        if(key.localeCompare("avatar") !== 0)
+        if (key.localeCompare("avatar") !== 0)
             $("#" + key).val(value);
     });
     $("#faAuthentication").prop("checked", response.faAuthentication);
-    $("#avatar-img").attr("src", "../uploads/"+response.avatar);
+    $("#avatar-img").attr("src", "../uploads/" + response.avatar);
 }
 
 $("#save-button").on("click", function () {
@@ -40,16 +41,16 @@ $("#save-button").on("click", function () {
 
 function collectData() {
     let formData = new FormData();
-    $("#form").find('input:text').each(function (){
+    $("#form").find('input:text').each(function () {
         formData.append($(this).attr("id"), $(this).val());
     });
     let image = $("#avatar").prop('files')[0];
-    if(image === undefined) {
+    if (image === undefined) {
         formData.append("avatar", new File([""], "filename"));
     } else {
         formData.append("avatar", image);
     }
-    formData.append("faAuthentication",$("#faAuthentication").is(':checked'));
+    formData.append("faAuthentication", $("#faAuthentication").is(':checked'));
     return formData;
 }
 
@@ -76,24 +77,119 @@ function sendData(formData) {
 
 $("#faAuthentication").on("change", function () {
     $(this).prop("checked", !$(this).is(':checked'));
-    if($(this).is(':checked')){
-        showCodeInput();
+    if ($(this).is(':checked')) {
+        openConfirmCodeModal();
     } else {
         getQRCode();
     }
 });
 
-function showCodeInput() {
-    $("#authentication").append(
-        `<label for="code" class="form-label mt-3">Код</label>
-        <div id="code-div">
-         <input type="text" class="form-control" id="code" name="code" placeholder="Введіть код"
-                       maxlength="32">
-         </div>
-         <button type="button" class="btn btn-primary mt-3" onclick="verifyCode()">Надіслати</button>
-         `);
+function getQRCode() {
+    blockCardDody();
+    $.ajax({
+        type: "GET",
+        url: "profile/getQR",
+        success: function (response) {
+            console.log(response)
+            openQrCodeModal(response);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
 }
 
+function openQrCodeModal(response) {
+    secretKey = response.qrCodeKey;
+    if ($("#qrModal").length === 0) {
+        $(".card-body").append(
+            `<div class="modal fade" id="qrModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Проскануйте QR код за допомогою Google Authenticator або іншого додатку</p>
+                        <img src="${response.qrCode}" alt="qr code" class="ms-5"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        Закрити
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="saveSecretKey()">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        );
+    }
+    $('#qrModal').modal('show');
+    authenticationOn = true;
+}
+function saveSecretKey() {
+    sendSecretKey();
+    openConfirmCodeModal();
+}
+
+function sendSecretKey() {
+    blockCardDody();
+    $.ajax({
+        type: "POST",
+        url: "profile/save-secret-key",
+        data: {
+            secretKey: secretKey
+        },
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function () {
+            $('#qrModal').modal('hide');
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+function openConfirmCodeModal(){
+    if ($("#confirmCodeModal").length === 0) {
+        $(".card-body").append(
+            `<div class="modal fade" id="confirmCodeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    </div>
+                    <div class="modal-body">
+                       <label for="code" class="form-label mt-3">Код</label>
+                        <div id="code-div">
+                            <input type="text" class="form-control" id="code" name="code" placeholder="Введіть код"
+                            maxlength="32">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="disableFaAuthenticationOrVerifyCode()">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        );
+    }
+    $('#confirmCodeModal').modal('show');
+}
+
+function disableFaAuthenticationOrVerifyCode() {
+    if(authenticationOn){
+        verifyCode();
+    } else {
+        disableFaAuthentication();
+    }
+}
 function verifyCode() {
     $.ajax({
         type: "POST",
@@ -105,83 +201,67 @@ function verifyCode() {
             "X-CSRF-TOKEN": token
         },
         success: function () {
-            toastr.success("Двофакторна автентифікація вимкнена");
-            $("#authentication").empty();
-            $("#faAuthentication").prop("checked", false);
-
+            toastr.success("Двофакторна автентифікація увімкнена");
+            $("#faAuthentication").prop("checked", true);
+            authenticationOn = false;
+            $('#confirmCodeModal').modal('hide');
+            $("#code").val("");
         },
         error: function (error) {
+            $("#code-error").remove();
             toastr.error(errorMessage);
-            if (error.status === 400){
-                $("#code-div").append(
-                    `<p class="text-danger" id="code-error">Невірний код</p>`
-                );
+            if (error.status === 400) {
+               showCodeValidation();
             }
         }
     });
 }
 
-function getQRCode() {
-    blockCardDody();
-    $.ajax({
-        type: "GET",
-        url: "profile/getQR",
-        success: function (response) {
-            console.log(response)
-            setQrCode(response);
-        },
-        error: function () {
-            toastr.error(errorMessage);
-        }
-    });
-}
-
-function setQrCode(response) {
-    secretKey = response.qrCodeKey;
-    $("#authentication").append(
-        `<p class="mt-3">Проскануйте QR код за допомогою Google Authenticator та збережіть код</p>
-         <img src="${response.qrCode}" alt="qr code"/>
-         <p class="mt-3">Якщо не маєте можливості сканувати QR код скопіюйте цей код: 
-         <br><span id="secret-key">${response.qrCodeKey}</span></br></p>
-         <button type="button" class="btn btn-primary" onclick="saveSecretKey()">OK</button>
-        `
-    );
-}
-
-function saveSecretKey() {
-    blockCardDody();
+function disableFaAuthentication() {
     $.ajax({
         type: "POST",
-        url: "profile/save-secret-key",
+        url: "profile/disable-faAuthentication",
         data: {
-            secretKey: $("#secret-key").text()
+            code: $("#code").val()
         },
         headers: {
             "X-CSRF-TOKEN": token
         },
         success: function () {
-            toastr.success("Двофакторна автентифікація увімкнена");
-            $("#authentication").empty();
-            $("#faAuthentication").prop("checked", true);
+            toastr.success("Двофакторна автентифікація вимкнена");
+            $("#faAuthentication").prop("checked", false);
+            $('#confirmCodeModal').modal('hide');
+            $("#code").val("");
         },
         error: function (error) {
+            $("#code-error").remove();
             toastr.error(errorMessage);
+            if (error.status === 400) {
+                showCodeValidation();
+            }
         }
     });
 }
 
+function showCodeValidation() {
+    $("#code-div").append(
+        `<p class="text-danger" id="code-error">Невірний код</p>`
+    );
+}
+
 $("#avatar").on("change", function () {
     var myFile = $(this).prop('files');
-    if(validateFile(myFile[0].name) != false){
+    if (validateFile(myFile[0].name) != false) {
         $("#avatar-img").attr("src", window.URL.createObjectURL(myFile[0]));
     } else {
         $("#avatarValidation").text(fileValidation);
         $(this).val('');
     }
 });
-function validateFile(value){
+
+function validateFile(value) {
     var ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();
-    if($.inArray(ext, ['png','jpg','jpeg']) == -1 && value != "") {
+    if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1 && value != "") {
         return false;
     } else {
         return true;
