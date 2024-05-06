@@ -1,9 +1,7 @@
 package com.example.admin.controller;
 
 import com.example.admin.entity.ChairmanStatus;
-import com.example.admin.model.chairmen.CreateChairmanRequest;
-import com.example.admin.model.chairmen.FilterRequest;
-import com.example.admin.model.chairmen.TableChairmanResponse;
+import com.example.admin.model.chairmen.*;
 import com.example.admin.service.ChairmanService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -44,9 +42,24 @@ public class ChairmanController {
     public @ResponseBody Page<TableChairmanResponse> getChairmen(FilterRequest request){
         return chairmanService.getChairmenForTable(request);
     }
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> deleteChairman(@PathVariable Long id){
-        
+        //todo delete
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/edit/{id}")
+    public ModelAndView getEditChairmanPage(){
+        return new ModelAndView("chairmen/edit-chairman");
+    }
+
+    @GetMapping("/edit/get/{id}")
+    public @ResponseBody ChairmanResponse getChairman(@PathVariable Long id){
+        return chairmanService.getChairmanResponse(id);
+    }
+    @PostMapping("/edit/{id}")
+    public @ResponseBody ResponseEntity<?> updateChairman(@PathVariable Long id,
+                                                          @Valid @ModelAttribute EditChairmanRequest editChairmanRequest) {
+        chairmanService.updateChairman(editChairmanRequest, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

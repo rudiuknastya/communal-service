@@ -2,9 +2,7 @@ package com.example.admin.serviceImpl;
 
 import com.example.admin.entity.Chairman;
 import com.example.admin.mapper.ChairmanMapper;
-import com.example.admin.model.chairmen.CreateChairmanRequest;
-import com.example.admin.model.chairmen.FilterRequest;
-import com.example.admin.model.chairmen.TableChairmanResponse;
+import com.example.admin.model.chairmen.*;
 import com.example.admin.repository.ChairmanRepository;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.specification.specificationFormer.ChairmanSpecificationFormer;
@@ -78,6 +76,41 @@ public class ChairmanServiceImpl implements ChairmanService {
         // todo check if has houses
         return false;
     }
+
+    @Override
+    public ChairmanResponse getChairmanResponse(Long id) {
+        logger.info("getChairmanResponse - Getting chairman response by id "+id);
+        Chairman chairman = getChairmanById(id);
+        ChairmanResponse chairmanResponse = chairmanMapper.chairmanToChairmanResponse(chairman);
+        logger.info("getChairmanResponse - Chairman response has been got");
+        return chairmanResponse;
+    }
+
+    @Override
+    public void updateChairman(EditChairmanRequest editChairmanRequest, Long id) {
+        logger.info("updateChairman - Updating chairman with id "+id+ " "+editChairmanRequest.toString());
+        Chairman chairman = getChairmanById(id);
+        String avatar = updateAvatar(editChairmanRequest.avatar(), chairman);
+        if(editChairmanRequest.password().isEmpty()){
+            chairmanMapper.updateChairmanWithoutPassword(chairman,avatar, editChairmanRequest);
+        } else {
+            chairmanMapper.updateChairmanWithPassword(chairman, avatar, editChairmanRequest,
+                    passwordEncoder.encode(editChairmanRequest.password()));
+        }
+        saveChairman(chairman);
+        logger.info("updateChairman - Chairman was updated");
+    }
+
+    private String updateAvatar(MultipartFile avatar, Chairman chairman) {
+        String currentAvatar = chairman.getAvatar();
+        if(avatar.isEmpty()){
+            return currentAvatar;
+        } else {
+            uploadFileUtil.deleteFile(currentAvatar);
+            return uploadFileUtil.saveMultipartFile(avatar);
+        }
+    }
+
     private Chairman getChairmanById(Long id){
         return chairmanRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Chairman was not found by id "+id));
     }

@@ -113,7 +113,7 @@ function openDeleteModal(chairmanId) {
 function deleteEntry() {
     blockCardDody();
     $.ajax({
-        type: "GET",
+        type: "DELETE",
         url: "chairmen/delete/"+entityId,
         data: request,
         success: function (response) {

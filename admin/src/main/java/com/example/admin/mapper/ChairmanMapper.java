@@ -1,11 +1,14 @@
 package com.example.admin.mapper;
 
 import com.example.admin.entity.Chairman;
+import com.example.admin.model.chairmen.ChairmanResponse;
 import com.example.admin.model.chairmen.CreateChairmanRequest;
+import com.example.admin.model.chairmen.EditChairmanRequest;
 import com.example.admin.model.chairmen.TableChairmanResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -18,4 +21,13 @@ public interface ChairmanMapper {
     List<TableChairmanResponse> chairmanListToTableChairmanResponseList(List<Chairman> chairmanList);
     @Mapping(target = "fullName", expression = "java(chairman.getLastName()+\" \"+chairman.getFirstName()+\" \"+chairman.getMiddleName())")
     TableChairmanResponse chairmanToTableChairmanResponse(Chairman chairman);
+    ChairmanResponse chairmanToChairmanResponse(Chairman chairman);
+    @Mapping(target = "password", source = "encodedPassword")
+    @Mapping(target = "avatar", source = "savedAvatar")
+    void updateChairmanWithPassword(@MappingTarget Chairman chairman, String savedAvatar,
+                                    EditChairmanRequest editChairmanRequest, String encodedPassword);
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "avatar", source = "savedAvatar")
+    void updateChairmanWithoutPassword(@MappingTarget Chairman chairman, String savedAvatar,
+                                       EditChairmanRequest editChairmanRequest);
 }
