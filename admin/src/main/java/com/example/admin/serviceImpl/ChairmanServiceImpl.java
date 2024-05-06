@@ -3,6 +3,8 @@ package com.example.admin.serviceImpl;
 import com.example.admin.entity.Chairman;
 import com.example.admin.mapper.ChairmanMapper;
 import com.example.admin.model.chairmen.*;
+import com.example.admin.model.general.SelectSearchRequest;
+import com.example.admin.model.houses.ChairmanNameResponse;
 import com.example.admin.repository.ChairmanRepository;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.specification.specificationFormer.ChairmanSpecificationFormer;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static com.example.admin.specification.ChairmanSpecification.byDeleted;
 
 @Service
 public class ChairmanServiceImpl implements ChairmanService {
@@ -109,6 +113,17 @@ public class ChairmanServiceImpl implements ChairmanService {
             uploadFileUtil.deleteFile(currentAvatar);
             return uploadFileUtil.saveMultipartFile(avatar);
         }
+    }
+
+    @Override
+    public Page<ChairmanNameResponse> getChairmanNameResponses(SelectSearchRequest selectSearchRequest) {
+        logger.info("getChairmanNameResponses - Getting chairman name responses "+selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Page<Chairman> chairmen = chairmanRepository.findAll(ChairmanSpecificationFormer.formSelectSpecification(selectSearchRequest), pageable);
+        List<ChairmanNameResponse> chairmanNameResponses = chairmanMapper.chairmanListToChairmanNameResponseList(chairmen.getContent());
+        Page<ChairmanNameResponse> chairmanNameResponsePage = new PageImpl<>(chairmanNameResponses, pageable, chairmen.getTotalElements());
+        logger.info("getChairmanNameResponses - Chairman name responses have been got");
+        return chairmanNameResponsePage;
     }
 
     private Chairman getChairmanById(Long id){

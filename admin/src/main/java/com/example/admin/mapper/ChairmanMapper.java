@@ -5,6 +5,7 @@ import com.example.admin.model.chairmen.ChairmanResponse;
 import com.example.admin.model.chairmen.CreateChairmanRequest;
 import com.example.admin.model.chairmen.EditChairmanRequest;
 import com.example.admin.model.chairmen.TableChairmanResponse;
+import com.example.admin.model.houses.ChairmanNameResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,4 +31,7 @@ public interface ChairmanMapper {
     @Mapping(target = "avatar", source = "savedAvatar")
     void updateChairmanWithoutPassword(@MappingTarget Chairman chairman, String savedAvatar,
                                        EditChairmanRequest editChairmanRequest);
+    List<ChairmanNameResponse> chairmanListToChairmanNameResponseList(List<Chairman> chairmanList);
+    @Mapping(target = "fullName", expression = "java(chairman.getLastName()+\" \"+chairman.getFirstName()+\" \"+chairman.getMiddleName())")
+    ChairmanNameResponse chairmanToChairmanNameResponse(Chairman chairman);
 }
