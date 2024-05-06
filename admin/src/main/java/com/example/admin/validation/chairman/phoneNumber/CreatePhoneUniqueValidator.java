@@ -13,6 +13,6 @@ public class CreatePhoneUniqueValidator implements ConstraintValidator<CreatePho
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext constraintValidatorContext) {
-        return !chairmanRepository.existsByPhoneNumber(phoneNumber);
+        return !chairmanRepository.existsByPhoneNumberAndDeleted(phoneNumber, false);
     }
 }
