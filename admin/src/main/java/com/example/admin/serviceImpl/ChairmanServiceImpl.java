@@ -6,6 +6,7 @@ import com.example.admin.model.chairmen.*;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.ChairmanNameResponse;
 import com.example.admin.repository.ChairmanRepository;
+import com.example.admin.repository.HouseRepository;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.specification.specificationFormer.ChairmanSpecificationFormer;
 import com.example.admin.util.UploadFileUtil;
@@ -28,14 +29,17 @@ import static com.example.admin.specification.ChairmanSpecification.byDeleted;
 @Service
 public class ChairmanServiceImpl implements ChairmanService {
     private final ChairmanRepository chairmanRepository;
+    private final HouseRepository houseRepository;
     private final ChairmanMapper chairmanMapper;
     private final UploadFileUtil uploadFileUtil;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger(ChairmanServiceImpl.class);
 
-    public ChairmanServiceImpl(ChairmanRepository chairmanRepository, ChairmanMapper chairmanMapper,
+    public ChairmanServiceImpl(ChairmanRepository chairmanRepository,
+                               HouseRepository houseRepository, ChairmanMapper chairmanMapper,
                                UploadFileUtil uploadFileUtil, PasswordEncoder passwordEncoder) {
         this.chairmanRepository = chairmanRepository;
+        this.houseRepository = houseRepository;
         this.chairmanMapper = chairmanMapper;
         this.uploadFileUtil = uploadFileUtil;
         this.passwordEncoder = passwordEncoder;
@@ -77,8 +81,13 @@ public class ChairmanServiceImpl implements ChairmanService {
     @Override
     public boolean deleteChairman(Long id) {
         Chairman chairman = getChairmanById(id);
-        // todo check if has houses
-        return false;
+        int housesCount = houseRepository.countHousesByChairmanIdAndDeletedIsFalse(id);
+        if(housesCount > 0){
+            return false;
+        }
+        chairman.setDeleted(true);
+        saveChairman(chairman);
+        return true;
     }
 
     @Override

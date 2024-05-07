@@ -44,8 +44,11 @@ public class ChairmanController {
     }
     @DeleteMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> deleteChairman(@PathVariable Long id){
-        //todo delete
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(chairmanService.deleteChairman(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
     @GetMapping("/edit/{id}")
     public ModelAndView getEditChairmanPage(){

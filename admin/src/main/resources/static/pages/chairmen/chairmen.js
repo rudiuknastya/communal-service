@@ -115,12 +115,20 @@ function deleteEntry() {
     $.ajax({
         type: "DELETE",
         url: "chairmen/delete/"+entityId,
-        data: request,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
         success: function (response) {
+            $('#deleteModal').modal('hide');
             toastr.success(deleteSuccessMessage);
         },
-        error: function () {
-            toastr.error(errorMessage);
+        error: function (error) {
+            $('#deleteModal').modal('hide');
+            if(error.status === 409){
+                toastr.warning("Неможливо видалити. Голова привязаний до будинку");
+            } else {
+                toastr.error(errorMessage);
+            }
         }
     });
 }
