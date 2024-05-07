@@ -1,11 +1,9 @@
 package com.example.admin.controller;
 
+import com.example.admin.entity.House;
 import com.example.admin.entity.HouseStatus;
 import com.example.admin.model.general.SelectSearchRequest;
-import com.example.admin.model.houses.ChairmanNameResponse;
-import com.example.admin.model.houses.FilterRequest;
-import com.example.admin.model.houses.HouseRequest;
-import com.example.admin.model.houses.TableHouseResponse;
+import com.example.admin.model.houses.*;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.service.HouseService;
 import jakarta.validation.Valid;
@@ -51,5 +49,18 @@ public class HouseController {
     public @ResponseBody Page<ChairmanNameResponse> getChairmen(SelectSearchRequest selectSearchRequest){
         return chairmanService.getChairmanNameResponses(selectSearchRequest);
     }
-
+    @GetMapping("/edit/{id}")
+    public ModelAndView getEditHousePage(){
+        return new ModelAndView("houses/edit-house");
+    }
+    @PostMapping("/edit/{id}")
+    public @ResponseBody ResponseEntity<?> updateHouse(@PathVariable Long id,
+                                                       @Valid @ModelAttribute HouseRequest houseRequest){
+        houseService.updateHouse(houseRequest, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/edit/get/{id}")
+    public @ResponseBody HouseResponse getCreateHousePage(@PathVariable Long id){
+        return houseService.getHouseResponse(id);
+    }
 }

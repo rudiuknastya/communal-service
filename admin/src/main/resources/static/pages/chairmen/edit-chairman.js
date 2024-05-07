@@ -7,6 +7,7 @@ $(document).ready(function () {
 });
 
 function getChairman() {
+    blockCardDody();
     $.ajax({
         type: "GET",
         url: "get/"+id,

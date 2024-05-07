@@ -5,6 +5,7 @@ import com.example.admin.entity.House;
 import com.example.admin.mapper.HouseMapper;
 import com.example.admin.model.houses.FilterRequest;
 import com.example.admin.model.houses.HouseRequest;
+import com.example.admin.model.houses.HouseResponse;
 import com.example.admin.model.houses.TableHouseResponse;
 import com.example.admin.repository.ChairmanRepository;
 import com.example.admin.repository.HouseRepository;
@@ -39,8 +40,7 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public void createHouse(HouseRequest houseRequest) {
         logger.info("createHouse - Creating house "+houseRequest.toString());
-        Chairman chairman = chairmanRepository.findById(houseRequest.chairmanId())
-                .orElseThrow(()-> new EntityNotFoundException("Chairman was not found by id "+houseRequest.chairmanId()));
+        Chairman chairman = getChairmanById(houseRequest.chairmanId());
         House house = houseMapper.createHouse(houseRequest, chairman);
         houseRepository.save(house);
         logger.info("createHouse - House has been created");
@@ -62,5 +62,27 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.findAll(houseSpecification, pageable);
     }
 
+    @Override
+    public HouseResponse getHouseResponse(Long id) {
+        logger.info("getHouseResponse - Getting house response by id "+id);
+        House house = getHouseById(id);
+        HouseResponse houseResponse = houseMapper.houseToHouseResponse(house);
+        logger.info("getHouseResponse - House response have been got");
+        return houseResponse;
+    }
 
+    @Override
+    public void updateHouse(HouseRequest houseRequest, Long id) {
+        House house = getHouseById(id);
+        Chairman chairman = getChairmanById(houseRequest.chairmanId());
+        houseMapper.updateHouse(house, houseRequest, chairman);
+        houseRepository.save(house);
+    }
+    private House getHouseById(Long id){
+        return houseRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("House was not found by id "+id));
+    }
+    private Chairman getChairmanById(Long id){
+        return chairmanRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Chairman was not found by id "+id));
+    }
 }

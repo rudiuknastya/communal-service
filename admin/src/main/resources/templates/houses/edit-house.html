@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Будинки</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <form enctype="multipart/form-data" id="form" class="row g-5">
+    <div class="col-md-7">
+      <div>
+        <label for="city" class="form-label">Місто</label>
+        <input type="text" class="form-control" id="city" name="city" placeholder="Місто"
+               maxlength="100">
+      </div>
+      <div>
+        <label for="street" class="form-label mt-3">Вулиця</label>
+        <input type="text" class="form-control" id="street" name="street" placeholder="Вулиця"
+               maxlength="200">
+      </div>
+      <div>
+        <label for="number" class="form-label mt-3">№ будинку</label>
+        <input type="number" class="form-control" id="number" name="number" min="0" step="1">
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div>
+        <label for="status" class="form-label">Статус</label>
+        <select class="form-select" id="status" name="status"></select>
+      </div>
+      <div>
+        <label for="chairmanId" class="form-label mt-3">Голови будинків</label>
+        <select class="form-select" id="chairmanId" name="chairmanId"></select>
+      </div>
+    </div>
+
+    <div class="mt-5 d-flex justify-content-end gap-3">
+      <a href="../../houses" type="button" class="btn btn-secondary" id="cancel-button">Відмінити</a>
+      <button type="button" class="btn btn-primary" id="save-button">Зберегти</button>
+    </div>
+  </form>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pages/houses/edit-house.js}"></script>
+</html>

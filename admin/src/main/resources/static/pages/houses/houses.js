@@ -59,7 +59,7 @@ function drawTable(response) {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="chairmen/edit/${house.id}">
+                                    <a class="dropdown-item" href="houses/edit/${house.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
                                     <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${house.id})">
