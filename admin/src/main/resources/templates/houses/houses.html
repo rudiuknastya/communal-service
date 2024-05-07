@@ -3,13 +3,13 @@
       layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Голови</title>
+    <title>Будинки</title>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="d-flex justify-content-between mb-3">
-        <h3 class="mb-0">Голови</h3>
-        <a th:href="@{chairmen/new}" type="button" class="btn btn-label-primary">
+        <h3 class="mb-0">Будинки</h3>
+        <a th:href="@{houses/new}" type="button" class="btn btn-label-primary">
             <i class="ti ti-plus me-1"></i>
             Створити
         </a>
@@ -24,21 +24,29 @@
             <thead>
             <tr class="table-primary text-center">
                 <th>#</th>
-                <th>ПІБ</th>
-                <th>Номер телефону</th>
+                <th>Місто</th>
+                <th>Вулиця</th>
+                <th>Номер будинку</th>
+                <th>Голова будинку</th>
                 <th>Статус</th>
                 <th>Дії</th>
             </tr>
             <tr>
                 <td></td>
-                <td>
-                    <input type="search" id="filter-by-fullName" class="form-control">
+                <td class="px-2">
+                    <input type="search" id="filter-by-city" class="form-control">
                 </td>
-                <td>
-                    <input type="search" id="filter-by-phoneNumber" class="form-control">
+                <td class="px-2">
+                    <input type="search" id="filter-by-street" class="form-control">
                 </td>
-                <td>
-                    <select class="form-select select2" id="filter-by-status"></select>
+                <td class="px-2">
+                    <input type="search" id="filter-by-number" class="form-control">
+                </td>
+                <td class="px-2">
+                    <select class="form-select select2" id="filter-by-chairman" style="min-width: 11rem"></select>
+                </td>
+                <td class="px-2">
+                    <select class="form-select select2" id="filter-by-status" style="min-width: 9rem"></select>
                 </td>
                 <td></td>
             </tr>
@@ -53,5 +61,5 @@
     </div>
 </div>
 </body>
-<script layout:fragment="script" th:src="@{/pages/chairmen/chairmen.js}"></script>
+<script layout:fragment="script" th:src="@{/pages/houses/houses.js}"></script>
 </html>
