@@ -13,11 +13,19 @@ public interface HouseSpecification {
     }
     static Specification<House> byCity(String city){
         return (root, query, builder) ->
-                builder.like(builder.upper(root.get("city")), "%"+city+"%");
+                builder.like(builder.upper(root.get("city")), "%"+city.toUpperCase()+"%");
+    }
+    static Specification<House> byCityEquals(String city){
+        return (root, query, builder) ->
+                builder.equal(root.get("city"), city);
     }
     static Specification<House> byStreet(String street){
         return (root, query, builder) ->
-                builder.like(builder.upper(root.get("street")), "%"+street+"%");
+                builder.like(builder.upper(root.get("street")), "%"+street.toUpperCase()+"%");
+    }
+    static Specification<House> byStreetEquals(String street){
+        return (root, query, builder) ->
+                builder.equal(root.get("street"), street);
     }
     static Specification<House> byNumber(Long number){
         return (root, query, builder) ->

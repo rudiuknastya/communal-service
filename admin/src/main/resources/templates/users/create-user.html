@@ -49,15 +49,15 @@
             </div>
             <div class="mt-3">
                 <label for="street" class="form-label">Вулиця</label>
-                <select class="form-select" id="street" name="street"></select>
+                <select class="form-select" id="street" name="street" disabled></select>
             </div>
             <div class="mt-3">
-                <label for="houseNumber" class="form-label">Номер будинку</label>
-                <select class="form-select" id="houseNumber" name="houseNumber"></select>
+                <label for="number" class="form-label">Номер будинку</label>
+                <select class="form-select" id="number" name="number" disabled></select>
             </div>
             <div class="mt-3">
                 <label for="personalAccount" class="form-label">Особистий рахунок</label>
-                <input type="text" class="form-control" id="personalAccount" name="personalAccount"
+                <input type="text" class="form-control personalAccount" id="personalAccount" name="personalAccount"
                        placeholder="1111-1111-1111-1111" maxlength="20">
             </div>
         </div>
@@ -68,7 +68,7 @@
             </div>
             <div>
                 <label for="apartmentNumber" class="form-label mt-3">Номер квартири</label>
-                <input type="number" class="form-control phoneNumber" id="apartmentNumber" name="apartmentNumber"
+                <input type="number" class="form-control" id="apartmentNumber" name="apartmentNumber"
                        placeholder="Номер квартири">
             </div>
             <div>
@@ -124,10 +124,11 @@
         </div>
 
         <div class="mt-5 d-flex justify-content-end gap-3">
+            <a href="../users" type="button" class="btn btn-secondary" id="cancel-button">Відмінити</a>
             <button type="button" class="btn btn-primary" id="save-button">Зберегти</button>
         </div>
     </form>
 </div>
-
 </body>
+<script layout:fragment="script" th:src="@{/pages/users/create-user.js}"></script>
 </html>

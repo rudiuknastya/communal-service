@@ -2,6 +2,7 @@ package com.example.admin.mapper;
 
 import com.example.admin.entity.Chairman;
 import com.example.admin.entity.House;
+import com.example.admin.model.houses.HouseNumberResponse;
 import com.example.admin.model.houses.HouseRequest;
 import com.example.admin.model.houses.HouseResponse;
 import com.example.admin.model.houses.TableHouseResponse;
@@ -29,4 +30,13 @@ public interface HouseMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", source = "houseRequest.status")
     void updateHouse(@MappingTarget House house, HouseRequest houseRequest, Chairman chairman);
+    List<HouseNumberResponse> houseListToHouseNumberResponseList(List<House> houses);
+    @Mapping(target = "id", source = "id")
+    HouseNumberResponse houseToHouseNumberResponse(House house);
+    default List<String> houseListToCityStringList(List<House> houses){
+        return houses.stream().map(House::getCity).toList();
+    }
+    default List<String> houseListToStreetStringList(List<House> houses){
+        return houses.stream().map(House::getStreet).toList();
+    }
 }

@@ -2,13 +2,15 @@ package com.example.admin.model.user;
 
 import com.example.admin.entity.UserStatus;
 import com.example.admin.validation.general.image.ImageExtensionValid;
-import com.example.admin.validation.general.image.ImageNotEmpty;
 import com.example.admin.validation.general.password.PasswordsEqual;
 import com.example.admin.validation.user.email.CreateEmailUnique;
 import com.example.admin.validation.user.personalAccount.CreatePersonalAccountUnique;
 import com.example.admin.validation.user.phone.CreatePhoneUnique;
 import com.example.admin.validation.user.username.CreateUsernameUnique;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -46,7 +48,6 @@ public record CreateUserRequest(
         UserStatus status,
         @NotNull(message = "Поле не може бути порожнім")
         BigDecimal area,
-        @ImageNotEmpty
         @ImageExtensionValid
         MultipartFile avatar,
         @NotBlank(message = "Поле не може бути порожнім")
@@ -63,6 +64,6 @@ public record CreateUserRequest(
         String password,
         String confirmPassword,
         @NotNull(message = "Поле не може бути порожнім")
-        Long houseId
+        Long number
 ) {
 }

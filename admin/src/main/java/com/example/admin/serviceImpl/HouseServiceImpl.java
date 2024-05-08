@@ -3,10 +3,8 @@ package com.example.admin.serviceImpl;
 import com.example.admin.entity.Chairman;
 import com.example.admin.entity.House;
 import com.example.admin.mapper.HouseMapper;
-import com.example.admin.model.houses.FilterRequest;
-import com.example.admin.model.houses.HouseRequest;
-import com.example.admin.model.houses.HouseResponse;
-import com.example.admin.model.houses.TableHouseResponse;
+import com.example.admin.model.general.SelectSearchRequest;
+import com.example.admin.model.houses.*;
 import com.example.admin.repository.ChairmanRepository;
 import com.example.admin.repository.HouseRepository;
 import com.example.admin.service.HouseService;
@@ -73,11 +71,53 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public void updateHouse(HouseRequest houseRequest, Long id) {
+        logger.info("updateHouse - Updating house with id "+id+" "+houseRequest.toString());
         House house = getHouseById(id);
         Chairman chairman = getChairmanById(houseRequest.chairmanId());
         houseMapper.updateHouse(house, houseRequest, chairman);
         houseRepository.save(house);
+        logger.info("updateHouse - House have been updated");
     }
+
+    @Override
+    public Page<String> getCities(SelectSearchRequest selectSearchRequest) {
+        logger.info("getCities - Getting cities for select "+selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Specification<House> houseSpecification = HouseSpecificationFormer
+                .formCitySelectSpecification(selectSearchRequest);
+        Page<House> housePage = houseRepository.findAll(houseSpecification,pageable);
+        List<String> cities = houseMapper.houseListToCityStringList(housePage.getContent());
+        Page<String> citiesPage = new PageImpl<>(cities, pageable, housePage.getTotalElements());
+        logger.info("getCities - Cities have been got");
+        return citiesPage;
+    }
+
+    @Override
+    public Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, Long number) {
+        logger.info("getStreets - Getting streets for select "+selectSearchRequest.toString()+" city: "+city+" number: "+number);
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Specification<House> houseSpecification = HouseSpecificationFormer
+                .formStreetSelectSpecification(selectSearchRequest, city, number);
+        Page<House> housePage = houseRepository.findAll(houseSpecification,pageable);
+        List<String> streets = houseMapper.houseListToStreetStringList(housePage.getContent());
+        Page<String> streetsPage = new PageImpl<>(streets, pageable, housePage.getTotalElements());
+        logger.info("getStreets - Streets have been got");
+        return streetsPage;
+    }
+
+    @Override
+    public Page<HouseNumberResponse> getNumbers(SelectSearchRequest selectSearchRequest, String city, String street) {
+        logger.info("getNumbers - Getting numbers for select "+selectSearchRequest.toString()+" city: "+city+" street: "+street);
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Specification<House> houseSpecification = HouseSpecificationFormer
+                .formNumberSelectSpecification(selectSearchRequest, city, street);
+        Page<House> housePage = houseRepository.findAll(houseSpecification, pageable);
+        List<HouseNumberResponse> houseNumberResponses = houseMapper.houseListToHouseNumberResponseList(housePage.getContent());
+        Page<HouseNumberResponse> houseNumberResponsePage = new PageImpl<>(houseNumberResponses, pageable, housePage.getTotalElements());
+        logger.info("getNumbers - Numbers have been got");
+        return houseNumberResponsePage;
+    }
+
     private House getHouseById(Long id){
         return houseRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("House was not found by id "+id));
     }

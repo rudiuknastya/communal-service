@@ -1,9 +1,7 @@
 package com.example.admin.service;
 
-import com.example.admin.model.houses.FilterRequest;
-import com.example.admin.model.houses.HouseRequest;
-import com.example.admin.model.houses.HouseResponse;
-import com.example.admin.model.houses.TableHouseResponse;
+import com.example.admin.model.general.SelectSearchRequest;
+import com.example.admin.model.houses.*;
 import org.springframework.data.domain.Page;
 
 public interface HouseService {
@@ -11,4 +9,7 @@ public interface HouseService {
     Page<TableHouseResponse> getHouseResponsesForTable(FilterRequest filterRequest);
     HouseResponse getHouseResponse(Long id);
     void updateHouse(HouseRequest houseRequest, Long id);
+    Page<String> getCities(SelectSearchRequest selectSearchRequest);
+    Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, Long number);
+    Page<HouseNumberResponse> getNumbers(SelectSearchRequest selectSearchRequest, String city, String street);
 }

@@ -5,8 +5,13 @@ import com.example.admin.entity.User;
 import com.example.admin.model.user.CreateUserRequest;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
-//    User createUser(CreateUserRequest createUserRequest, String avatar, House house);
+    @Mapping(target = "status", source = "createUserRequest.status")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "avatar", source = "savedAvatar")
+    @Mapping(target = "house", source = "house")
+    User createUser(CreateUserRequest createUserRequest, String savedAvatar, House house);
 }
