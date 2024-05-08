@@ -4,6 +4,8 @@ import com.example.admin.entity.UserStatus;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.HouseNumberResponse;
 import com.example.admin.model.user.CreateUserRequest;
+import com.example.admin.model.user.FilterRequest;
+import com.example.admin.model.user.TableUserResponse;
 import com.example.admin.service.HouseService;
 import com.example.admin.service.UserService;
 import jakarta.validation.Valid;
@@ -58,4 +60,16 @@ public class UserController {
                                                              @RequestParam(name = "street", required = false) String street){
         return houseService.getNumbers(selectSearchRequest, city, street);
     }
+    @GetMapping("/get")
+    public @ResponseBody Page<TableUserResponse> getUsers(FilterRequest filterRequest){
+        return userService.getUserResponsesForTable(filterRequest);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

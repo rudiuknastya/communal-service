@@ -120,6 +120,7 @@ function deleteEntry() {
         },
         success: function (response) {
             $('#deleteModal').modal('hide');
+            getChairmen(0);
             toastr.success(deleteSuccessMessage);
         },
         error: function (error) {

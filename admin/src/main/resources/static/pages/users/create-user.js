@@ -69,7 +69,7 @@ function initializeStreetSelect() {
                     search: params.term,
                     page: params.page || 1,
                     city: $("#city").val(),
-                    number: ""
+                    number: $("#number").val()
                 };
             },
             processResults: function (response) {
