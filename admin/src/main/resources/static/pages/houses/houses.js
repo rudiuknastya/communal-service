@@ -86,6 +86,62 @@ function getStatusSpan(status) {
             return '<span class="badge bg-label-danger">Вимкнений</span>';
     }
 }
+
+function openDeleteModal(houseId) {
+    if($("#deleteModal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>${deleteModalText}</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        Закрити
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete-button" onclick="deleteEntry()">
+                            Видалити
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#deleteModal').modal('show');
+    entityId = houseId;
+}
+
+function deleteEntry() {
+    blockCardDody();
+    $.ajax({
+        type: "DELETE",
+        url: "houses/delete/"+entityId,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function () {
+            $('#deleteModal').modal('hide');
+            getHouses(0);
+            toastr.success(deleteSuccessMessage);
+        },
+        error: function (error) {
+            $('#deleteModal').modal('hide');
+            if(error.status === 409){
+                toastr.warning("Неможливо видалити. Будинок привязаний до користувачів");
+            } else {
+                toastr.error(errorMessage);
+            }
+        }
+    });
+}
+
 $("#filter-by-city").on("change", function () {
     request.city = $(this).val();
     getHouses(0);

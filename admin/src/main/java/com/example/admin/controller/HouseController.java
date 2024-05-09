@@ -63,4 +63,12 @@ public class HouseController {
     public @ResponseBody HouseResponse getCreateHousePage(@PathVariable Long id){
         return houseService.getHouseResponse(id);
     }
+    @DeleteMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteHouse(@PathVariable Long id){
+        if(houseService.deleteHouse(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 }

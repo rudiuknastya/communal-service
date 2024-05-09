@@ -7,6 +7,7 @@ import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.*;
 import com.example.admin.repository.ChairmanRepository;
 import com.example.admin.repository.HouseRepository;
+import com.example.admin.repository.UserRepository;
 import com.example.admin.service.HouseService;
 import com.example.admin.specification.specificationFormer.HouseSpecificationFormer;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,13 +26,15 @@ import java.util.List;
 public class HouseServiceImpl implements HouseService {
     private final HouseRepository houseRepository;
     private final ChairmanRepository chairmanRepository;
+    private final UserRepository userRepository;
     private final HouseMapper houseMapper;
     private final Logger logger = LogManager.getLogger(HouseServiceImpl.class);
 
     public HouseServiceImpl(HouseRepository houseRepository, ChairmanRepository chairmanRepository,
-                            HouseMapper houseMapper) {
+                            UserRepository userRepository, HouseMapper houseMapper) {
         this.houseRepository = houseRepository;
         this.chairmanRepository = chairmanRepository;
+        this.userRepository = userRepository;
         this.houseMapper = houseMapper;
     }
 
@@ -116,6 +119,18 @@ public class HouseServiceImpl implements HouseService {
         Page<HouseNumberResponse> houseNumberResponsePage = new PageImpl<>(houseNumberResponses, pageable, housePage.getTotalElements());
         logger.info("getNumbers - Numbers have been got");
         return houseNumberResponsePage;
+    }
+
+    @Override
+    public boolean deleteHouse(Long id) {
+        int usersCount = userRepository.countUsersByHouseIdAndDeletedIsFalse(id);
+        if(usersCount > 0) {
+            return false;
+        }
+        House house = getHouseById(id);
+        house.setDeleted(true);
+        houseRepository.save(house);
+        return true;
     }
 
     private House getHouseById(Long id){

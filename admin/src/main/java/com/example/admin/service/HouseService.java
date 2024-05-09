@@ -12,4 +12,5 @@ public interface HouseService {
     Page<String> getCities(SelectSearchRequest selectSearchRequest);
     Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, Long number);
     Page<HouseNumberResponse> getNumbers(SelectSearchRequest selectSearchRequest, String city, String street);
+    boolean deleteHouse(Long id);
 }
