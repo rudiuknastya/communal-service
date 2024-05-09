@@ -42,6 +42,7 @@ public record CreateUserRequest(
         @NotNull(message = "Поле не може бути порожнім")
         Long apartmentNumber,
         @NotBlank(message = "Поле не може бути порожнім")
+        @Pattern(regexp="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}", message="Невірний формат рахунку")
         @CreatePersonalAccountUnique
         String personalAccount,
         @NotNull(message = "Поле не може бути порожнім")

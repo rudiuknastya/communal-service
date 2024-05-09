@@ -3,9 +3,7 @@ package com.example.admin.controller;
 import com.example.admin.entity.UserStatus;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.HouseNumberResponse;
-import com.example.admin.model.user.CreateUserRequest;
-import com.example.admin.model.user.FilterRequest;
-import com.example.admin.model.user.TableUserResponse;
+import com.example.admin.model.user.*;
 import com.example.admin.service.HouseService;
 import com.example.admin.service.UserService;
 import jakarta.validation.Valid;
@@ -70,6 +68,19 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping("/edit/{id}")
+    public ModelAndView getUserPage(){
+        return new ModelAndView("users/edit-user");
+    }
 
-
+    @GetMapping("/edit/get/{id}")
+    public @ResponseBody UserResponse getUser(@PathVariable Long id){
+        return userService.getUserResponse(id);
+    }
+    @PostMapping("/edit/{id}")
+    public @ResponseBody ResponseEntity<?> updateUser(@PathVariable Long id,
+                                                      @Valid @ModelAttribute EditUserRequest editUserRequest){
+        userService.updateUser(id, editUserRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

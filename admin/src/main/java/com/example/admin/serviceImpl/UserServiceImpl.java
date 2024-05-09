@@ -3,9 +3,7 @@ package com.example.admin.serviceImpl;
 import com.example.admin.entity.House;
 import com.example.admin.entity.User;
 import com.example.admin.mapper.UserMapper;
-import com.example.admin.model.user.CreateUserRequest;
-import com.example.admin.model.user.FilterRequest;
-import com.example.admin.model.user.TableUserResponse;
+import com.example.admin.model.user.*;
 import com.example.admin.repository.HouseRepository;
 import com.example.admin.repository.UserRepository;
 import com.example.admin.service.UserService;
@@ -43,8 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(CreateUserRequest createUserRequest) {
         logger.info("createUser - Creating user "+createUserRequest.toString());
-        House house = houseRepository.findById(createUserRequest.number())
-                .orElseThrow(()-> new EntityNotFoundException("House was not found by id "+createUserRequest.number()));
+        House house = getHouseById(createUserRequest.number());
         String avatar = saveNewAvatar(createUserRequest.avatar());
         User user = userMapper.createUser(createUserRequest, avatar, house);
         userRepository.save(user);
@@ -82,7 +79,39 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         logger.info("deleteUser - User have been deleted");
     }
+
+    @Override
+    public UserResponse getUserResponse(Long id) {
+        logger.info("getUserResponse - Getting user response by id "+id);
+        User user = getUserById(id);
+        UserResponse userResponse = userMapper.userToUserResponse(user);
+        logger.info("getUserResponse - User response have been got");
+        return userResponse;
+    }
+
+    @Override
+    public void updateUser(Long id, EditUserRequest editUserRequest) {
+        User user = getUserById(id);
+        House house = getHouseById(editUserRequest.number());
+        String avatar = updateAvatar(editUserRequest.avatar(), user);
+        userMapper.updateUser(user, editUserRequest, house, avatar);
+        userRepository.save(user);
+    }
+    private String updateAvatar(MultipartFile avatar, User user) {
+        String currentAvatar = user.getAvatar();
+        if(avatar.isEmpty()){
+            return currentAvatar;
+        } else {
+            uploadFileUtil.deleteFile(currentAvatar);
+            return uploadFileUtil.saveMultipartFile(avatar);
+        }
+    }
+
     private User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User was not found by id "+id));
+    }
+    private House getHouseById(Long id){
+        return houseRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("House was not found by id "+id));
     }
 }
