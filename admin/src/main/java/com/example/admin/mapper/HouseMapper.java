@@ -2,10 +2,7 @@ package com.example.admin.mapper;
 
 import com.example.admin.entity.Chairman;
 import com.example.admin.entity.House;
-import com.example.admin.model.houses.HouseNumberResponse;
-import com.example.admin.model.houses.HouseRequest;
-import com.example.admin.model.houses.HouseResponse;
-import com.example.admin.model.houses.TableHouseResponse;
+import com.example.admin.model.houses.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

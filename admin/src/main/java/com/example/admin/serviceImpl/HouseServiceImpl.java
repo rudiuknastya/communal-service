@@ -40,7 +40,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public void createHouse(HouseRequest houseRequest) {
-        logger.info("createHouse - Creating house "+houseRequest.toString());
+        logger.info("createHouse - Creating house "+ houseRequest.toString());
         Chairman chairman = getChairmanById(houseRequest.chairmanId());
         House house = houseMapper.createHouse(houseRequest, chairman);
         houseRepository.save(house);

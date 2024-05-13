@@ -1,16 +1,18 @@
 package com.example.admin.controller;
 
-import com.example.admin.entity.House;
 import com.example.admin.entity.HouseStatus;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.*;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.service.HouseService;
+import com.example.admin.validation.general.groups.Create;
+import com.example.admin.validation.general.groups.Edit;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,7 +39,8 @@ public class HouseController {
         return new ModelAndView("houses/create-house");
     }
     @PostMapping("/new")
-    public @ResponseBody ResponseEntity<?> createHouse(@Valid @ModelAttribute HouseRequest houseRequest){
+    public @ResponseBody ResponseEntity<?> createHouse(@Validated(Create.class) @ModelAttribute
+                                                           HouseRequest houseRequest){
         houseService.createHouse(houseRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -55,7 +58,8 @@ public class HouseController {
     }
     @PostMapping("/edit/{id}")
     public @ResponseBody ResponseEntity<?> updateHouse(@PathVariable Long id,
-                                                       @Valid @ModelAttribute HouseRequest houseRequest){
+                                                       @Validated(Edit.class) @ModelAttribute
+                                                       HouseRequest houseRequest){
         houseService.updateHouse(houseRequest, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
