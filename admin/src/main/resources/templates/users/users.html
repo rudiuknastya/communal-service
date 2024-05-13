@@ -8,10 +8,13 @@
 <div layout:fragment="content">
     <div class="d-flex justify-content-between mb-3">
         <h3 class="mb-0">Користувачі</h3>
-        <a th:href="@{users/new}" type="button" class="btn btn-label-primary">
-            <i class="ti ti-plus me-1"></i>
-            Створити
-        </a>
+        <div>
+            <button type="button" class="btn btn-label-primary me-3" id="upload-button">Завантажити</button>
+            <a th:href="@{users/new}" type="button" class="btn btn-label-primary">
+                <i class="ti ti-plus me-1"></i>
+                Створити
+            </a>
+        </div>
     </div>
     <div class="d-flex justify-content-end" style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
         <button type="button" class="btn btn-outline-secondary m-1" id="clear-filters">

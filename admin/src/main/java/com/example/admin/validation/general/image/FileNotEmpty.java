@@ -8,10 +8,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.FIELD;
-@Constraint(validatedBy = ImageNotEmptyValidator.class)
+@Constraint(validatedBy = FileNotEmptyValidator.class)
 @Target({FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ImageNotEmpty {
+public @interface FileNotEmpty {
     String message() default "Зображення є обов'язковим";
 
     Class<?>[] groups() default {};

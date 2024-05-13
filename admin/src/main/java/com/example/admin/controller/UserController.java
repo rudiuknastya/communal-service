@@ -83,4 +83,9 @@ public class UserController {
         userService.updateUser(id, editUserRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PostMapping("/upload-file")
+    public @ResponseBody ResponseEntity<?> uploadXlsxFile(@Valid @ModelAttribute XlsxFileRequest xlsxFileRequest){
+        userService.importDataFromXlsx(xlsxFileRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

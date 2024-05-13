@@ -334,3 +334,85 @@ $("#clear-filters").on("click", function () {
         .val("").trigger('change');
 
 });
+
+$("#upload-button").on("click", function () {
+    openUploadFileModal()
+});
+
+function openUploadFileModal() {
+    if($("#upload-file-modal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="upload-file-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <input type="file" accept=".xlsx" class="form-control"  id="xlsxFile" name="xlsxFile" onchange="fileValidationChange(this)">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        Закрити
+                        </button>
+                        <button type="button" class="btn btn-primary" id="-button" onclick="sendFile()">
+                            Ок
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#upload-file-modal').modal('show');
+}
+
+function fileValidationChange(input) {
+    let myFile = $(input).prop('files');
+    if(!validateFile(myFile[0].name)){
+        $(input).addClass("is-invalid")
+        $(input).parent().append($(
+            '<p class="error-message invalid-feedback m-0">Файл не відповідає формату .xlsx</p>'));
+        $(input).val('');
+    }
+}
+function validateFile(value){
+    let ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();
+    if(value !== "" && $.inArray(ext, ['xlsx']) === -1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function sendFile() {
+    let formData = new FormData();
+    let xlsxFile = $('#xlsxFile').prop('files')[0];
+    if(xlsxFile === undefined) {
+        formData.append("xlsxFile",  new File([""], "filename"));
+    } else {
+        formData.append("xlsxFile", xlsxFile);
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "users/upload-file",
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function () {
+            $('#upload-file-modal').modal('hide');
+            getUsers(0);
+        },
+        error: function (error) {
+            printErrorMessageToField(error);
+        }
+    });
+}

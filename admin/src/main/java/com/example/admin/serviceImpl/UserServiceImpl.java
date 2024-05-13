@@ -8,10 +8,15 @@ import com.example.admin.repository.HouseRepository;
 import com.example.admin.repository.UserRepository;
 import com.example.admin.service.UserService;
 import com.example.admin.specification.specificationFormer.UserSpecificationFormer;
+import com.example.admin.util.ExcelUploadUtil;
 import com.example.admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +25,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -28,14 +35,17 @@ public class UserServiceImpl implements UserService {
     private final HouseRepository houseRepository;
     private final UserMapper userMapper;
     private final UploadFileUtil uploadFileUtil;
+    private final ExcelUploadUtil excelUploadUtil;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, HouseRepository houseRepository,
-                           UserMapper userMapper, UploadFileUtil uploadFileUtil) {
+                           UserMapper userMapper, UploadFileUtil uploadFileUtil,
+                           ExcelUploadUtil excelUploadUtil) {
         this.userRepository = userRepository;
         this.houseRepository = houseRepository;
         this.userMapper = userMapper;
         this.uploadFileUtil = uploadFileUtil;
+        this.excelUploadUtil = excelUploadUtil;
     }
 
     @Override
@@ -104,6 +114,35 @@ public class UserServiceImpl implements UserService {
         } else {
             uploadFileUtil.deleteFile(currentAvatar);
             return uploadFileUtil.saveMultipartFile(avatar);
+        }
+    }
+
+    @Override
+    public void importDataFromXlsx(XlsxFileRequest xlsxFileRequest) {
+
+    }
+    private void openWorkBook(MultipartFile multipartFile) throws IOException {
+        XSSFWorkbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        int rowIndex = 0;
+        for(Row row: sheet){
+            if(rowIndex == 0){
+                rowIndex ++;
+                continue;
+            }
+            Iterator<Cell> cellIterator = row.iterator();
+            int cellIndex = 0;
+            User user = new User();
+            while (cellIterator.hasNext()){
+                Cell cell = cellIterator.next();
+                switch (cellIndex){
+                    case 0 -> user.setLastName(cell.getStringCellValue());
+                    case 1 -> user.setFirstName(cell.getStringCellValue());
+                    case 2 -> user.setMiddleName(cell.getStringCellValue());
+                    case 3 -> user.setPhoneNumber(cell.getStringCellValue());
+                    case 4 -> user.setEmail(cell.getStringCellValue());
+                }
+            }
         }
     }
 

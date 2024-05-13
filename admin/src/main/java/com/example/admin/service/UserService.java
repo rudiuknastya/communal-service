@@ -9,4 +9,5 @@ public interface UserService {
     void deleteUser(Long id);
     UserResponse getUserResponse(Long id);
     void updateUser(Long id, EditUserRequest editUserRequest);
+    void importDataFromXlsx(XlsxFileRequest xlsxFileRequest);
 }
