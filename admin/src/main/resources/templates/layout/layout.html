@@ -208,6 +208,6 @@
 <script th:inline="javascript">
     const authenticatedAvatar = [[${#authentication.principal.avatar}]];
 </script>
-
+<th:block layout:fragment="initThymeleafVariable"></th:block>
 <script layout:fragment="script"></script>
 </html>

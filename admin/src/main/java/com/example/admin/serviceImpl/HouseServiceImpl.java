@@ -96,7 +96,7 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, Long number) {
+    public Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, String number) {
         logger.info("getStreets - Getting streets for select "+selectSearchRequest.toString()+" city: "+city+" number: "+number);
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
         Specification<House> houseSpecification = HouseSpecificationFormer

@@ -49,7 +49,7 @@ public class UserController {
     @GetMapping("/get-streets")
     public @ResponseBody Page<String> getStreets(SelectSearchRequest selectSearchRequest,
                                                  @RequestParam("city") String city,
-                                                 @RequestParam(name = "number", required = false) Long number){
+                                                 @RequestParam(name = "number", required = false) String number){
         return houseService.getStreets(selectSearchRequest, city, number);
     }
     @GetMapping("/get-numbers")

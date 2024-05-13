@@ -10,7 +10,7 @@ public interface HouseService {
     HouseResponse getHouseResponse(Long id);
     void updateHouse(HouseRequest houseRequest, Long id);
     Page<String> getCities(SelectSearchRequest selectSearchRequest);
-    Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, Long number);
+    Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, String number);
     Page<HouseNumberResponse> getNumbers(SelectSearchRequest selectSearchRequest, String city, String street);
     boolean deleteHouse(Long id);
 }

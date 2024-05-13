@@ -12,8 +12,8 @@ public class House {
     private String city;
     @Column(length = 200, nullable = false)
     private String street;
-    @Column(nullable = false)
-    private Long number;
+    @Column(length = 10, nullable = false)
+    private String number;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private HouseStatus status;
@@ -46,11 +46,11 @@ public class House {
         this.street = street;
     }
 
-    public Long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

@@ -11,17 +11,15 @@
         <div class="col-md-7">
             <div>
                 <label for="city" class="form-label">Місто</label>
-                <input type="text" class="form-control" id="city" name="city" placeholder="Місто"
-                       maxlength="100">
+                <select class="form-select" id="city" name="city"></select>
             </div>
             <div>
                 <label for="street" class="form-label mt-3">Вулиця</label>
-                <input type="text" class="form-control" id="street" name="street" placeholder="Вулиця"
-                       maxlength="200">
+                <select class="form-select" id="street" name="street" disabled></select>
             </div>
             <div>
                 <label for="number" class="form-label mt-3">№ будинку</label>
-                <input type="number" class="form-control" id="number" name="number" min="0" step="1">
+                <input type="text" class="form-control" id="number" name="number" maxlength="10">
             </div>
         </div>
         <div class="col-md-5">
@@ -43,5 +41,8 @@
 </div>
 
 </body>
+<script layout:fragment="initThymeleafVariable">
+    const apikey = "[[${@environment.getProperty('nova-post.api-key')}]]";
+</script>
 <script layout:fragment="script" th:src="@{/pages/houses/create-house.js}"></script>
 </html>

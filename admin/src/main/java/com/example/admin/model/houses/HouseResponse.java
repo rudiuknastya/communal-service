@@ -5,7 +5,7 @@ import com.example.admin.entity.HouseStatus;
 public record HouseResponse(
         String city,
         String street,
-        Long number,
+        String number,
         HouseStatus status,
         ChairmanNameResponse chairmanNameResponse
 ) {

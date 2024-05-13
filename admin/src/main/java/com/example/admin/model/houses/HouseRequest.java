@@ -12,8 +12,9 @@ public record HouseRequest(
         @NotBlank(message = "Поле не може бути порожнім")
         @Size(max=200, message = "Розмір поля має бути не більше 200 символів")
         String street,
-        @NotNull(message = "Поле не може бути порожнім")
-        Long number,
+        @NotBlank(message = "Поле не може бути порожнім")
+        @Size(max=10, message = "Розмір поля має бути не більше 10 символів")
+        String number,
         @NotNull(message = "Поле не може бути порожнім")
         HouseStatus status,
         @NotNull(message = "Поле не може бути порожнім")

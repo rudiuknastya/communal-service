@@ -16,7 +16,7 @@ public class HouseSpecificationFormer {
         if(!filterRequest.street().isEmpty()){
             houseSpecification = houseSpecification.and(byStreet(filterRequest.street()));
         }
-        if(filterRequest.number() != null){
+        if(!filterRequest.number().isEmpty()){
             houseSpecification = houseSpecification.and(byNumber(filterRequest.number()));
         }
         if (filterRequest.chairmanId() != null){
@@ -35,12 +35,12 @@ public class HouseSpecificationFormer {
         return houseSpecification;
     }
     public static Specification<House> formStreetSelectSpecification(SelectSearchRequest selectSearchRequest,
-                                                                     String city, Long number){
+                                                                     String city, String number){
         Specification<House> houseSpecification = Specification.where(byDeleted().and(byCityEquals(city)));
         if(!selectSearchRequest.search().isEmpty()){
             houseSpecification = houseSpecification.and(byStreet(selectSearchRequest.search()));
         }
-        if (number != null){
+        if (!number.isEmpty()){
             houseSpecification = houseSpecification.and(byNumber(number));
         }
         return houseSpecification;
@@ -49,7 +49,7 @@ public class HouseSpecificationFormer {
                                                                      String city, String street){
         Specification<House> houseSpecification = Specification.where(byDeleted().and(byCityEquals(city)));
         if(!selectSearchRequest.search().isEmpty()){
-            houseSpecification = houseSpecification.and(byNumber(Long.valueOf(selectSearchRequest.search())));
+            houseSpecification = houseSpecification.and(byNumber(selectSearchRequest.search()));
         }
         if(!street.isEmpty()){
             houseSpecification = houseSpecification.and(byStreetEquals(street));

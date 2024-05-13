@@ -6,7 +6,7 @@ public record TableHouseResponse(
         Long id,
         String city,
         String street,
-        Long number,
+        String number,
         String chairman,
         HouseStatus status
 ) {

@@ -27,9 +27,9 @@ public interface HouseSpecification {
         return (root, query, builder) ->
                 builder.equal(root.get("street"), street);
     }
-    static Specification<House> byNumber(Long number){
+    static Specification<House> byNumber(String number){
         return (root, query, builder) ->
-                builder.equal(root.get("number"), number);
+                builder.like(builder.upper(root.get("number")), "%"+number.toUpperCase()+"%");
     }
     static Specification<House> byChairmanId(Long chairmanId){
         return (root, query, builder) -> {

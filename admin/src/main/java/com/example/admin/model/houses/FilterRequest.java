@@ -7,7 +7,7 @@ public record FilterRequest(
         int pageSize,
         String city,
         String street,
-        Long number,
+        String number,
         Long chairmanId,
         HouseStatus status
 ) {
