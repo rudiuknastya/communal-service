@@ -119,7 +119,7 @@ function openQrCodeModal(response) {
                         <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
                         Закрити
                         </button>
-                        <button type="button" class="btn btn-primary" onclick="saveSecretKey()">
+                        <button type="button" class="btn btn-primary" onclick="confirmCode()">
                             OK
                         </button>
                     </div>
@@ -131,30 +131,11 @@ function openQrCodeModal(response) {
     $('#qrModal').modal('show');
     authenticationOn = true;
 }
-function saveSecretKey() {
-    sendSecretKey();
+function confirmCode() {
+    $('#qrModal').modal('hide');
     openConfirmCodeModal();
 }
 
-function sendSecretKey() {
-    blockCardDody();
-    $.ajax({
-        type: "POST",
-        url: "profile/save-secret-key",
-        data: {
-            secretKey: secretKey
-        },
-        headers: {
-            "X-CSRF-TOKEN": token
-        },
-        success: function () {
-            $('#qrModal').modal('hide');
-        },
-        error: function () {
-            toastr.error(errorMessage);
-        }
-    });
-}
 function openConfirmCodeModal(){
     if ($("#confirmCodeModal").length === 0) {
         $(".card-body").append(
@@ -171,7 +152,7 @@ function openConfirmCodeModal(){
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="disableFaAuthenticationOrVerifyCode()">
+                        <button type="button" class="btn btn-primary" onclick="disableOrEnableFaAuthentication()">
                             OK
                         </button>
                     </div>
@@ -183,19 +164,20 @@ function openConfirmCodeModal(){
     $('#confirmCodeModal').modal('show');
 }
 
-function disableFaAuthenticationOrVerifyCode() {
+function disableOrEnableFaAuthentication() {
     if(authenticationOn){
-        verifyCode();
+        enableFaAuthentication();
     } else {
         disableFaAuthentication();
     }
 }
-function verifyCode() {
+function enableFaAuthentication() {
     $.ajax({
         type: "POST",
-        url: "profile/verify-code",
+        url: "profile/enable-faAuthentication",
         data: {
-            code: $("#code").val()
+            code: $("#code").val(),
+            secretKey: secretKey
         },
         headers: {
             "X-CSRF-TOKEN": token

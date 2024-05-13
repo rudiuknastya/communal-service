@@ -42,15 +42,11 @@ public class AdminController {
     public @ResponseBody MFATokenResponse getQRCode() {
         return mfaTokenService.getMFATokenResponse();
     }
-    @PostMapping("/save-secret-key")
-    public @ResponseBody ResponseEntity<?> saveSecretKey(@RequestParam(name = "secretKey") String secretKey) {
+    @PostMapping("/enable-faAuthentication")
+    public @ResponseBody ResponseEntity<?> enableFaAuthentication(@RequestParam(name = "secretKey") String secretKey,
+                                                                  @RequestParam(name = "code") String code) {
         adminService.saveSecretKey(secretKey);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-    @PostMapping("/verify-code")
-    public @ResponseBody ResponseEntity<?> verifyCode(@RequestParam(name = "code") String code) {
-        Admin admin = adminService.getAuthenticatedAdmin();
-        if(mfaTokenService.verifyTotp(code, admin.getSecret())) {
+        if(mfaTokenService.verifyTotp(code,secretKey)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
