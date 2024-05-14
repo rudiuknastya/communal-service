@@ -13,6 +13,6 @@ public class CreateEmailUniqueValidator implements ConstraintValidator<CreateEma
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
-        return !userRepository.existsByEmail(email);
+        return !userRepository.existsByEmailAndDeletedIsFalse(email);
     }
 }

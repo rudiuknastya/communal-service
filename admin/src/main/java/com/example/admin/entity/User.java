@@ -16,13 +16,13 @@ public class User {
     private String lastName;
     @Column(length = 50, nullable = false)
     private String middleName;
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String email;
-    @Column(length = 13, nullable = false, unique = true)
+    @Column(length = 13, nullable = false)
     private String phoneNumber;
     @Column(nullable = false)
     private Long apartmentNumber;
-    @Column(length = 20, nullable = false, unique = true)
+    @Column(length = 20, nullable = false)
     private String personalAccount;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -31,7 +31,7 @@ public class User {
     private BigDecimal area;
     @Column(nullable = false)
     private String avatar;
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String username;
     @Column(length = 72, nullable = false)
     private String password;

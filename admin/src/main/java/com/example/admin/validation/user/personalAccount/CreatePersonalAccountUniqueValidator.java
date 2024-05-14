@@ -13,6 +13,6 @@ public class CreatePersonalAccountUniqueValidator implements ConstraintValidator
 
     @Override
     public boolean isValid(String personalAccount, ConstraintValidatorContext constraintValidatorContext) {
-        return !userRepository.existsByPersonalAccount(personalAccount);
+        return !userRepository.existsByPersonalAccountAndDeletedIsFalse(personalAccount);
     }
 }
