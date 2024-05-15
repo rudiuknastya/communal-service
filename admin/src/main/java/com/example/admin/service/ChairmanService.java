@@ -8,7 +8,8 @@ import org.springframework.data.domain.Page;
 public interface ChairmanService {
     void createChairman(CreateChairmanRequest createChairmanRequest);
     Page<TableChairmanResponse> getChairmenForTable(FilterRequest filterRequest);
-    boolean deleteChairman(Long id);
+    void deleteChairman(Long id);
+    boolean checkIfPossibleToDelete(Long id);
     ChairmanResponse getChairmanResponse(Long id);
     void updateChairman(EditChairmanRequest editChairmanRequest, Long id);
     Page<ChairmanNameResponse> getChairmanNameResponses(SelectSearchRequest selectSearchRequest);

@@ -56,7 +56,7 @@ function drawTable(response) {
                                     <a class="dropdown-item" href="chairmen/edit/${chairman.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
-                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${chairman.id})">
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="checkIfPossibleToDelete(${chairman.id}, '${chairman.fullName}')">
                                         <i class="ti ti-trash me-1"></i>${buttonLabelDelete}
                                     </button>
                                 </div>
@@ -78,8 +78,25 @@ function getStatusSpan(status) {
             return '<span class="badge bg-label-danger">Вимкнений</span>';
     }
 }
+function checkIfPossibleToDelete(id, fullName) {
+    $.ajax({
+        type: "GET",
+        url: "chairmen/check-delete/"+id,
+        data: request,
+        success: function (response) {
+            if(response){
+                openDeleteModal(id, fullName);
+            } else {
+                toastr.warning("Неможливо видалити. Голова привязаний до будинку");
+            }
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
 
-function openDeleteModal(chairmanId) {
+function openDeleteModal(chairmanId, fullName) {
     if($("#deleteModal").length === 0) {
         $("div.card").append(
             `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -91,7 +108,7 @@ function openDeleteModal(chairmanId) {
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h4>${deleteModalText}</h4>
+                        <h4>Ви впевнені що хочете видалити голову ${fullName}?</h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
@@ -118,18 +135,14 @@ function deleteEntry() {
         headers: {
             "X-CSRF-TOKEN": token
         },
-        success: function (response) {
+        success: function () {
             $('#deleteModal').modal('hide');
             getChairmen(0);
             toastr.success(deleteSuccessMessage);
         },
-        error: function (error) {
+        error: function () {
             $('#deleteModal').modal('hide');
-            if(error.status === 409){
-                toastr.warning("Неможливо видалити. Голова привязаний до будинку");
-            } else {
-                toastr.error(errorMessage);
-            }
+            toastr.error(errorMessage);
         }
     });
 }

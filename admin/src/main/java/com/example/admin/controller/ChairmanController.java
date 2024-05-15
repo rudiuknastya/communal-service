@@ -42,13 +42,14 @@ public class ChairmanController {
     public @ResponseBody Page<TableChairmanResponse> getChairmen(FilterRequest request){
         return chairmanService.getChairmenForTable(request);
     }
+    @GetMapping("/check-delete/{id}")
+    public @ResponseBody boolean checkIfPossibleToDelete(@PathVariable Long id){
+        return chairmanService.checkIfPossibleToDelete(id);
+    }
     @DeleteMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> deleteChairman(@PathVariable Long id){
-        if(chairmanService.deleteChairman(id)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        chairmanService.deleteChairman(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/edit/{id}")
     public ModelAndView getEditChairmanPage(){

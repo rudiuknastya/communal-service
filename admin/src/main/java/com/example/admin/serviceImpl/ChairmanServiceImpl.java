@@ -24,8 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.example.admin.specification.ChairmanSpecification.byDeleted;
-
 @Service
 public class ChairmanServiceImpl implements ChairmanService {
     private final ChairmanRepository chairmanRepository;
@@ -79,14 +77,23 @@ public class ChairmanServiceImpl implements ChairmanService {
     }
 
     @Override
-    public boolean deleteChairman(Long id) {
+    public void deleteChairman(Long id) {
+        logger.info("deleteChairman - Deleting chairmen by id "+id);
         Chairman chairman = getChairmanById(id);
-        int housesCount = houseRepository.countHousesByChairmanIdAndDeletedIsFalse(id);
-        if(housesCount > 0){
-            return false;
-        }
         chairman.setDeleted(true);
         saveChairman(chairman);
+        logger.info("deleteChairman - Chairmen have been deleted");
+    }
+
+    @Override
+    public boolean checkIfPossibleToDelete(Long id) {
+        logger.info("checkIfPossibleToDelete - Checking if possible to delete chairmen by id "+id);
+        int housesCount = houseRepository.countHousesByChairmanIdAndDeletedIsFalse(id);
+        if(housesCount > 0){
+            logger.info("checkIfPossibleToDelete - Not possible to delete chairmen");
+            return false;
+        }
+        logger.info("checkIfPossibleToDelete - Possible to delete chairmen");
         return true;
     }
 
