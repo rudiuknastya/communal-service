@@ -59,6 +59,9 @@ function drawTable(response) {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="users/filter-by-house/${house.id}">
+                                        <i class="ti ti-users me-1"></i> Показати користувачів
+                                    </a>
                                     <a class="dropdown-item" href="houses/edit/${house.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>

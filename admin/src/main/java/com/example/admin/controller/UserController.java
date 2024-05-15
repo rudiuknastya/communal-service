@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/admin/users")
 public class UserController {
@@ -27,7 +30,15 @@ public class UserController {
 
     @GetMapping("")
     public ModelAndView getUsersPage(){
-        return new ModelAndView("users/users");
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("getUrl","users/get");
+        attributes.put("deleteUrl","users/delete/");
+        attributes.put("citySelectUrl","users/get-cities");
+        attributes.put("streetSelectUrl","users/get-streets");
+        attributes.put("numberSelectUrl","users/get-numbers");
+        attributes.put("statusSelectUrl","users/get-statuses");
+        attributes.put("uploadFileUrl","users/upload-file");
+        return new ModelAndView("users/users", attributes);
     }
     @GetMapping("/new")
     public ModelAndView getCreateUserPage(){
@@ -87,5 +98,21 @@ public class UserController {
     public @ResponseBody ResponseEntity<?> uploadXlsxFile(@Valid @ModelAttribute XlsxFileRequest xlsxFileRequest){
         userService.importDataFromXlsx(xlsxFileRequest);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/filter-by-house/{id}")
+    public ModelAndView getUsersPageWithFilterByHouse(){
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("getUrl","../get");
+        attributes.put("deleteUrl","../delete/");
+        attributes.put("citySelectUrl","../get-cities");
+        attributes.put("streetSelectUrl","../get-streets");
+        attributes.put("numberSelectUrl","../get-numbers");
+        attributes.put("statusSelectUrl","../get-statuses");
+        attributes.put("uploadFileUrl","../upload-file");
+        return new ModelAndView("users/users", attributes);
+    }
+    @GetMapping("/filter-by-house/get/{id}")
+    public @ResponseBody FilterHouseResponse getUsersPageWithFilterByHouse(@PathVariable Long id){
+        return houseService.getHouseResponseForUsersFilter(id);
     }
 }

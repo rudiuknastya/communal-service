@@ -14,17 +14,43 @@ let request = {
 };
 
 $(document).ready(function () {
-    getUsers(0);
+    let url = window.location.pathname;
+    let id = url.substring(url.lastIndexOf('/') + 1);
+    if(id.localeCompare("users") === 0) {
+        getUsers(0);
+    } else {
+        getHouse(id);
+    }
     initializeSelects();
 });
-
+function getHouse(id) {
+    $.ajax({
+        type: "GET",
+        url: "get/"+id,
+        success: function (response) {
+            setHouseFilter(response);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+function setHouseFilter(response) {
+    let cityOption = new Option(response.city, response.city, true, true);
+    $('#filter-by-city').append(cityOption).trigger('change');
+    let streetOption = new Option(response.street, response.street, true, true);
+    $('#filter-by-street').append(streetOption).trigger('change');
+    let numberOption = new Option(response.number, response.number, true, true);
+    $('#filter-by-houseNumber').append(numberOption).trigger('change');
+    $("#filter-by-houseNumber").prop('disabled', false);
+}
 function getUsers(currentPage) {
     blockCardDody();
     request.page = currentPage;
     request.pageSize = tableLength;
     $.ajax({
         type: "GET",
-        url: "users/get",
+        url: getUrl,
         data: request,
         success: function (response) {
             $("tbody").empty();
@@ -127,7 +153,7 @@ function deleteEntry() {
     blockCardDody();
     $.ajax({
         type: "DELETE",
-        url: "users/delete/"+entityId,
+        url: deleteUrl+""+entityId,
         headers: {
             "X-CSRF-TOKEN": token
         },
@@ -154,10 +180,11 @@ function initializeCitySelect() {
     $("#filter-by-city").wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $("#dropdownParent"),
         maximumInputLength: 100,
+        allowClear: true,
         placeholder: "Оберіть місто",
         ajax: {
             type: "GET",
-            url: "users/get-cities",
+            url: citySelectUrl,
             data: function (params) {
                 return {
                     search: params.term,
@@ -186,10 +213,11 @@ function initializeStreetSelect() {
     $("#filter-by-street").wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $("#dropdownParent"),
         maximumInputLength: 100,
+        allowClear: true,
         placeholder: "Оберіть вулицю",
         ajax: {
             type: "GET",
-            url: "users/get-streets",
+            url: streetSelectUrl,
             data: function (params) {
                 return {
                     search: params.term,
@@ -224,7 +252,7 @@ function initializeHouseNumberSelect() {
         placeholder: "Оберіть номер будинку",
         ajax: {
             type: "GET",
-            url: "users/get-numbers",
+            url: numberSelectUrl,
             data: function (params) {
                 return {
                     search: params.term,
@@ -255,10 +283,11 @@ function initializeStatusSelect() {
     $("#filter-by-status").wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $("#dropdownParent"),
         minimumResultsForSearch: -1,
+        allowClear: true,
         placeholder: "Оберіть статус",
         ajax: {
             type: "GET",
-            url: "users/get-statuses",
+            url: statusSelectUrl,
             processResults: function (response) {
                 return {
                     results: $.map(response, function (item) {
@@ -400,7 +429,7 @@ function sendFile() {
 
     $.ajax({
         type: "POST",
-        url: "users/upload-file",
+        url: uploadFileUrl,
         data: formData,
         contentType: false,
         processData: false,

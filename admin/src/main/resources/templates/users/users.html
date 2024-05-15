@@ -76,5 +76,14 @@
 </div>
 
 </body>
+<script layout:fragment="initThymeleafVariable">
+    const getUrl = "[[${getUrl}]]";
+    const deleteUrl = "[[${deleteUrl}]]";
+    const citySelectUrl = "[[${citySelectUrl}]]";
+    const streetSelectUrl = "[[${streetSelectUrl}]]";
+    const numberSelectUrl = "[[${numberSelectUrl}]]";
+    const statusSelectUrl = "[[${statusSelectUrl}]]";
+    const uploadFileUrl = "[[${uploadFileUrl}]]";
+</script>
 <script layout:fragment="script" th:src="@{/pages/users/users.js}"></script>
 </html>

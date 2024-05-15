@@ -3,6 +3,7 @@ package com.example.admin.mapper;
 import com.example.admin.entity.Chairman;
 import com.example.admin.entity.House;
 import com.example.admin.model.houses.*;
+import com.example.admin.model.user.FilterHouseResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -36,4 +37,5 @@ public interface HouseMapper {
     default List<String> houseListToStreetStringList(List<House> houses){
         return houses.stream().map(House::getStreet).toList();
     }
+    FilterHouseResponse houseToFilterHouseResponse(House house);
 }

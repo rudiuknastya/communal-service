@@ -5,6 +5,7 @@ import com.example.admin.entity.House;
 import com.example.admin.mapper.HouseMapper;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.*;
+import com.example.admin.model.user.FilterHouseResponse;
 import com.example.admin.repository.ChairmanRepository;
 import com.example.admin.repository.HouseRepository;
 import com.example.admin.repository.UserRepository;
@@ -131,6 +132,15 @@ public class HouseServiceImpl implements HouseService {
         house.setDeleted(true);
         houseRepository.save(house);
         return true;
+    }
+
+    @Override
+    public FilterHouseResponse getHouseResponseForUsersFilter(Long id) {
+        logger.info("getHouseResponseForUsersFilter - Getting house response for users filter");
+        House house = getHouseById(id);
+        FilterHouseResponse filterHouseResponse = houseMapper.houseToFilterHouseResponse(house);
+        logger.info("getHouseResponseForUsersFilter - House response have been got");
+        return filterHouseResponse;
     }
 
     private House getHouseById(Long id){
