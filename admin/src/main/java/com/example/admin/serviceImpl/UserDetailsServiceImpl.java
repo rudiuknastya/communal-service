@@ -28,13 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         logger.info("loadUserByUsername() - Finding admin by email "+username+" for admin details");
         Admin admin = adminRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Admin was not found by email "+username));
         AdminDetails adminDetails = new AdminDetails(admin);
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if (admin.isFaAuthentication()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_PRE_AUTH_ADMIN"));
-        } else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
-        adminDetails.setAuthorities(authorities);
         logger.info("loadUserByUsername() - Admin was found");
         return adminDetails;
     }

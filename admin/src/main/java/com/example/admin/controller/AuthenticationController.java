@@ -33,12 +33,12 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public ModelAndView getLoginPage() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
             return new ModelAndView("authentication/login");
-//        } else {
-//            return new ModelAndView("redirect:users");
-//        }
+        } else {
+            return new ModelAndView("redirect:users");
+        }
     }
     @GetMapping("/login/2fa")
     public ModelAndView get2FAPage(@RequestParam(name="error", required = false) String error) {
@@ -60,5 +60,6 @@ public class AuthenticationController {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), authorities);
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+        adminService.updateRole("ROLE_ADMIN");
     }
 }

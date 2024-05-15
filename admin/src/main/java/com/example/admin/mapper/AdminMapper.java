@@ -17,8 +17,10 @@ public interface AdminMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "avatar", source = "avatar")
+    @Mapping(target = "role", source = "role")
     Admin createFirstAdmin(String firstName, String lastName, String middleName,
-                           String encodedPassword, String email, String phoneNumber, String avatar);
+                           String encodedPassword, String email, String phoneNumber,
+                           String avatar, String role);
 
     ProfileResponse adminToProfileResponse(Admin admin);
     @Mapping(target = "avatar", source = "avatar")

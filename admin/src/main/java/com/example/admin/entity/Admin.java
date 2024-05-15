@@ -24,6 +24,7 @@ public class Admin {
     private String avatar;
     private boolean faAuthentication;
     private String secret;
+    private String role;
 
     public Long getId() {
         return id;
@@ -103,5 +104,13 @@ public class Admin {
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

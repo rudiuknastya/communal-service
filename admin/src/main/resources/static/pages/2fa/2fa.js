@@ -1,5 +1,6 @@
 
 $("#send-button").on("click", function () {
+    let token = $("meta[name='_csrf']").attr("content");
     $.ajax({
         type: "POST",
         url: window.location.href,

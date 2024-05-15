@@ -41,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
             String avatar = uploadFileUtil.saveDefaultAvatar();
             Admin admin = adminMapper.createFirstAdmin("Адмін", "Адмін",
                     "Адмінович", passwordEncoder.encode("admin"),
-                    "admin@gmail.com", "+380991111111", avatar);
+                    "admin@gmail.com", "+380991111111", avatar, "ROLE_PRE_AUTH_ADMIN");
             saveAdmin(admin);
             logger.info("createAdminIfNotExist() - Admin was created");
         } else {
@@ -98,10 +98,21 @@ public class AdminServiceImpl implements AdminService {
     }
     @Override
     public void disableFaAuthentication() {
+        logger.info("disableFaAuthentication() - Disabling 2fa authentication");
         Admin admin = getAuthenticatedAdmin();
         admin.setFaAuthentication(false);
         admin.setSecret(null);
         saveAdmin(admin);
+        logger.info("disableFaAuthentication() - 2fa authentication was disabled");
+    }
+
+    @Override
+    public void updateRole(String role) {
+        logger.info("updateRole() - Updating role");
+        Admin admin = getAuthenticatedAdmin();
+        admin.setRole(role);
+        saveAdmin(admin);
+        logger.info("updateRole() - Role was updated");
     }
 
     @Override

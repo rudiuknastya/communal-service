@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,10 +31,18 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         UserDetails adminDetails = (UserDetails) authentication.getPrincipal();
         String email = adminDetails.getUsername();
         Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("Admin was not found by email "+email));
+        List<GrantedAuthority> authorities = new ArrayList<>();
         if (admin.isFaAuthentication()){
+            admin.setRole("ROLE_PRE_AUTH_ADMIN");
+            authorities.add(new SimpleGrantedAuthority("ROLE_PRE_AUTH_ADMIN"));
             response.sendRedirect(request.getContextPath()+"/admin/login/2fa");
         } else {
+            admin.setRole("ROLE_ADMIN");
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             response.sendRedirect(request.getContextPath()+"/admin/users");
         }
+        adminRepository.save(admin);
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), authorities);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 }

@@ -11,4 +11,5 @@ public interface AdminService {
     void saveSecretKey(String secretKey);
     Admin getAuthenticatedAdmin();
     void disableFaAuthentication();
+    void updateRole(String role);
 }
