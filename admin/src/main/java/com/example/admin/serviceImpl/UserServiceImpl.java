@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,16 +37,18 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UploadFileUtil uploadFileUtil;
     private final ExcelUploadUtil excelUploadUtil;
+    private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, HouseRepository houseRepository,
                            UserMapper userMapper, UploadFileUtil uploadFileUtil,
-                           ExcelUploadUtil excelUploadUtil) {
+                           ExcelUploadUtil excelUploadUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.houseRepository = houseRepository;
         this.userMapper = userMapper;
         this.uploadFileUtil = uploadFileUtil;
         this.excelUploadUtil = excelUploadUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -53,7 +56,8 @@ public class UserServiceImpl implements UserService {
         logger.info("createUser - Creating user "+createUserRequest.toString());
         House house = getHouseById(createUserRequest.number());
         String avatar = saveNewAvatar(createUserRequest.avatar());
-        User user = userMapper.createUser(createUserRequest, avatar, house);
+        User user = userMapper.createUser(createUserRequest, avatar, house,
+                passwordEncoder.encode(createUserRequest.password()));
         userRepository.save(user);
         logger.info("createUser - User has been created");
     }
@@ -101,10 +105,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(Long id, EditUserRequest editUserRequest) {
+        logger.info("updateUser - Updating user with id "+id+" "+editUserRequest.toString());
         User user = getUserById(id);
         House house = getHouseById(editUserRequest.number());
         String avatar = updateAvatar(editUserRequest.avatar(), user);
-        userMapper.updateUser(user, editUserRequest, house, avatar);
+        if (editUserRequest.password().isEmpty()) {
+            userMapper.updateUserWithoutPassword(user, editUserRequest, house, avatar);
+        } else {
+            userMapper.updateUserWithPassword(user, editUserRequest, house, avatar,
+                    passwordEncoder.encode(editUserRequest.password()));
+        }
+        logger.info("updateUser - User have been updated");
         userRepository.save(user);
     }
     private String updateAvatar(MultipartFile avatar, User user) {

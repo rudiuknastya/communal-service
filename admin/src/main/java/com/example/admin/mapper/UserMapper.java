@@ -19,7 +19,9 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "avatar", source = "savedAvatar")
     @Mapping(target = "house", source = "house")
-    User createUser(CreateUserRequest createUserRequest, String savedAvatar, House house);
+    @Mapping(target = "password", source = "encodedPassword")
+    User createUser(CreateUserRequest createUserRequest, String savedAvatar, House house,
+                    String encodedPassword);
     List<TableUserResponse> userListToTableUserResponseList(List<User> users);
     @Mapping(target = "id", source = "id")
     @Mapping(target = "fullName", expression = "java(user.getLastName()+\" \"+user.getFirstName()+\" \"+user.getMiddleName())")
@@ -38,5 +40,14 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "avatar", source = "savedAvatar")
     @Mapping(target = "house", source = "house")
-    void updateUser(@MappingTarget User user, EditUserRequest editUserRequest, House house, String savedAvatar);
+    @Mapping(target = "password", ignore = true)
+    void updateUserWithoutPassword(@MappingTarget User user, EditUserRequest editUserRequest,
+                                   House house, String savedAvatar);
+    @Mapping(target = "status", source = "editUserRequest.status")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "avatar", source = "savedAvatar")
+    @Mapping(target = "house", source = "house")
+    @Mapping(target = "password", source = "encodedPassword")
+    void updateUserWithPassword(@MappingTarget User user, EditUserRequest editUserRequest,
+                                House house, String savedAvatar, String encodedPassword);
 }
