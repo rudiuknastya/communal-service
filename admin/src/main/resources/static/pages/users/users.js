@@ -93,7 +93,7 @@ function drawTable(response) {
                                     <a class="dropdown-item" href="users/edit/${user.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
-                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${user.id})">
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${user.id}, '${user.fullName}')">
                                         <i class="ti ti-trash me-1"></i>${buttonLabelDelete}
                                     </button>
                                 </div>
@@ -118,7 +118,7 @@ function getStatusSpan(status) {
     }
 }
 
-function openDeleteModal(userId) {
+function openDeleteModal(userId, fullName) {
     if($("#deleteModal").length === 0) {
         $("div.card").append(
             `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -130,7 +130,7 @@ function openDeleteModal(userId) {
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h4>${deleteModalText}</h4>
+                        <h4>Ви впевнені що хочете видалити користувача ${fullName}?</h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">

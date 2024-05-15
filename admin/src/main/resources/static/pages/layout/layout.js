@@ -7,7 +7,6 @@ const fileValidation = "Зображення не відповідає форм�
 const dataNotFound = "Дані не знайдено";
 const buttonLabelEdit = "Редагувати";
 const buttonLabelDelete = "Видалити";
-const deleteModalText = "Ви впевнені що хочете видалити цей елемент?";
 
 let token = $("meta[name='_csrf']").attr("content");
 $(document).ready(function () {
