@@ -26,53 +26,65 @@ public class HouseController {
         this.chairmanService = chairmanService;
         this.houseService = houseService;
     }
+
     @GetMapping("")
-    public ModelAndView getHousesPage(){
+    public ModelAndView getHousesPage() {
         return new ModelAndView("houses/houses");
     }
+
     @GetMapping("/get")
-    public @ResponseBody Page<TableHouseResponse> getHouses(FilterRequest filterRequest){
+    public @ResponseBody Page<TableHouseResponse> getHouses(FilterRequest filterRequest) {
         return houseService.getHouseResponsesForTable(filterRequest);
     }
+
     @GetMapping("/new")
-    public ModelAndView getCreateHousePage(){
+    public ModelAndView getCreateHousePage() {
         return new ModelAndView("houses/create-house");
     }
+
     @PostMapping("/new")
     public @ResponseBody ResponseEntity<?> createHouse(@Validated(Create.class) @ModelAttribute
-                                                           HouseRequest houseRequest){
+                                                       HouseRequest houseRequest) {
         houseService.createHouse(houseRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/get-statuses")
-    public @ResponseBody HouseStatus[] getStatuses(){
+    public @ResponseBody HouseStatus[] getStatuses() {
         return HouseStatus.values();
     }
+
     @GetMapping("/get-chairmen")
-    public @ResponseBody Page<ChairmanNameResponse> getChairmen(SelectSearchRequest selectSearchRequest){
+    public @ResponseBody Page<ChairmanNameResponse> getChairmen(SelectSearchRequest selectSearchRequest) {
         return chairmanService.getChairmanNameResponses(selectSearchRequest);
     }
+
     @GetMapping("/edit/{id}")
-    public ModelAndView getEditHousePage(){
+    public ModelAndView getEditHousePage() {
         return new ModelAndView("houses/edit-house");
     }
+
     @PostMapping("/edit/{id}")
     public @ResponseBody ResponseEntity<?> updateHouse(@PathVariable Long id,
                                                        @Validated(Edit.class) @ModelAttribute
-                                                       HouseRequest houseRequest){
+                                                       HouseRequest houseRequest) {
         houseService.updateHouse(houseRequest, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/edit/get/{id}")
-    public @ResponseBody HouseResponse getCreateHousePage(@PathVariable Long id){
+    public @ResponseBody HouseResponse getCreateHousePage(@PathVariable Long id) {
         return houseService.getHouseResponse(id);
     }
+
     @DeleteMapping("/delete/{id}")
-    public @ResponseBody ResponseEntity<?> deleteHouse(@PathVariable Long id){
-        if(houseService.deleteHouse(id)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+    public @ResponseBody ResponseEntity<?> deleteHouse(@PathVariable Long id) {
+        houseService.deleteHouse(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/check-delete/{id}")
+    public @ResponseBody boolean checkIfPossibleToDelete(@PathVariable Long id) {
+        return houseService.checkIfPossibleToDelete(id);
     }
 }

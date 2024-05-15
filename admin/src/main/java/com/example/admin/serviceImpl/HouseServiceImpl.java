@@ -123,14 +123,23 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public boolean deleteHouse(Long id) {
-        int usersCount = userRepository.countUsersByHouseIdAndDeletedIsFalse(id);
-        if(usersCount > 0) {
-            return false;
-        }
+    public void deleteHouse(Long id) {
+        logger.info("deleteHouse - Deleting house by id "+id);
         House house = getHouseById(id);
         house.setDeleted(true);
         houseRepository.save(house);
+        logger.info("deleteHouse - House have been deleted");
+    }
+
+    @Override
+    public boolean checkIfPossibleToDelete(Long id) {
+        logger.info("checkIfPossibleToDelete - Checking if possible to delete house by id "+id);
+        int usersCount = userRepository.countUsersByHouseIdAndDeletedIsFalse(id);
+        if(usersCount > 0) {
+            logger.info("checkIfPossibleToDelete - Not possible to delete house");
+            return false;
+        }
+        logger.info("checkIfPossibleToDelete - Possible to delete house");
         return true;
     }
 

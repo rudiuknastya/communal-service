@@ -13,6 +13,7 @@ public interface HouseService {
     Page<String> getCities(SelectSearchRequest selectSearchRequest);
     Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, String number);
     Page<HouseNumberResponse> getNumbers(SelectSearchRequest selectSearchRequest, String city, String street);
-    boolean deleteHouse(Long id);
+    void deleteHouse(Long id);
+    boolean checkIfPossibleToDelete(Long id);
     FilterHouseResponse getHouseResponseForUsersFilter(Long id);
 }

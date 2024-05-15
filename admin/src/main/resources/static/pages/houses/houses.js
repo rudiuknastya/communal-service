@@ -65,7 +65,7 @@ function drawTable(response) {
                                     <a class="dropdown-item" href="houses/edit/${house.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
-                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${house.id})">
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="checkIfPossibleToDelete(${house.id}, '${house.city}', '${house.street}', ${house.number})">
                                         <i class="ti ti-trash me-1"></i>${buttonLabelDelete}
                                     </button>
                                 </div>
@@ -89,8 +89,25 @@ function getStatusSpan(status) {
             return '<span class="badge bg-label-danger">Вимкнений</span>';
     }
 }
+function checkIfPossibleToDelete(id, city, street, number) {
+    $.ajax({
+        type: "GET",
+        url: "houses/check-delete/"+id,
+        data: request,
+        success: function (response) {
+            if(response){
+                openDeleteModal(id, city, street, number);
+            } else {
+                toastr.warning("Неможливо видалити. Будинок привязаний до користувачів");
+            }
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
 
-function openDeleteModal(houseId) {
+function openDeleteModal(houseId, city, street, number) {
     if($("#deleteModal").length === 0) {
         $("div.card").append(
             `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -102,7 +119,7 @@ function openDeleteModal(houseId) {
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h4>${deleteModalText}</h4>
+                        <h4>Ви впевнені що хочете видалити будинок за адресою ${city} вул.${street} №${number} </h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
@@ -136,11 +153,7 @@ function deleteEntry() {
         },
         error: function (error) {
             $('#deleteModal').modal('hide');
-            if(error.status === 409){
-                toastr.warning("Неможливо видалити. Будинок привязаний до користувачів");
-            } else {
-                toastr.error(errorMessage);
-            }
+            toastr.error(errorMessage);
         }
     });
 }
