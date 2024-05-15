@@ -11,13 +11,13 @@ public class HouseSpecificationFormer {
     public static Specification<House> formSpecification(FilterRequest filterRequest){
         Specification<House> houseSpecification = Specification.where(byDeleted());
         if(!filterRequest.city().isEmpty()){
-            houseSpecification = houseSpecification.and(byCity(filterRequest.city()));
+            houseSpecification = houseSpecification.and(byCityLike(filterRequest.city()));
         }
         if(!filterRequest.street().isEmpty()){
-            houseSpecification = houseSpecification.and(byStreet(filterRequest.street()));
+            houseSpecification = houseSpecification.and(byStreetLike(filterRequest.street()));
         }
         if(!filterRequest.number().isEmpty()){
-            houseSpecification = houseSpecification.and(byNumber(filterRequest.number()));
+            houseSpecification = houseSpecification.and(byNumberLike(filterRequest.number()));
         }
         if (filterRequest.chairmanId() != null){
             houseSpecification = houseSpecification.and(byChairmanId(filterRequest.chairmanId()));
@@ -28,20 +28,23 @@ public class HouseSpecificationFormer {
         return houseSpecification;
     }
     public static Specification<House> formCitySelectSpecification(SelectSearchRequest selectSearchRequest){
-        Specification<House> houseSpecification = Specification.where(byDeleted());
+        Specification<House> houseSpecification = Specification.where(null);
         if(!selectSearchRequest.search().isEmpty()){
-            houseSpecification = houseSpecification.and(byCity(selectSearchRequest.search()));
+            houseSpecification = houseSpecification.and(byCityLike(selectSearchRequest.search()));
         }
+        houseSpecification = houseSpecification.and(groupByCity());
         return houseSpecification;
     }
     public static Specification<House> formStreetSelectSpecification(SelectSearchRequest selectSearchRequest,
                                                                      String city, String number){
-        Specification<House> houseSpecification = Specification.where(byDeleted().and(byCityEquals(city)));
+        Specification<House> houseSpecification = Specification.where(byCityEquals(city));
         if(!selectSearchRequest.search().isEmpty()){
-            houseSpecification = houseSpecification.and(byStreet(selectSearchRequest.search()));
+            houseSpecification = houseSpecification.and(byStreetLike(selectSearchRequest.search()));
         }
         if (!number.isEmpty()){
-            houseSpecification = houseSpecification.and(byNumber(number));
+            houseSpecification = houseSpecification.and(byNumberEquals(number)).and(byDeleted());
+        } else {
+            houseSpecification = houseSpecification.and(groupByStreet());
         }
         return houseSpecification;
     }
@@ -49,7 +52,7 @@ public class HouseSpecificationFormer {
                                                                      String city, String street){
         Specification<House> houseSpecification = Specification.where(byDeleted().and(byCityEquals(city)));
         if(!selectSearchRequest.search().isEmpty()){
-            houseSpecification = houseSpecification.and(byNumber(selectSearchRequest.search()));
+            houseSpecification = houseSpecification.and(byNumberLike(selectSearchRequest.search()));
         }
         if(!street.isEmpty()){
             houseSpecification = houseSpecification.and(byStreetEquals(street));

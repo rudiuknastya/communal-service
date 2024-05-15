@@ -102,7 +102,7 @@ function initializeStreetSelect() {
                     search: params.term,
                     page: params.page || 1,
                     city: $("#city").val(),
-                    number: $("#number").val()
+                    number: $("#number  option:selected").text()
                 };
             },
             processResults: function (response) {
