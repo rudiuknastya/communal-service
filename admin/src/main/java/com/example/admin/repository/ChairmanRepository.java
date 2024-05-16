@@ -5,15 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ChairmanRepository extends JpaRepository<Chairman, Long>, JpaSpecificationExecutor<Chairman> {
-    boolean existsByEmailAndDeleted(String email, boolean deleted);
+    boolean existsByEmailAndDeletedIsFalse(String email);
 
-    boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByEmailAndDeletedIsFalseAndIdNot(String email, Long id);
 
-    boolean existsByPhoneNumberAndDeleted(String phoneNumber, boolean deleted);
+    boolean existsByPhoneNumberAndDeletedIsFalse(String phoneNumber);
 
-    boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
+    boolean existsByPhoneNumberAndDeletedIsFalseAndIdNot(String phoneNumber, Long id);
 
-    boolean existsByUsernameAndDeleted(String username, boolean deleted);
+    boolean existsByUsernameAndDeletedIsFalse(String username);
 
-    boolean existsByUsernameAndIdNot(String username, Long id);
+    boolean existsByUsernameAndDeletedIsFalseAndIdNot(String username, Long id);
 }

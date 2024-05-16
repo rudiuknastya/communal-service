@@ -25,6 +25,6 @@ public class EditEmailUniqueValidator implements ConstraintValidator<EditEmailUn
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Long> map = objectMapper
                 .convertValue(object, new TypeReference<Map<String, Long>>() {});
-        return !chairmanRepository.existsByEmailAndIdNot(email, map.get("id"));
+        return !chairmanRepository.existsByEmailAndDeletedIsFalseAndIdNot(email, map.get("id"));
     }
 }

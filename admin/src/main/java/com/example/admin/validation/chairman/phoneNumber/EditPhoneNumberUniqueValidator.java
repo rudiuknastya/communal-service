@@ -25,6 +25,6 @@ public class EditPhoneNumberUniqueValidator implements ConstraintValidator<EditP
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Long> map = objectMapper
                 .convertValue(object, new TypeReference<Map<String, Long>>() {});
-        return !chairmanRepository.existsByPhoneNumberAndIdNot(phoneNumber, map.get("id"));
+        return !chairmanRepository.existsByPhoneNumberAndDeletedIsFalseAndIdNot(phoneNumber, map.get("id"));
     }
 }

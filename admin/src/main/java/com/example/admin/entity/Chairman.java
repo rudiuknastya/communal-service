@@ -14,9 +14,9 @@ public class Chairman {
     private String lastName;
     @Column(length = 50, nullable = false)
     private String middleName;
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String email;
-    @Column(length = 13, nullable = false, unique = true)
+    @Column(length = 13, nullable = false)
     private String phoneNumber;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

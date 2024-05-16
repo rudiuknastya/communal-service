@@ -25,6 +25,6 @@ public class EditUsernameUniqueValidator implements ConstraintValidator<EditUser
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Long> map = objectMapper
                 .convertValue(object, new TypeReference<Map<String, Long>>() {});
-        return !chairmanRepository.existsByUsernameAndIdNot(username, map.get("id"));
+        return !chairmanRepository.existsByUsernameAndDeletedIsFalseAndIdNot(username, map.get("id"));
     }
 }

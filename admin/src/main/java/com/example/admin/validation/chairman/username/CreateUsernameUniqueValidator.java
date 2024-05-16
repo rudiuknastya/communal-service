@@ -13,6 +13,6 @@ public class CreateUsernameUniqueValidator implements ConstraintValidator<Create
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
-        return !chairmanRepository.existsByUsernameAndDeleted(username, false);
+        return !chairmanRepository.existsByUsernameAndDeletedIsFalse(username);
     }
 }

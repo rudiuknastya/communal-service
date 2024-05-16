@@ -12,7 +12,7 @@ import static java.lang.annotation.ElementType.FIELD;
 @Target({FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordPatternValid {
-    String message() default "Пароль має мати принаймні одну цифру, одну велику літеру, один спецсимвол ,./?";
+    String message() default "Пароль має мати принаймні одну цифру, одну велику літеру, один спецсимвол ,./? та розмір від 8 до 100 символів";
 
     Class<?>[] groups() default {};
 

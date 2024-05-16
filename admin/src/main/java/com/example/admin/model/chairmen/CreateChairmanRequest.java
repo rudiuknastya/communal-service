@@ -5,12 +5,16 @@ import com.example.admin.validation.chairman.email.CreateEmailUnique;
 import com.example.admin.validation.chairman.phoneNumber.CreatePhoneUnique;
 import com.example.admin.validation.chairman.username.CreateUsernameUnique;
 import com.example.admin.validation.general.image.ImageExtensionValid;
+import com.example.admin.validation.general.password.PasswordsEqual;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
-
+@PasswordsEqual(
+        password = "password",
+        confirmPassword = "confirmPassword"
+)
 public record CreateChairmanRequest(
         @NotBlank(message = "Поле не може бути порожнім")
         @Size(max=50, message = "Розмір поля має бути не більше 50 символів")
