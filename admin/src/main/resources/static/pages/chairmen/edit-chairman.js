@@ -15,7 +15,7 @@ function getChairman() {
             setFields(response);
         },
         error: function (error) {
-            printErrorMessageToField(error);
+            toastr.error(errorMessage);
         }
     });
 }
@@ -167,6 +167,7 @@ function sendData(formData) {
             window.location = "../../chairmen";
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });

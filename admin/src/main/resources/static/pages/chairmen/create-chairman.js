@@ -141,6 +141,7 @@ function sendData(formData) {
             window.location = "../chairmen";
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });

@@ -231,6 +231,7 @@ function sendData(formData) {
             window.location = "../../houses";
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });

@@ -269,6 +269,7 @@ function sendData(formData) {
             window.location = "../users";
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });
