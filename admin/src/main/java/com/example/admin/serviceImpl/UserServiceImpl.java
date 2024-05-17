@@ -13,10 +13,6 @@ import com.example.admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,8 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -130,30 +125,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void importDataFromXlsx(XlsxFileRequest xlsxFileRequest) {
-
-    }
-    private void openWorkBook(MultipartFile multipartFile) throws IOException {
-        XSSFWorkbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        int rowIndex = 0;
-        for(Row row: sheet){
-            if(rowIndex == 0){
-                rowIndex ++;
-                continue;
+        logger.info("importDataFromXlsx - Importing data from xlsx file "+xlsxFileRequest.xlsxFile().getOriginalFilename());
+        try {
+            List<UserDataImportRequest> userDataImportRequests =  excelUploadUtil.importDataFromExcelFile(xlsxFileRequest.xlsxFile());
+            for(UserDataImportRequest userDataImportRequest: userDataImportRequests){
+                HouseDataImportDto houseDataImportDto = userDataImportRequest.getHouseDataImportDto();
+                House house = houseRepository.findByCityAndStreetAndNumberAndDeletedIsFalse(houseDataImportDto.getCity(),
+                        houseDataImportDto.getStreet(), houseDataImportDto.getNumber())
+                        .orElseThrow(()-> new EntityNotFoundException("House was not found by city: "+houseDataImportDto.getCity()+" street: "+houseDataImportDto.getStreet()+" number: "+houseDataImportDto.getNumber()));
+                User user = userMapper.userDataImportRequestToUser(userDataImportRequest,
+                        house, passwordEncoder.encode(userDataImportRequest.getPassword()),
+                        "defaultAvatar.png");
+                userRepository.save(user);
             }
-            Iterator<Cell> cellIterator = row.iterator();
-            int cellIndex = 0;
-            User user = new User();
-            while (cellIterator.hasNext()){
-                Cell cell = cellIterator.next();
-                switch (cellIndex){
-                    case 0 -> user.setLastName(cell.getStringCellValue());
-                    case 1 -> user.setFirstName(cell.getStringCellValue());
-                    case 2 -> user.setMiddleName(cell.getStringCellValue());
-                    case 3 -> user.setPhoneNumber(cell.getStringCellValue());
-                    case 4 -> user.setEmail(cell.getStringCellValue());
-                }
-            }
+            logger.info("importDataFromXlsx - Data has been imported");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
     }
 

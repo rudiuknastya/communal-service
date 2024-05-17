@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public record XlsxFileRequest(
         @FileNotEmpty(message = "Файл не був завантажений")
-        @XlsxFileExtension
+//        @XlsxFileExtension
         MultipartFile xlsxFile
 ) {
 }

@@ -1,8 +1,8 @@
 package com.example.admin.handler;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,10 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @ControllerAdvice
 public class ValidationExceptionHandler {
@@ -32,5 +29,16 @@ public class ValidationExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> importDataNotValid(ConstraintViolationException exception) {
+        Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
+        Map<String, String> errors = new HashMap<>();
+        for (Iterator<ConstraintViolation<?>> violation = violations.iterator(); violation.hasNext(); ) {
+            ConstraintViolation<?> constraint = violation.next();
+            errors.put(String.valueOf(constraint.getPropertyPath()), constraint.getMessage());
+        }
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 }

@@ -380,7 +380,7 @@ function openUploadFileModal() {
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div>
+                        <div id="modal-text">
                             <input type="file" accept=".xlsx" class="form-control"  id="xlsxFile" name="xlsxFile" onchange="fileValidationChange(this)">
                         </div>
                     </div>
@@ -441,7 +441,53 @@ function sendFile() {
             getUsers(0);
         },
         error: function (error) {
-            printErrorMessageToField(error);
+            if(error.status === 409){
+                showDataImportValidation(error);
+            } else {
+                printErrorMessageToField(error);
+            }
         }
     });
 }
+
+function showDataImportValidation(errorResponse) {
+    console.log(errorResponse.responseJSON);
+    let appendText = "";
+    let rowAppendText = ""
+    const errorMap = new Map(Object.entries((errorResponse.responseJSON)));
+    errorMap.forEach((value, key) => {
+        if (key.localeCompare("row") === 0) {
+            rowAppendText += "<p class='mt-2 text-danger'> Проблема у рядку " + value + ": </p>";
+        } else {
+            appendText += "<p class='text-danger'>" + getUaField(key) + ": " + value + "</p>";
+        }
+    });
+    $("#modal-text").append(rowAppendText);
+    $("#modal-text").append(appendText);
+}
+    function getUaField(field) {
+        switch (field) {
+            case 'firstName':
+                return "Ім'я";
+            case 'lastName':
+                return "Прізвище";
+            case 'middleName':
+                return "По батькові";
+            case 'phoneNumber':
+                return "Номер телефону";
+            case 'apartmentNumber':
+                return "Номер квартири";
+            case 'personalAccount':
+                return "Особистий рахунок";
+            case 'status':
+                return "Статус";
+            case 'area':
+                return "Площа";
+            case 'username':
+                return "Логін";
+            case 'password':
+                return "Пароль";
+            case 'house':
+                return "Будинок";
+        }
+    }

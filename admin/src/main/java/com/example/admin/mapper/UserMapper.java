@@ -2,10 +2,7 @@ package com.example.admin.mapper;
 
 import com.example.admin.entity.House;
 import com.example.admin.entity.User;
-import com.example.admin.model.user.CreateUserRequest;
-import com.example.admin.model.user.EditUserRequest;
-import com.example.admin.model.user.TableUserResponse;
-import com.example.admin.model.user.UserResponse;
+import com.example.admin.model.user.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -50,4 +47,18 @@ public interface UserMapper {
     @Mapping(target = "password", source = "encodedPassword")
     void updateUserWithPassword(@MappingTarget User user, EditUserRequest editUserRequest,
                                 House house, String savedAvatar, String encodedPassword);
+
+    @Mapping(target = "house", source = "house")
+    @Mapping(target = "password", source = "encodedPassword")
+    @Mapping(target = "avatar", source = "avatar")
+    @Mapping(target = "status", source = "userDataImportRequest.status")
+    User userDataImportRequestToUser(UserDataImportRequest userDataImportRequest, House house,
+                                     String encodedPassword, String avatar);
+
+
+
+
+
+
+
 }
