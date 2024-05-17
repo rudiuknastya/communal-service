@@ -14,7 +14,7 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
     <title>ЖКХ Система</title>
     <link rel="icon" type="image/x-icon" th:href="@{/assets/img/favicon/home-icon.png}" />
 
@@ -112,34 +112,34 @@
                 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                     <div class="mx-auto">
                         <ul class="menu-inner">
-                            <li class="menu-item me-2 py-2 px-3">
+                            <li class="menu-item py-2 px-3">
                                 <a th:href="@{/chairman/users}" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-users"></i>
                                     <div data-i18n="Email">Користувачі</div>
                                 </a>
                             </li>
-                            <li class="menu-item me-2 py-2 px-3">
+                            <li class="menu-item py-2 px-3">
                                 <a th:href="@{/chairman/invoices}" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-friends"></i>
                                     <div data-i18n="Email">Рахунки</div>
                                 </a>
                             </li>
-                            <li class="menu-item me-2 py-2 px-3">
+                            <li class="menu-item py-2 px-3">
                                 <a th:href="@{/chairman/chat}" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-brand-wechat"></i>
                                     <div data-i18n="Email">Чат</div>
                                 </a>
                             </li>
-                            <li class="menu-item me-2 py-2 px-3">
+                            <li class="menu-item py-2 px-3">
                                 <a th:href="@{/chairman/voting}" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-chart-pie"></i>
                                     <div data-i18n="Email">Голосування</div>
                                 </a>
                             </li>
-                            <li class="menu-item me-2 py-2 px-3">
+                            <li class="menu-item py-2 px-3">
                                 <a th:href="@{/chairman/messages}" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-message"></i>
-                                    <div data-i18n="Email">Зворотній зв'язок</div>
+                                    <div data-i18n="Email" class="text-wrap">Зворотній зв'язок</div>
                                 </a>
                             </li>
                             <li class="menu-item py-2 px-3">
@@ -159,12 +159,12 @@
                             </div>
                         </li>
                         <li class="nav-item me-3">
-<!--                            <div sec:authentication="principal.fullName"></div>-->
+                            <div sec:authentication="principal.fullName"></div>
                             <div id="roleName">Голова</div>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/logout}" id="logoutLink">
+                            <a class="nav-link" th:href="@{/chairman/logout}" id="logoutLink">
                                 <h3 class="mb-0"><i class="bi bi-box-arrow-right"></i></h3>
                             </a>
                         </li>
@@ -217,9 +217,9 @@
 <!--<script th:src="@{/pages/general/custom-block-ui.js}"></script>-->
 <!--<script th:src="@{/pages/general/pagination.js}"></script>-->
 
-<!--<script th:inline="javascript">-->
-<!--    // const authenticatedAvatar = [[${#authentication.principal.avatar}]];-->
-<!--</script>-->
+<script th:inline="javascript">
+    const authenticatedAvatar = [[${#authentication.principal.avatar}]];
+</script>
 <th:block layout:fragment="initThymeleafVariable"></th:block>
 <script layout:fragment="script"></script>
 </html>
