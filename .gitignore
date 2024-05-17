@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /admin/src/main/resources/application.yml
+/chairman/src/main/resources/application.yml
