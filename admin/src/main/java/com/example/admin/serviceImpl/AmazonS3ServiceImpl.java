@@ -18,17 +18,17 @@ import java.io.IOException;
 public class AmazonS3ServiceImpl implements AmazonS3Service {
     @Value("${aws.s3.bucket}")
     private String bucketName;
-    private final AmazonS3 amazonS3;
+    private final AmazonS3 s3client;
     private final Logger logger = LogManager.getLogger(AmazonS3ServiceImpl.class);
-    public AmazonS3ServiceImpl(AmazonS3 amazonS3) {
-        this.amazonS3 = amazonS3;
+    public AmazonS3ServiceImpl(AmazonS3 s3client) {
+        this.s3client = s3client;
     }
 
     @Override
     public void uploadMultipartFile(String keyName, MultipartFile file) {
         logger.info("uploadMultipartFile() - Uploading multipart file "+file.getOriginalFilename());
         try {
-            amazonS3.putObject(bucketName, keyName, file.getInputStream(), null);
+            s3client.putObject(bucketName, keyName, file.getInputStream(), null);
             logger.info("uploadMultipartFile() - Multipart file has been uploaded");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -39,7 +39,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     public void uploadFile(String name, File file) {
         logger.info("uploadFile() - Uploading file "+file.getName());
         try {
-            amazonS3.putObject(bucketName, name, new FileInputStream(file), null);
+            s3client.putObject(bucketName, name, new FileInputStream(file), null);
             logger.info("uploadFile() - File has been uploaded");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -49,7 +49,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     @Override
     public S3Object getS3Object(String fileName) {
         logger.info("getFile() - Getting file "+fileName);
-        S3Object s3Object = amazonS3.getObject(bucketName, fileName);
+        S3Object s3Object = s3client.getObject(bucketName, fileName);
         logger.info("getFile() - File has been got");
         return s3Object;
     }
@@ -57,7 +57,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     @Override
     public void deleteFile(String fileName) {
         logger.info("getFile() - Deleting file "+fileName);
-        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        s3client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
         logger.info("getFile() - File has been deleted");
     }
 }

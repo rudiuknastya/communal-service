@@ -29,7 +29,9 @@ public class UploadFileUtil {
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage());
         }
-        saveFile("defaultAvatar.png", avatar);
+        String uuidFile = UUID.randomUUID().toString();
+        String filename = uuidFile+"."+"defaultAvatar.png";
+        saveFile(filename, avatar);
         logger.info("saveDefaultAvatar - Default avatar has been saved");
         return "defaultAvatar.png";
     }
