@@ -122,5 +122,13 @@
             <version>1.12.676</version>
         </dependency>
         <!-- AWS S3-->
+
+        <!-- Tika -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <!-- Tika -->
     </dependencies>
 </project>
