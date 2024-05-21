@@ -2,17 +2,27 @@ package com.example.chairman.serviceImp;
 
 import com.example.chairman.entity.User;
 import com.example.chairman.mapper.UserMapper;
+import com.example.chairman.model.user.FilterRequest;
+import com.example.chairman.model.user.TableUserResponse;
 import com.example.chairman.model.user.UserRequest;
 import com.example.chairman.model.user.UserResponse;
 import com.example.chairman.repository.UserRepository;
 import com.example.chairman.service.UserService;
+import com.example.chairman.specification.specificationFormer.UserSpecificationFormer;
 import com.example.chairman.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -61,6 +71,22 @@ public class UserServiceImpl implements UserService {
         logger.info("getUserResponse - User response has been got");
         return userResponse;
     }
+
+    @Override
+    public Page<TableUserResponse> getUserResponsesForTable(FilterRequest filterRequest) {
+        logger.info("getUserResponsesForTable - Getting user responses for table "+filterRequest.toString());
+        Pageable pageable = PageRequest.of(filterRequest.page(), filterRequest.pageSize());
+        Page<User> userPage = getFilteredUsers(filterRequest, pageable);
+        List<TableUserResponse> tableUserResponses = userMapper.userListToTableUserResponseList(userPage.getContent());
+        Page<TableUserResponse> tableUserResponsePage = new PageImpl<>(tableUserResponses, pageable, userPage.getTotalElements());
+        logger.info("getUserResponsesForTable - User responses have been got");
+        return tableUserResponsePage;
+    }
+    private Page<User> getFilteredUsers(FilterRequest filterRequest, Pageable pageable) {
+        Specification<User> userSpecification = UserSpecificationFormer.formSpecification(filterRequest);
+        return userRepository.findAll(userSpecification, pageable);
+    }
+
     private User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User was not found by id "+id));
     }
