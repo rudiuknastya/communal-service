@@ -1,5 +1,7 @@
 const buttonLabelEdit = "Редагувати";
 const buttonLabelDelete = "Видалити";
+const errorMessage = "Виникла помилка!";
+
 let token = $("meta[name='_csrf']").attr("content");
 $(document).ready(function () {
     const currHref = window.location.pathname;

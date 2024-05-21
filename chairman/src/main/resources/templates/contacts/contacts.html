@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Контакти</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h4 class="mb-4">Редагування сторінки "Контакти"</h4>
+    <form enctype="multipart/form-data" id="form" class="row g-3">
+        <div class="col-md-12">
+            <label for="firstTitle" class="form-label">Заголовок</label>
+            <input type="text" class="form-control" id="firstTitle" name="firstTitle"
+                   placeholder="Заголовок" maxlength="100">
+        </div>
+        <div class="col-md-12">
+            <label for="firstText" class="form-label">Зміст</label>
+            <div id="firstText" name="firstText"></div>
+        </div>
+        <div class="col-md-12">
+            <label for="secondTitle" class="form-label mt-5">Заголовок</label>
+            <input type="text" class="form-control" id="secondTitle" name="secondTitle"
+                   placeholder="Заголовок" maxlength="100">
+        </div>
+        <div class="col-md-12">
+            <label for="secondText" class="form-label">Зміст</label>
+            <div id="secondText" name="secondText"></div>
+        </div>
+        <div class="mt-5 d-flex justify-content-end gap-3">
+            <button type="button" class="btn btn-secondary" id="cancel-button">Відмінити</button>
+            <button type="button" class="btn btn-primary" id="save-button">Зберегти</button>
+        </div>
+    </form>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pages/contacts/contacts.js}"></script>
+</html>
