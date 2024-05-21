@@ -21,7 +21,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/assets/**", "/pages/**").permitAll()
+                        .requestMatchers("/assets/**", "/pages/**",
+                                "/chairman/forgotPassword", "/chairman/sentToken",
+                                "/chairman/changePassword", "/chairman/tokenExpired",
+                                "/chairman/success").permitAll()
                         .requestMatchers("/chairman/**").hasRole("CHAIRMAN")
                         .anyRequest().authenticated()
                 )

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ChairmanRepository extends JpaRepository<Chairman, Long> {
     Optional<Chairman> findByUsernameAndDeletedIsFalse(String username);
+    Optional<Chairman> findByEmailAndDeletedIsFalse(String email);
+    boolean existsByEmailAndDeletedIsFalse(String email);
 }

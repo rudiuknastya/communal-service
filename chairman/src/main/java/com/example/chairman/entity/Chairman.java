@@ -28,6 +28,8 @@ public class Chairman {
     @Column(length = 72, nullable = false)
     private String password;
     private boolean deleted;
+    @OneToOne(mappedBy = "chairman", cascade = CascadeType.ALL)
+    private ChairmanPasswordResetToken chairmanPasswordResetToken;
 
     public Long getId() {
         return id;
@@ -115,5 +117,13 @@ public class Chairman {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public ChairmanPasswordResetToken getChairmanPasswordResetToken() {
+        return chairmanPasswordResetToken;
+    }
+
+    public void setChairmanPasswordResetToken(ChairmanPasswordResetToken chairmanPasswordResetToken) {
+        this.chairmanPasswordResetToken = chairmanPasswordResetToken;
     }
 }
