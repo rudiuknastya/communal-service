@@ -23,7 +23,6 @@ public class VotingForm {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private VotingStatus status;
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private VotingResultStatus resultStatus;
     private boolean deleted;
