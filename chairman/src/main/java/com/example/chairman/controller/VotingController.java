@@ -20,9 +20,10 @@ public class VotingController {
     }
 
     @GetMapping("/new")
-    public ModelAndView getVotingFormPage(){
+    public ModelAndView getCreateVotingFormPage(){
         return new ModelAndView("voting/create-voting-form");
     }
+
     @PostMapping("/new")
     public @ResponseBody ResponseEntity<?> createVotingForm(@Valid @ModelAttribute VotingFormDto votingFormDto){
         votingService.createVotingForm(votingFormDto);
@@ -31,5 +32,20 @@ public class VotingController {
     @GetMapping("/get-statuses")
     public @ResponseBody VotingStatus[] getStatuses(){
         return VotingStatus.values();
+    }
+    @GetMapping("/edit/{id}")
+    public ModelAndView getEditVotingFormPage(){
+        return new ModelAndView("voting/edit-voting-form");
+    }
+    @GetMapping("/edit/get/{id}")
+    public @ResponseBody VotingFormDto getVotingForm(@PathVariable Long id){
+        return votingService.getVotingFormDto(id);
+    }
+    @PostMapping("/edit/{id}")
+    public @ResponseBody ResponseEntity<?> getEditVotingFormPage(@PathVariable Long id,
+                                                                 @Valid @ModelAttribute
+                                                                 VotingFormDto votingFormDto){
+        votingService.updateVotingForm(votingFormDto, id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Голосування</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form enctype="multipart/form-data" id="form" class="row g-3">
+        <div class="col-md-12">
+            <label for="subject" class="form-label">Тема голосування</label>
+            <input type="text" class="form-control" id="subject" name="subject"
+                   placeholder="Тема голосування" maxlength="100">
+        </div>
+        <div class="col-md-12">
+            <label for="text" class="form-label">Текст голосування</label>
+            <textarea class="form-control" id="text" name="text" rows="5"
+                      placeholder="Текст голосування" maxlength="400"></textarea>
+        </div>
+        <div class="col-md-3">
+            <label for="startDate" class="form-label">Час початку</label>
+            <input type="text" class="form-control" id="startDate" name="startDate"
+                   placeholder="Час початку">
+        </div>
+        <div class="col-md-3">
+            <label for="endDate" class="form-label">Час закінчення</label>
+            <input type="text" class="form-control" id="endDate" name="endDate"
+                   placeholder="Час закінчення">
+        </div>
+        <div class="col-md-3">
+            <label for="quorum" class="form-label">Кворум кв.м</label>
+            <input type="text" class="form-control" id="quorum" name="quorum"
+                   placeholder="Кворум кв.м">
+        </div>
+        <div class="col-md-3">
+            <label for="status" class="form-label">Статус</label>
+            <select class="form-select" id="status" name="status"></select>
+        </div>
+        <div class="mt-5 d-flex justify-content-end gap-3">
+            <a href="../../voting" type="button" class="btn btn-secondary" id="cancel-button">Відмінити</a>
+            <button type="button" class="btn btn-primary" id="save-button">Зберегти</button>
+        </div>
+    </form>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/voting/edit-voting-form.js}"></script>
+</html>
