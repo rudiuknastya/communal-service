@@ -79,7 +79,7 @@ function drawTable(response) {
             i++;
         }
     }
-    buildPagination(response, "getUsers");
+    buildPagination(response, "getVotingForms");
 }
 function formatDate(date) {
     return moment(date, 'YYYY-MM-DD HH:MM').format('DD.MM.YYYY HH:MM')
