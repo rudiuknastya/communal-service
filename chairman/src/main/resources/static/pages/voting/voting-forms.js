@@ -62,7 +62,7 @@ function drawTable(response) {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="users/${form.id}">
+                                    <a class="dropdown-item" href="voting/${form.id}">
                                         <i class="ti ti-eye me-1"></i>Перегляд
                                     </a>
                                     <a class="dropdown-item" href="voting/edit/${form.id}">

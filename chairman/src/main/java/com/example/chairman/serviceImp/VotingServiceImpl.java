@@ -5,6 +5,7 @@ import com.example.chairman.entity.VotingStatus;
 import com.example.chairman.mapper.VotingFormMapper;
 import com.example.chairman.model.voting.FilterRequest;
 import com.example.chairman.model.voting.TableVotingFormResponse;
+import com.example.chairman.model.voting.ViewVotingFormResponse;
 import com.example.chairman.model.voting.VotingFormDto;
 import com.example.chairman.repository.VoteRepository;
 import com.example.chairman.repository.VotingFormRepository;
@@ -99,6 +100,21 @@ public class VotingServiceImpl implements VotingService {
         Specification<VotingForm> votingFormSpecification = VotingFormSpecificationFormer
                 .formSpecification(filterRequest);
         return votingFormRepository.findAll(votingFormSpecification, pageable);
+    }
+
+    @Override
+    public ViewVotingFormResponse getViewVotingFormResponse(Long id) {
+        logger.info("getViewVotingFormResponse - Getting view voting form response by id "+id);
+        VotingForm votingForm = getVotingForm(id);
+        Long voted = voteRepository.getVotesCountByVotingFormId(votingForm.getId());
+        Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingForm.getId());
+        Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingForm.getId());
+        Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingForm.getId());
+        ViewVotingFormResponse votingFormResponse = votingFormMapper
+                .votingFormToViewVotingFormResponse(votingForm, voted,
+                        List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount));
+        logger.info("getViewVotingFormResponse - View voting form response has been got");
+        return votingFormResponse;
     }
 
     private VotingForm getVotingForm(Long id) {

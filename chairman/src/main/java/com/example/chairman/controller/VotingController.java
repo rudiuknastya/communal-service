@@ -4,6 +4,7 @@ import com.example.chairman.entity.VotingResultStatus;
 import com.example.chairman.entity.VotingStatus;
 import com.example.chairman.model.voting.FilterRequest;
 import com.example.chairman.model.voting.TableVotingFormResponse;
+import com.example.chairman.model.voting.ViewVotingFormResponse;
 import com.example.chairman.model.voting.VotingFormDto;
 import com.example.chairman.service.VotingService;
 import jakarta.validation.Valid;
@@ -53,7 +54,7 @@ public class VotingController {
         return new ModelAndView("voting/edit-voting-form");
     }
     @GetMapping("/edit/get/{id}")
-    public @ResponseBody VotingFormDto getVotingForm(@PathVariable Long id){
+    public @ResponseBody VotingFormDto getVotingFormForEDIT(@PathVariable Long id){
         return votingService.getVotingFormDto(id);
     }
     @PostMapping("/edit/{id}")
@@ -62,5 +63,14 @@ public class VotingController {
                                                                  VotingFormDto votingFormDto){
         votingService.updateVotingForm(votingFormDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/{id}")
+    public ModelAndView getVotingFormForViewPage(){
+        return new ModelAndView("voting/view-voting-form");
+    }
+
+    @GetMapping("get-for-view/{id}")
+    public @ResponseBody ViewVotingFormResponse getVotingFormForView(@PathVariable Long id){
+        return votingService.getViewVotingFormResponse(id);
     }
 }

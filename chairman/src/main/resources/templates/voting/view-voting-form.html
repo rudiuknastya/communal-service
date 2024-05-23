@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Голосування</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-around align-items-center">
+        <div class="col-8">
+            <h5 id="subject"></h5>
+            <div id="text"></div>
+        </div>
+        <a href="" type="button" class="btn btn-label-primary" id="edit-button">
+            <i class="ti ti-pencil me-1"></i>
+            Редагувати
+        </a>
+    </div>
+    <div class="d-flex justify-content-around align-items-center mt-5">
+        <div class="col-4">
+            <canvas id="doughnutChart" class="chartjs mb-5" data-height="150"></canvas>
+            <ul class="doughnut-legend d-flex justify-content-around ps-0 mb-2 mt-4 pt-1">
+                <li class="ct-series-0 d-flex flex-column me-3">
+                    <h6 class="mb-0 fw-bold">За</h6>
+                    <span
+                            class="badge badge-dot my-2 cursor-pointer rounded-pill mx-auto"
+                            style="background-color: rgb(80, 200, 120); width: 35px; height: 6px">
+                    </span>
+                    <div id="agreed" class="text-muted mx-auto"></div>
+                </li>
+                <li class="ct-series-1 d-flex flex-column me-3">
+                    <h6 class="mb-0 fw-bold">Проти</h6>
+                    <span
+                            class="badge badge-dot my-2 cursor-pointer rounded-pill mx-auto"
+                            style="background-color: rgb(238, 75, 43); width: 35px; height: 6px">
+                    </span>
+                    <div id="disagreed" class="text-muted mx-auto"></div>
+                </li>
+                <li class="ct-series-2 d-flex flex-column">
+                    <h6 class="mb-0 fw-bold">Утримались</h6>
+                    <span
+                            class="badge badge-dot my-2 cursor-pointer rounded-pill mx-auto"
+                            style="background-color: rgb(255, 234, 0); width: 35px; height: 6px">
+                    </span>
+                    <div id="absent" class="text-muted mx-auto"></div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-5">
+            <p>Статус:  <span class="fw-bold" id="status"></span></p>
+            <p>Голосування:  <span class="fw-bold" id="resultStatus"></span></p>
+            <p>Всього проголосувало:  <span class="fw-bold" id="voted"></span></p>
+            <p>Час початку:  <span class="fw-bold" id="startTime"></span></p>
+            <p>Час завершення:  <span class="fw-bold" id="endTime"></span></p>
+            <a href="" type="button" class="btn btn-primary" id="show-users">
+                Переглянути учасників
+            </a>
+        </div>
+    </div>
+
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/voting/view-voting-form.js}"></script>
+</html>
