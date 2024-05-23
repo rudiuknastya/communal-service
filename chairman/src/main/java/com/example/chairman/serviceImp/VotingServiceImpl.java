@@ -1,15 +1,15 @@
 package com.example.chairman.serviceImp;
 
+import com.example.chairman.entity.Vote;
 import com.example.chairman.entity.VotingForm;
 import com.example.chairman.entity.VotingStatus;
 import com.example.chairman.mapper.VotingFormMapper;
-import com.example.chairman.model.voting.FilterRequest;
-import com.example.chairman.model.voting.TableVotingFormResponse;
-import com.example.chairman.model.voting.ViewVotingFormResponse;
-import com.example.chairman.model.voting.VotingFormDto;
+import com.example.chairman.model.voting.*;
 import com.example.chairman.repository.VoteRepository;
 import com.example.chairman.repository.VotingFormRepository;
 import com.example.chairman.service.VotingService;
+import com.example.chairman.specification.VoteSpecification;
+import com.example.chairman.specification.specificationFormer.VoteSpecificationFormer;
 import com.example.chairman.specification.specificationFormer.VotingFormSpecificationFormer;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
@@ -115,6 +115,23 @@ public class VotingServiceImpl implements VotingService {
                         List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount));
         logger.info("getViewVotingFormResponse - View voting form response has been got");
         return votingFormResponse;
+    }
+
+    @Override
+    public Page<VotedUserResponse> getVotedUserResponsesForTable(Long id, UsersFilterRequest usersFilterRequest) {
+        logger.info("getVotedUserResponsesForTable - Getting voted user responses for table by id "+id+" "+usersFilterRequest.toString());
+        Pageable pageable = PageRequest.of(usersFilterRequest.page(), usersFilterRequest.pageSize());
+        Page<Vote> votes = getFilteredVotes(id, usersFilterRequest, pageable);
+        List<VotedUserResponse> votedUserResponses = votingFormMapper
+                .voteListToVotedUserResponseList(votes.getContent());
+        Page<VotedUserResponse> votedUserResponsePage = new PageImpl<>(votedUserResponses, pageable, votes.getTotalElements());
+        logger.info("getVotedUserResponsesForTable - Voted user responses have been got");
+        return votedUserResponsePage;
+    }
+
+    private Page<Vote> getFilteredVotes(Long id, UsersFilterRequest usersFilterRequest, Pageable pageable) {
+        Specification<Vote> voteSpecification = VoteSpecificationFormer.formSpecification(id, usersFilterRequest);
+        return voteRepository.findAll(voteSpecification, pageable);
     }
 
     private VotingForm getVotingForm(Long id) {

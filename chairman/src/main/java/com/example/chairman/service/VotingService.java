@@ -1,9 +1,6 @@
 package com.example.chairman.service;
 
-import com.example.chairman.model.voting.FilterRequest;
-import com.example.chairman.model.voting.TableVotingFormResponse;
-import com.example.chairman.model.voting.ViewVotingFormResponse;
-import com.example.chairman.model.voting.VotingFormDto;
+import com.example.chairman.model.voting.*;
 import org.springframework.data.domain.Page;
 
 public interface VotingService {
@@ -12,4 +9,5 @@ public interface VotingService {
     void updateVotingForm(VotingFormDto votingFormDto, Long id);
     Page<TableVotingFormResponse> getVotingFormResponsesForTable(FilterRequest filterRequest);
     ViewVotingFormResponse getViewVotingFormResponse(Long id);
+    Page<VotedUserResponse> getVotedUserResponsesForTable(Long id, UsersFilterRequest usersFilterRequest);
 }

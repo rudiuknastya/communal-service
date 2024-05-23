@@ -1,11 +1,9 @@
 package com.example.chairman.controller;
 
+import com.example.chairman.entity.UserVote;
 import com.example.chairman.entity.VotingResultStatus;
 import com.example.chairman.entity.VotingStatus;
-import com.example.chairman.model.voting.FilterRequest;
-import com.example.chairman.model.voting.TableVotingFormResponse;
-import com.example.chairman.model.voting.ViewVotingFormResponse;
-import com.example.chairman.model.voting.VotingFormDto;
+import com.example.chairman.model.voting.*;
 import com.example.chairman.service.VotingService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -73,4 +71,18 @@ public class VotingController {
     public @ResponseBody ViewVotingFormResponse getVotingFormForView(@PathVariable Long id){
         return votingService.getViewVotingFormResponse(id);
     }
+    @GetMapping("users/{id}")
+    public ModelAndView getVotedUsersPage(){
+        return new ModelAndView("voting/voted-users");
+    }
+
+    @GetMapping("users/get/{id}")
+    public @ResponseBody Page<VotedUserResponse> getVotedUsers(@PathVariable Long id, UsersFilterRequest usersFilterRequest){
+        return votingService.getVotedUserResponsesForTable(id, usersFilterRequest);
+    }
+    @GetMapping("users/get-userVotes")
+    public @ResponseBody UserVote[] getUserVotes(){
+        return UserVote.values();
+    }
+
 }
