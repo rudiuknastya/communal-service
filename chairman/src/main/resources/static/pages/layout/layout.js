@@ -1,6 +1,7 @@
 const buttonLabelEdit = "Редагувати";
 const buttonLabelDelete = "Видалити";
 const errorMessage = "Виникла помилка!";
+const dataNotFound = "Дані не знайдено";
 
 let token = $("meta[name='_csrf']").attr("content");
 $(document).ready(function () {

@@ -1,9 +1,13 @@
 package com.example.chairman.controller;
 
+import com.example.chairman.entity.VotingResultStatus;
 import com.example.chairman.entity.VotingStatus;
+import com.example.chairman.model.voting.FilterRequest;
+import com.example.chairman.model.voting.TableVotingFormResponse;
 import com.example.chairman.model.voting.VotingFormDto;
 import com.example.chairman.service.VotingService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +22,14 @@ public class VotingController {
     public VotingController(VotingService votingService) {
         this.votingService = votingService;
     }
-
+    @GetMapping("")
+    public ModelAndView getVotingFormsPage(){
+        return new ModelAndView("voting/voting-forms");
+    }
+    @GetMapping("/get")
+    public @ResponseBody Page<TableVotingFormResponse> getVotingForms(FilterRequest filterRequest){
+        return votingService.getVotingFormResponsesForTable(filterRequest);
+    }
     @GetMapping("/new")
     public ModelAndView getCreateVotingFormPage(){
         return new ModelAndView("voting/create-voting-form");
@@ -32,6 +43,10 @@ public class VotingController {
     @GetMapping("/get-statuses")
     public @ResponseBody VotingStatus[] getStatuses(){
         return VotingStatus.values();
+    }
+    @GetMapping("/get-resultStatuses")
+    public @ResponseBody VotingResultStatus[] getResultStatuses(){
+        return VotingResultStatus.values();
     }
     @GetMapping("/edit/{id}")
     public ModelAndView getEditVotingFormPage(){

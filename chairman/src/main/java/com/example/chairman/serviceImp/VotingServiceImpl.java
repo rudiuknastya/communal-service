@@ -1,24 +1,40 @@
 package com.example.chairman.serviceImp;
 
 import com.example.chairman.entity.VotingForm;
+import com.example.chairman.entity.VotingStatus;
 import com.example.chairman.mapper.VotingFormMapper;
+import com.example.chairman.model.voting.FilterRequest;
+import com.example.chairman.model.voting.TableVotingFormResponse;
 import com.example.chairman.model.voting.VotingFormDto;
+import com.example.chairman.repository.VoteRepository;
 import com.example.chairman.repository.VotingFormRepository;
 import com.example.chairman.service.VotingService;
+import com.example.chairman.specification.specificationFormer.VotingFormSpecificationFormer;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class VotingServiceImpl implements VotingService {
     private final VotingFormRepository votingFormRepository;
     private final VotingFormMapper votingFormMapper;
+    private final VoteRepository voteRepository;
     private final Logger logger = LogManager.getLogger(VotingServiceImpl.class);
 
-    public VotingServiceImpl(VotingFormRepository votingFormRepository, VotingFormMapper votingFormMapper) {
+    public VotingServiceImpl(VotingFormRepository votingFormRepository, VotingFormMapper votingFormMapper,
+                             VoteRepository voteRepository) {
         this.votingFormRepository = votingFormRepository;
         this.votingFormMapper = votingFormMapper;
+        this.voteRepository = voteRepository;
     }
 
     @Override
@@ -45,6 +61,44 @@ public class VotingServiceImpl implements VotingService {
         votingFormMapper.updateVotingForm(votingForm, votingFormDto);
         votingFormRepository.save(votingForm);
         logger.info("updateVotingForm - Voting form has been updated");
+    }
+
+    @Override
+    public Page<TableVotingFormResponse> getVotingFormResponsesForTable(FilterRequest filterRequest) {
+        logger.info("getVotingFormResponsesForTable - Getting voting form responses for table "+filterRequest.toString());
+        Pageable pageable = PageRequest.of(filterRequest.page(), filterRequest.pageSize());
+        Page<VotingForm> votingForms = getFilteredVotingForms(filterRequest, pageable);
+        List<TableVotingFormResponse> tableVotingFormResponses = getTableVotingFormResponses(votingForms);
+        Page<TableVotingFormResponse> tableVotingFormResponsePage = new PageImpl<>(tableVotingFormResponses, pageable, votingForms.getTotalElements());
+        logger.info("getVotingFormResponsesForTable - Voting form responses have been got");
+        return tableVotingFormResponsePage;
+    }
+
+    private List<TableVotingFormResponse> getTableVotingFormResponses(Page<VotingForm> votingForms) {
+        List<TableVotingFormResponse> tableVotingFormResponses = new ArrayList<>();
+        for(VotingForm votingForm: votingForms.getContent()){
+            TableVotingFormResponse tableVotingFormResponse;
+            if(votingForm.getStatus().equals(VotingStatus.ACTIVE)){
+                Long votesCount = voteRepository.getVotesCountByVotingFormId(votingForm.getId());
+                tableVotingFormResponse = votingFormMapper
+                        .votingFormToTableVotingFormResponse(votingForm,votesCount.toString());
+            } else {
+                Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingForm.getId());
+                Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingForm.getId());
+                Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingForm.getId());
+                String voted = agreeVotesCount+"/"+abstainVotesCount+"/"+disagreeVotesCount;
+                tableVotingFormResponse = votingFormMapper
+                        .votingFormToTableVotingFormResponse(votingForm, voted);
+            }
+            tableVotingFormResponses.add(tableVotingFormResponse);
+        }
+        return tableVotingFormResponses;
+    }
+
+    private Page<VotingForm> getFilteredVotingForms(FilterRequest filterRequest, Pageable pageable) {
+        Specification<VotingForm> votingFormSpecification = VotingFormSpecificationFormer
+                .formSpecification(filterRequest);
+        return votingFormRepository.findAll(votingFormSpecification, pageable);
     }
 
     private VotingForm getVotingForm(Long id) {
