@@ -134,6 +134,15 @@ public class VotingServiceImpl implements VotingService {
         return voteRepository.findAll(voteSpecification, pageable);
     }
 
+    @Override
+    public void deleteVotingForm(Long id) {
+        logger.info("deleteVotingForm - Deleting voting form by id "+id);
+        VotingForm votingForm = getVotingForm(id);
+        votingForm.setDeleted(true);
+        votingFormRepository.save(votingForm);
+        logger.info("deleteVotingForm - Voting form has been deleted");
+    }
+
     private VotingForm getVotingForm(Long id) {
         return votingFormRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Voting form was not found by id "+id));

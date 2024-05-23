@@ -10,4 +10,5 @@ public interface VotingService {
     Page<TableVotingFormResponse> getVotingFormResponsesForTable(FilterRequest filterRequest);
     ViewVotingFormResponse getViewVotingFormResponse(Long id);
     Page<VotedUserResponse> getVotedUserResponsesForTable(Long id, UsersFilterRequest usersFilterRequest);
+    void deleteVotingForm(Long id);
 }

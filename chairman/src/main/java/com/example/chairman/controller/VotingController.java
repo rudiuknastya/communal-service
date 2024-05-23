@@ -84,5 +84,9 @@ public class VotingController {
     public @ResponseBody UserVote[] getUserVotes(){
         return UserVote.values();
     }
-
+    @DeleteMapping("delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteVotingForm(@PathVariable Long id){
+        votingService.deleteVotingForm(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

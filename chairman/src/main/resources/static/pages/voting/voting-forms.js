@@ -68,7 +68,7 @@ function drawTable(response) {
                                     <a class="dropdown-item" href="voting/edit/${form.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
-                                    <button type="button" class="dropdown-item btn justify-content-start">
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${form.id}, '${form.subject}')">
                                         <i class="ti ti-trash me-1"></i>${buttonLabelDelete}
                                     </button>
                                 </div>
@@ -114,6 +114,57 @@ function formatVoted(voted) {
     } else {
         return voted;
     }
+}
+
+function openDeleteModal(id, subject) {
+    if($("#deleteModal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Ви впевнені що хочете видалити голосування "${subject}"?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        Закрити
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete-button" onclick="deleteEntity()">
+                            Видалити
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#deleteModal').modal('show');
+    entityId = id;
+}
+
+function deleteEntity() {
+    blockCardDody();
+    $.ajax({
+        type: "DELETE",
+        url: "voting/delete/"+entityId,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function (response) {
+            $('#deleteModal').modal('hide');
+            getVotingForms(0);
+            toastr.success(deleteSuccessMessage);
+        },
+        error: function (error) {
+            $('#deleteModal').modal('hide');
+            toastr.error(errorMessage);
+        }
+    });
 }
 
 function initializeSelects() {
