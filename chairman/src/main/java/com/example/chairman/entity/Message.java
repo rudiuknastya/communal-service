@@ -3,6 +3,7 @@ package com.example.chairman.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "messages")
@@ -15,13 +16,14 @@ public class Message {
     @Column(length = 500, nullable = false)
     private String text;
     @Column(nullable = false)
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
     @ManyToOne
     @JoinColumn(name = "chairman_id", referencedColumnName = "id", nullable = false)
     private Chairman chairman;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -47,11 +49,11 @@ public class Message {
         this.text = text;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -69,5 +71,13 @@ public class Message {
 
     public void setChairman(Chairman chairman) {
         this.chairman = chairman;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
