@@ -39,13 +39,6 @@ public class UserDataImportRequest {
     @NotBlank(message = "Поле не може бути порожнім")
     @Size(min = 10, max=100, message = "Довжина поля має бути від 10 до 100 символів")
     private String username;
-    @Pattern.List({
-            @Pattern(regexp = ".*\\d+.*", message = "Пароль має мати принаймні одну цифру, одну велику літеру, один спецсимвол ,./?"),
-            @Pattern(regexp = ".*[,./?]+.*", message = "Пароль має мати принаймні одну цифру, одну велику літеру, один спецсимвол ,./?"),
-            @Pattern(regexp = ".*[A-Z]+.*", message = "Пароль має мати принаймні одну цифру, одну велику літеру, один спецсимвол ,./?")
-    })
-    @Size(min = 8, max = 100, message = "Довжина поля має бути від 8 до 100 символів")
-    @NotBlank(message = "Поле не може бути порожнім")
     private String password;
     private HouseDataImportDto houseDataImportDto;
 

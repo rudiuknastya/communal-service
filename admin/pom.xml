@@ -150,7 +150,13 @@
         </dependency>
         <!-- Poi -->
 
-
+        <!--Password generator -->
+            <dependency>
+                <groupId>org.passay</groupId>
+                <artifactId>passay</artifactId>
+                <version>1.6.4</version>
+            </dependency>
+        <!--Password generator -->
     </dependencies>
 
     <build>
