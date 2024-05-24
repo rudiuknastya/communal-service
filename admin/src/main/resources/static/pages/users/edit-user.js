@@ -307,3 +307,13 @@ function sendData(formData) {
         }
     });
 }
+
+$("#apartmentNumber").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9]/g, '')
+        .replace(/(\..*?)\..*/g, '$1'));
+});
+
+$("#area").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9.]/g, '')
+        .replace(/(\..*?)\..*/g, '$1'));
+});
