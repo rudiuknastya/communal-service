@@ -475,6 +475,8 @@ function showDataImportValidation(errorResponse) {
                 return "По батькові";
             case 'phoneNumber':
                 return "Номер телефону";
+            case 'email':
+                return "Email";
             case 'apartmentNumber':
                 return "Номер квартири";
             case 'personalAccount':
@@ -485,8 +487,6 @@ function showDataImportValidation(errorResponse) {
                 return "Площа";
             case 'username':
                 return "Логін";
-            case 'password':
-                return "Пароль";
             case 'house':
                 return "Будинок";
         }

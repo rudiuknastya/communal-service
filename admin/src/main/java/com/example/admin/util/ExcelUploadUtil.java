@@ -37,6 +37,7 @@ public class ExcelUploadUtil {
         XSSFSheet sheet = workbook.getSheetAt(0);
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         List<UserDataImportRequest> userDataImportRequests = new ArrayList<>();
+        Set<ConstraintViolation<UserDataImportRequest>> violations = new HashSet<>();
         int rowIndex = 0;
         for(Row row: sheet){
             if(rowIndex == 0){
@@ -49,10 +50,10 @@ public class ExcelUploadUtil {
             HouseDataImportDto houseDataImportDto = new HouseDataImportDto();
             while (cellIterator.hasNext()){
                 Cell cell = cellIterator.next();
-                setCellData(cell, cellIndex, importRequest, houseDataImportDto);
+                setCellData(cell, cellIndex, importRequest, houseDataImportDto, violations);
                 cellIndex ++;
             }
-            validateData(importRequest, houseDataImportDto, validator, rowIndex);
+            validateData(importRequest, houseDataImportDto, validator, rowIndex, violations);
             importRequest.setHouseDataImportDto(houseDataImportDto);
             importRequest.setPassword(generatePassword());
             userDataImportRequests.add(importRequest);
@@ -91,7 +92,8 @@ public class ExcelUploadUtil {
             return password;
     }
 
-    private void setCellData(Cell cell, int cellIndex, UserDataImportRequest importRequest, HouseDataImportDto houseDataImportDto) {
+    private void setCellData(Cell cell, int cellIndex, UserDataImportRequest importRequest,
+                             HouseDataImportDto houseDataImportDto,Set<ConstraintViolation<UserDataImportRequest>> violations) {
         switch (cellIndex){
             case 0:
                 importRequest.setLastName(cell.getStringCellValue());
@@ -121,7 +123,13 @@ public class ExcelUploadUtil {
                 importRequest.setPersonalAccount(cell.getStringCellValue());
                 break;
             case 9:
-                importRequest.setStatus(UserStatus.valueOf(cell.getStringCellValue()));
+                try {
+                    importRequest.setStatus(UserStatus.valueOf(getStatus(cell.getStringCellValue())));
+                } catch (IllegalArgumentException ex){
+                    Path path = PathImpl.createPathFromString("status");
+                    ConstraintViolation<UserDataImportRequest> violation =  ConstraintViolationImpl.forBeanValidation("Такого статусу не існує", null, null, "Такого статусу не існує", UserDataImportRequest.class, new UserDataImportRequest(), null, null, path, null, null);
+                    violations.add(violation);
+                }
                 break;
             case 10:
                 importRequest.setApartmentNumber((long) cell.getNumericCellValue());
@@ -134,10 +142,23 @@ public class ExcelUploadUtil {
                 break;
         }
     }
+    private String getStatus(String ukrStatus){
+        String status = ukrStatus.toUpperCase();
+        switch (status){
+            case "НОВИЙ":
+                return "NEW";
+            case "АКТИВНИЙ":
+                return "ACTIVE";
+            case "ВИМКНЕНИЙ":
+                return "DISABLED";
+            default:
+                return ukrStatus;
+        }
+    }
 
-    private void validateData(UserDataImportRequest importRequest, HouseDataImportDto houseDataImportDto, Validator validator, int rowIndex) {
+    private void validateData(UserDataImportRequest importRequest, HouseDataImportDto houseDataImportDto, Validator validator, int rowIndex, Set<ConstraintViolation<UserDataImportRequest>> mutableViolations) {
         Set<ConstraintViolation<UserDataImportRequest>> violations = validator.validate(importRequest);
-        Set<ConstraintViolation<UserDataImportRequest>> mutableViolations = new HashSet<>(violations);
+        mutableViolations.addAll(violations);
         userDataImportValidator.validateHouseExist(houseDataImportDto, mutableViolations);
         userDataImportValidator.validateForUniqueness(importRequest, mutableViolations);
         if (!mutableViolations.isEmpty()){

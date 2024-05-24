@@ -24,7 +24,7 @@ public class UserDataImportRequest {
     private String email;
     @NotBlank(message = "Поле не може бути порожнім")
     @Size(max = 13, message = "Розмір поля має бути не більше 13 символів")
-    @Pattern(regexp = "380(50)?(66)?(95)?(99)?(67)?(68)?(96)?(97)?(98)?(63)?(93)?(73)?[0-9]{0,7}",
+    @Pattern(regexp = "\\+?380(50)?(66)?(95)?(99)?(67)?(68)?(96)?(97)?(98)?(63)?(93)?(73)?[0-9]{7}",
             message = "Номер телефону не відповідає формату '380991111111'")
     private String phoneNumber;
     @NotNull(message = "Поле не може бути порожнім")
@@ -32,7 +32,6 @@ public class UserDataImportRequest {
     @NotBlank(message = "Поле не може бути порожнім")
     @Pattern(regexp="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}", message="Невірний формат рахунку")
     private String personalAccount;
-    @NotNull(message = "Поле не може бути порожнім")
     private UserStatus status;
     @NotNull(message = "Поле не може бути порожнім")
     private BigDecimal area;
