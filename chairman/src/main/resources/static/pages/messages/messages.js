@@ -68,7 +68,6 @@ function drawTable(response) {
 
 function formDate(date) {
     const splitDate = date.split("T");
-    console.log(splitDate);
     const datePart = moment(splitDate[0], 'YYYY-MM-DD').format('DD.MM.YYYY');
     return datePart + " "+splitDate[1];
 }

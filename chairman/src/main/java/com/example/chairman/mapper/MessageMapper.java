@@ -2,6 +2,7 @@ package com.example.chairman.mapper;
 
 import com.example.chairman.entity.Message;
 import com.example.chairman.model.message.TableMessageResponse;
+import com.example.chairman.model.message.ViewMessageResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,4 +17,5 @@ public interface MessageMapper {
     @Mapping(target = "phoneNumber", source = "user.phoneNumber")
     @Mapping(target = "id", source = "message.id")
     TableMessageResponse messageToTableMessageResponse(Message message);
+    ViewMessageResponse messageToViewMessageResponse(Message message);
 }
