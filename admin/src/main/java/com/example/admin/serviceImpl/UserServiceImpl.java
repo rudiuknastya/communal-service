@@ -133,9 +133,10 @@ public class UserServiceImpl implements UserService {
                 House house = houseRepository.findByCityAndStreetAndNumberAndDeletedIsFalse(houseDataImportDto.getCity(),
                         houseDataImportDto.getStreet(), houseDataImportDto.getNumber())
                         .orElseThrow(()-> new EntityNotFoundException("House was not found by city: "+houseDataImportDto.getCity()+" street: "+houseDataImportDto.getStreet()+" number: "+houseDataImportDto.getNumber()));
+                String avatar = uploadFileUtil.saveDefaultAvatar();
                 User user = userMapper.userDataImportRequestToUser(userDataImportRequest,
                         house, passwordEncoder.encode(userDataImportRequest.getPassword()),
-                        "defaultAvatar.png");
+                        avatar);
                 userRepository.save(user);
             }
             logger.info("importDataFromXlsx - Data has been imported");
