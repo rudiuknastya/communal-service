@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Рахунки</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form enctype="multipart/form-data" id="form" class="row g-5">
+        <div class="col-md-5 d-flex justify-content-between align-items-center">
+            <div class="me-2">
+                Квитанція
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">№</span>
+                <input type="text" class="form-control" id="number" disabled name="number"/>
+            </div>
+        </div>
+        <div class="col-md-7"></div>
+        <div class="col-md-6">
+            <div>
+                <label for="userId" class="form-label">Користувач</label>
+                <select class="form-select" id="userId" name="userId"></select>
+            </div>
+            <div class="mt-4">
+                <p>Особистий рахунок: <span id="personal-account"></span></p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="file" class="form-label">Файл</label>
+            <input type="file" accept=".pdf" class="form-control"  id="file" name="file">
+            <div class="text-danger" id="fileValidation"></div>
+        </div>
+        <div class="mt-5 d-flex justify-content-end gap-3">
+            <a href="../invoices" type="button" class="btn btn-secondary" id="cancel-button">Відмінити</a>
+            <button type="button" class="btn btn-primary" id="save-button">Зберегти</button>
+        </div>
+    </form>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/invoices/create-invoice.js}"></script>
+</html>

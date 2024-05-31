@@ -3,6 +3,7 @@ const buttonLabelDelete = "Видалити";
 const errorMessage = "Виникла помилка!";
 const dataNotFound = "Дані не знайдено";
 const deleteSuccessMessage = "Видалення успішне!";
+const fileValidation = "Зображення не відповідає формату .jpeg, .jpg, .png";
 
 let token = $("meta[name='_csrf']").attr("content");
 $(document).ready(function () {

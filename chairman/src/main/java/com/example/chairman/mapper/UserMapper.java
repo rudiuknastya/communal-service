@@ -2,6 +2,7 @@ package com.example.chairman.mapper;
 
 import com.example.chairman.entity.House;
 import com.example.chairman.entity.User;
+import com.example.chairman.model.invoice.UserNameResponse;
 import com.example.chairman.model.user.TableUserResponse;
 import com.example.chairman.model.user.UserRequest;
 import com.example.chairman.model.user.UserResponse;
@@ -39,4 +40,8 @@ public interface UserMapper {
     @Mapping(target = "houseNumber", source = "house.number")
     @Mapping(target = "status", source = "status")
     TableUserResponse userToTableUserResponse(User user);
+    List<UserNameResponse> userListToUserNameResponseList(List<User> users);
+    @Mapping(target = "fullName", expression = "java(user.getLastName()+\" \"+user.getFirstName()+\" \"+user.getMiddleName())")
+    @Mapping(target = "id", source = "id")
+    UserNameResponse userToUserNameResponse(User user);
 }

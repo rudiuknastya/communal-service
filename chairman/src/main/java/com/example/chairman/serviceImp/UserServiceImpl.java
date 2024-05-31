@@ -2,6 +2,8 @@ package com.example.chairman.serviceImp;
 
 import com.example.chairman.entity.User;
 import com.example.chairman.mapper.UserMapper;
+import com.example.chairman.model.general.SelectSearchRequest;
+import com.example.chairman.model.invoice.UserNameResponse;
 import com.example.chairman.model.user.FilterRequest;
 import com.example.chairman.model.user.TableUserResponse;
 import com.example.chairman.model.user.UserRequest;
@@ -85,6 +87,31 @@ public class UserServiceImpl implements UserService {
     private Page<User> getFilteredUsers(FilterRequest filterRequest, Pageable pageable) {
         Specification<User> userSpecification = UserSpecificationFormer.formSpecification(filterRequest);
         return userRepository.findAll(userSpecification, pageable);
+    }
+
+    @Override
+    public Page<UserNameResponse> getUserNameResponses(SelectSearchRequest selectSearchRequest) {
+        logger.info("getUserNameResponses - Getting user name responses for select "+selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Page<User> users = getFilteredUsersForSelect(selectSearchRequest, pageable);
+        List<UserNameResponse> userNameResponses = userMapper.userListToUserNameResponseList(users.getContent());
+        Page<UserNameResponse> userNameResponsePage = new PageImpl<>(userNameResponses, pageable, users.getTotalElements());
+        logger.info("getUserNameResponses - User name responses have been got");
+        return userNameResponsePage;
+    }
+
+    private Page<User> getFilteredUsersForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable) {
+        Specification<User> userSpecification = UserSpecificationFormer.formSelectSpecification(selectSearchRequest);
+        return userRepository.findAll(userSpecification, pageable);
+    }
+
+    @Override
+    public String getPersonalAccount(Long id) {
+        logger.info("getPersonalAccount - Getting personal account");
+        User user = getUserById(id);
+        String personalAccount = user.getPersonalAccount();
+        logger.info("getPersonalAccount - Personal account has been got");
+        return personalAccount;
     }
 
     private User getUserById(Long id){
