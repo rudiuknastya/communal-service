@@ -3,19 +3,28 @@ package com.example.chairman.serviceImp;
 import com.example.chairman.entity.Invoice;
 import com.example.chairman.entity.User;
 import com.example.chairman.mapper.InvoiceMapper;
+import com.example.chairman.model.invoice.FilterRequest;
 import com.example.chairman.model.invoice.InvoiceRequest;
+import com.example.chairman.model.invoice.TableInvoiceResponse;
 import com.example.chairman.repository.InvoiceRepository;
 import com.example.chairman.repository.UserRepository;
 import com.example.chairman.service.InvoiceService;
+import com.example.chairman.specification.specificationFormer.InvoiceSpecificationFormer;
 import com.example.chairman.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.tika.utils.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,6 +53,31 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceMapper.invoiceRequestToInvoice(invoiceRequest, user, file, number, localDate);
         invoiceRepository.save(invoice);
         logger.info("createInvoice - Invoice has been created");
+    }
+
+    @Override
+    public Page<TableInvoiceResponse> getTableInvoiceResponses(FilterRequest filterRequest) {
+        logger.info("getTableInvoiceResponses - Getting table invoice responses "+filterRequest.toString());
+        Pageable pageable = PageRequest.of(filterRequest.page(), filterRequest.pageSize());
+        Page<Invoice> invoicePage = getFilteredInvoices(filterRequest, pageable);
+        List<TableInvoiceResponse> tableInvoiceResponses = invoiceMapper.invoiceListToTableInvoiceResponseList(invoicePage.getContent());
+        Page<TableInvoiceResponse> tableInvoiceResponsePage = new PageImpl<>(tableInvoiceResponses, pageable, invoicePage.getTotalElements());
+        logger.info("getTableInvoiceResponses - Table invoice responses have been got");
+        return tableInvoiceResponsePage;
+    }
+
+    private Page<Invoice> getFilteredInvoices(FilterRequest filterRequest, Pageable pageable) {
+        Specification<Invoice> invoiceSpecification = InvoiceSpecificationFormer.formSpecification(filterRequest);
+        return invoiceRepository.findAll(invoiceSpecification, pageable);
+    }
+
+    @Override
+    public void deleteInvoices(Long[] invoiceIds) {
+        List<Invoice> invoices = invoiceRepository.findAllById(List.of(invoiceIds));
+        for(Invoice invoice: invoices){
+            invoice.setDeleted(true);
+        }
+        invoiceRepository.saveAll(invoices);
     }
 
     @Override
