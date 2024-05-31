@@ -3,6 +3,8 @@ package com.example.chairman.model.user;
 
 import com.example.chairman.entity.UserStatus;
 
+import java.math.BigDecimal;
+
 public record UserResponse(
         String firstName,
         String lastName,
@@ -11,6 +13,12 @@ public record UserResponse(
         String phoneNumber,
         UserStatus status,
         String avatar,
-        String username
+        String username,
+        BigDecimal area,
+        Long apartmentNumber,
+        String personalAccount,
+        String city,
+        String street,
+        String number
 ) {
 }

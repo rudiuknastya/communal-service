@@ -15,6 +15,9 @@ import java.util.List;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
     @Mapping(target = "status", source = "status")
+    @Mapping(target = "city", source = "house.city")
+    @Mapping(target = "street", source = "house.street")
+    @Mapping(target = "number", source = "house.number")
     UserResponse userToUserResponse(User user);
     @Mapping(target = "status", source = "userRequest.status")
     @Mapping(target = "id", ignore = true)

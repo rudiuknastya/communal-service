@@ -27,6 +27,12 @@ function setFields(response) {
     });
     let statusOption = new Option(getStatus(response.status), response.status, true, true);
     $('#status').append(statusOption).trigger('change');
+    let cityOption = new Option(response.city, response.city, true, true);
+    $('#city').append(cityOption).trigger('change');
+    let streetOption = new Option(response.street, response.street, true, true);
+    $('#street').append(streetOption).trigger('change');
+    let numberOption = new Option(response.number, response.number, true, true);
+    $('#number').append(numberOption).trigger('change');
     $("#avatar-img").attr("src","../../../uploads/"+response.avatar);
 }
 
@@ -138,7 +144,9 @@ $("#save-button").on("click", function () {
 function collectData() {
     let formData = new FormData();
     $("#form").find('input:text, input:password').each(function (){
-        formData.append($(this).attr("id"), $(this).val());
+        if($(this).attr("id").localeCompare("personalAccount")!== 0) {
+            formData.append($(this).attr("id"), $(this).val());
+        }
     });
     let status = $("#status").val() == null? '': $("#status").val();
     formData.append("status", status);
