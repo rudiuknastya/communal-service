@@ -62,9 +62,7 @@ function drawTable(response) {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="voting/${form.id}">
-                                        <i class="ti ti-eye me-1"></i>Перегляд
-                                    </a>
+                                    ${getShowButton(form.status, form.id)}
                                     <a class="dropdown-item" href="voting/edit/${form.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
@@ -115,7 +113,14 @@ function formatVoted(voted) {
         return voted;
     }
 }
-
+function getShowButton(status, id) {
+    if(status.localeCompare("CLOSED") === 0){
+        return '<a class="dropdown-item" href="voting/'+id+'">'
+            +'<i class="ti ti-eye me-1"></i>Перегляд</a>'
+    } else {
+        return '';
+    }
+}
 function openDeleteModal(id, subject) {
     if($("#deleteModal").length === 0) {
         $("div.card").append(
