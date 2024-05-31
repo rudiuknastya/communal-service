@@ -61,6 +61,7 @@ function sendData(formData) {
             "X-CSRF-TOKEN": token
         },
         success: function () {
+            toastr.success("Дані оновлено!")
             getContactsPage();
         },
         error: function (error) {
