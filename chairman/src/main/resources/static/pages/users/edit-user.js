@@ -13,8 +13,8 @@ function getUser() {
         success: function (response) {
             setFields(response);
         },
-        error: function (error) {
-            printErrorMessageToField(error);
+        error: function () {
+            toastr.error(errorMessage);
         }
     });
 }
