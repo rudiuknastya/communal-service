@@ -116,16 +116,53 @@ $("#filter-by-creationDateTo").on("change", function () {
 });
 
 $("#delete-button").on("click", function () {
+    // console.log($("input[name=checks]:checked").length);
+    if ($("input[name=checks]:checked").length !== 0) {
+        openDeleteModal();
+    } else {
+        toastr.warning("Не вибрано елемент для видалення");
+    }
+    // deleteInvoices(invoiceIds);
+});
+
+function openDeleteModal() {
+    if($("#deleteModal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Ви впевнені що хочете видалити ці рахунки?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        Закрити
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete-button" onclick="deleteInvoices()">
+                            Видалити
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#deleteModal').modal('show');
+}
+
+function deleteInvoices() {
+    $('#deleteModal').modal('hide');
+    $("#mainCheck").prop("checked", false);
+    blockCardDody();
     let invoiceIds = [];
     $("input[name=checks]:checked").each(function () {
         invoiceIds.push($(this).attr("id"));
     });
-    deleteInvoices(invoiceIds);
-});
-
-function deleteInvoices(invoiceIds) {
-    if (invoiceIds.length != 0) {
-        blockCardDody();
         $.ajax({
             type: "GET",
             url: "invoices/delete-invoices",
@@ -140,9 +177,6 @@ function deleteInvoices(invoiceIds) {
                 toastr.error(errorMessage);
             }
         });
-    } else {
-        toastr.warning("Не вибрано елемент для видалення");
-    }
 }
 
 $("#mainCheck").on("change", function () {
