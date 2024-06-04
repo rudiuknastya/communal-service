@@ -55,7 +55,7 @@ function drawTable(response) {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="users/edit/${invoice.id}">
+                                    <a class="dropdown-item" href="invoices/edit/${invoice.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
                                     <button type="button" class="dropdown-item btn justify-content-start">

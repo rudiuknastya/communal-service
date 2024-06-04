@@ -5,6 +5,7 @@ import com.example.chairman.entity.User;
 import com.example.chairman.mapper.InvoiceMapper;
 import com.example.chairman.model.invoice.FilterRequest;
 import com.example.chairman.model.invoice.InvoiceRequest;
+import com.example.chairman.model.invoice.InvoiceResponse;
 import com.example.chairman.model.invoice.TableInvoiceResponse;
 import com.example.chairman.repository.InvoiceRepository;
 import com.example.chairman.repository.UserRepository;
@@ -21,9 +22,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,11 +74,43 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void deleteInvoices(Long[] invoiceIds) {
+        logger.info("deleteInvoices - Deleting invoices by ids "+invoiceIds.toString());
         List<Invoice> invoices = invoiceRepository.findAllById(List.of(invoiceIds));
         for(Invoice invoice: invoices){
             invoice.setDeleted(true);
         }
         invoiceRepository.saveAll(invoices);
+        logger.info("deleteInvoices - Invoices have been deleted");
+    }
+
+    @Override
+    public InvoiceResponse getInvoiceResponse(Long id) {
+        logger.info("getInvoiceResponse - Getting invoice response by id "+id);
+        Invoice invoice = getInvoiceById(id);
+        InvoiceResponse invoiceResponse = invoiceMapper.invoiceToInvoiceResponse(invoice);
+        logger.info("getInvoiceResponse - Invoice response has been got");
+        return invoiceResponse;
+    }
+
+    @Override
+    public void updateInvoice(Long id, InvoiceRequest invoiceRequest) {
+        logger.info("updateInvoice - Updating invoice by id "+id+" "+invoiceRequest.toString());
+        Invoice invoice = getInvoiceById(id);
+        User user = getUser(invoiceRequest.userId());
+        String file = updateFile(invoiceRequest.file(), invoice);
+        invoiceMapper.updateInvoice(invoice, user, file);
+        invoiceRepository.save(invoice);
+        logger.info("updateInvoice - Invoice has been updated");
+    }
+
+    private String updateFile(MultipartFile file, Invoice invoice) {
+        String currentFile = invoice.getFile();
+        if(file.isEmpty()){
+            return currentFile;
+        } else {
+            uploadFileUtil.deleteFile(currentFile);
+            return uploadFileUtil.saveMultipartFile(file);
+        }
     }
 
     @Override
@@ -95,5 +128,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User was not found by id "+id));
+    }
+    private Invoice getInvoiceById(Long id){
+        return invoiceRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
     }
 }
