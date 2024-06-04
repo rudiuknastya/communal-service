@@ -315,6 +315,10 @@ $("#filter-by-apartmentNumber").on("change", function () {
     request.apartmentNumber = $(this).val();
     getUsers(0);
 });
+$("#filter-by-apartmentNumber").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9]/g, '')
+        .replace(/(\..*?)\..*/g, '$1'));
+});
 
 $("#filter-by-personalAccount").on("change", function () {
     request.personalAccount = $(this).val();
