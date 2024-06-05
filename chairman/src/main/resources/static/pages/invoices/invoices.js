@@ -7,6 +7,12 @@ let request = {
     creationDateFrom: "",
     creationDateTo: "",
 };
+const BORDER_ALL = {
+    top: {style: 'thin', color: {rgb: '000000'}},
+    right: {style: 'thin', color: {rgb: '000000'}},
+    bottom: {style: 'thin', color: {rgb: '000000'}},
+    left: {style: 'thin', color: {rgb: '000000'}}
+};
 
 $(document).ready(function () {
     getInvoices(0);
@@ -55,11 +61,14 @@ function drawTable(response) {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="printRow(this)">
+                                        <i class="ti ti-printer me-1"></i>Роздрукувати
+                                    </button>
                                     <a class="dropdown-item" href="invoices/edit/${invoice.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
-                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="printRow(this)">
-                                        <i class="ti ti-printer me-1"></i>Роздрукувати
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="toExcel(this)">
+                                        <i class="ti ti-download me-1"></i>Завантажити в Excel
                                     </button>
                                 </div>
                             </div>
@@ -112,6 +121,80 @@ function setObject(object, i, value) {
     }
 }
 
+function toExcel(toExcelButton) {
+    let name = createFileName();
+    let table = getTable(toExcelButton);
+    var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.aoa_to_sheet(table);
+    styleTable(worksheet);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Invoices Data Table");
+    XLSX.writeFile(workbook, name, {bookType: 'xlsx', type: 'base64'});
+}
+
+function createFileName(toExcelButton) {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    return "invoice-"+dd+"-"+mm+"-"+yyyy+".xlsx";
+}
+
+function getTable(toExcelButton) {
+    let table = [];
+    let head = [];
+    let headText = ["№ квитанції", "Особистий рахунок", "Дата"];
+    for(let text of headText){
+        head.push({
+            v: text,
+            t: "s",
+            s: {font: {bold: true}, border: BORDER_ALL, alignment: {horizontal: 'center'}}
+        });
+    }
+    table.push(head);
+    let i = 0;
+    let row = []
+    $td = $(toExcelButton).parent().parent().parent();
+    $($td).siblings().each(function () {
+        if(i > 1) {
+            let text = $(this).text();
+            row.push({
+                v: text,
+                t: "s",
+                s: {border: BORDER_ALL, alignment: {horizontal: 'center'}}
+            });
+        }
+        i++;
+    });
+    table.push(row);
+    // $('#myTHead tr').find('th').not(':first-child').not(':last-child').each(function () {
+    //     let text = $(this).text();
+    //     head.push({
+    //         v: text,
+    //         t: "s",
+    //         s: {font: {bold: true}, border: BORDER_ALL, alignment: {horizontal: 'center'}}
+    //     });
+    // });
+
+    // $('tr[data-href]').each(function () {
+    //     let row = []
+    //     $(this).find('td').not(":last-child").not(':first-child').each(function () {
+    //         let text = $(this).text();
+    //         row.push({
+    //             v: text,
+    //             t: "s",
+    //             s: {border: BORDER_ALL, alignment: {horizontal: 'center'}}
+    //         });
+    //     });
+    //     table.push(row);
+    // });
+    return table;
+}
+
+function styleTable(worksheet) {
+    let DEF_ColW = 20;
+    worksheet['!cols'] = [{width: DEF_ColW}, {width: DEF_ColW}, {width: DEF_ColW}];
+}
+
 function initializeFlatPickers() {
     $("#filter-by-creationDateFrom").flatpickr({
         locale: "uk",
@@ -152,13 +235,11 @@ $("#filter-by-creationDateTo").on("change", function () {
 });
 
 $("#delete-button").on("click", function () {
-    // console.log($("input[name=checks]:checked").length);
     if ($("input[name=checks]:checked").length !== 0) {
         openDeleteModal();
     } else {
         toastr.warning("Не вибрано елемент для видалення");
     }
-    // deleteInvoices(invoiceIds);
 });
 
 function openDeleteModal() {
