@@ -58,7 +58,7 @@ function drawTable(response) {
                                     <a class="dropdown-item" href="invoices/edit/${invoice.id}">
                                         <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                                     </a>
-                                    <button type="button" class="dropdown-item btn justify-content-start">
+                                    <button type="button" class="dropdown-item btn justify-content-start" onclick="printRow(this)">
                                         <i class="ti ti-printer me-1"></i>Роздрукувати
                                     </button>
                                 </div>
@@ -74,6 +74,42 @@ function drawTable(response) {
 
 function formatDate(date) {
     return moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY');
+}
+
+function printRow(printButton) {
+    let row = formRow(printButton);
+    let table = [];
+    table.push(row);
+    printJS({
+        printable: table,
+        properties: ['№ квитанції', 'Особистий рахунок', 'Дата'],
+        type: 'json',
+        header: "Квитанція"
+    });
+}
+
+function formRow(printButton) {
+    let i = 0;
+    $td = $(printButton).parent().parent().parent();
+    let row = {};
+    $($td).siblings().each(function () {
+        if(i > 1) {
+            setObject(row, i, $(this).text());
+        }
+        i++;
+    });
+    return row;
+}
+
+function setObject(object, i, value) {
+    switch (i) {
+        case 2:
+            object["№ квитанції"] = value;
+        case 3:
+            object["Особистий рахунок"] = value;
+        case 4:
+            object["Дата"] = value;
+    }
 }
 
 function initializeFlatPickers() {
