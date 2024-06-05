@@ -33,3 +33,4 @@ build/
 .vscode/
 /admin/src/main/resources/application.yml
 /chairman/src/main/resources/application.yml
+/user/src/main/resources/application.yml
