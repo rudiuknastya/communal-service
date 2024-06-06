@@ -39,6 +39,16 @@ public class User {
     @JoinColumn(name = "house_id", referencedColumnName = "id", nullable = false)
     private House house;
     private boolean deleted;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserPasswordResetToken userPasswordResetToken;
+
+    public UserPasswordResetToken getUserPasswordResetToken() {
+        return userPasswordResetToken;
+    }
+
+    public void setUserPasswordResetToken(UserPasswordResetToken userPasswordResetToken) {
+        this.userPasswordResetToken = userPasswordResetToken;
+    }
 
     public Long getId() {
         return id;
