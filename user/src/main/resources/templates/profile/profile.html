@@ -6,7 +6,45 @@
 </head>
 <body>
 <div layout:fragment="content">
-
+    <div class="d-flex justify-content-around">
+        <div class="col-3">
+            <img  src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+              style="width:200px; height:200px;"
+              class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img"
+              id="avatar-img">
+        </div>
+        <div class="col-8">
+            <h5 class="mb-1" id="fullName"></h5>
+            <div>Особистий рахунок: <span id="personalAccount"></span></div>
+            <div class="d-flex justify-content-between mt-4">
+                <div>
+                    <div>
+                        <span class="fw-bold">Номер телефону:</span> <span id="phoneNumber"></span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="fw-bold">Email:</span> <span id="email"></span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <span class="fw-bold">Місто:</span> <span id="city"></span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="fw-bold">Адреса:</span> <span id="address"></span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <span class="fw-bold">Номер квартири:</span> <span id="apartmentNumber"></span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="fw-bold">Площа квартири:</span> <span id="area"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
+<script layout:fragment="script" th:src="@{/pages/profile/profile.js}"></script>
 </html>
