@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Голосування</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 class="mb-0">Голосування</h3>
+    <div class="d-flex justify-content-end" style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
+        <button type="button" class="btn btn-outline-secondary m-1" id="clear-filters">
+            Очистити
+        </button>
+    </div>
+    <div class="table-responsive" style="overflow: inherit" id="dropdownParent">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr class="table-primary text-center">
+                <th>#</th>
+                <th>Тема голосування</th>
+                <th>Час завершення</th>
+                <th>Статус</th>
+                <th>Результат</th>
+                <th>Проголосувало, кв.м.</th>
+                <th>Дії</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="px-2">
+                    <input type="search" id="filter-by-subject" class="form-control">
+                </td>
+                <td class="px-2">
+                    <input type="text" id="filter-by-endDate" class="form-control">
+                </td>
+                <td class="px-2" style="min-width: 10rem">
+                    <select class="form-select select2" id="filter-by-status"></select>
+                </td>
+                <td class="px-2" style="min-width: 10rem">
+                    <select class="form-select select2" id="filter-by-result"></select>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between mt-4">
+        <div class="d-flex justify-content-start align-items-center" id="paginationElements"></div>
+        <ul class="pagination justify-content-end"></ul>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/voting/voting-forms.js}"></script>
+</html>
