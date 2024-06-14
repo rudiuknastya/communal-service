@@ -4,6 +4,7 @@ import com.example.user.entity.UserVote;
 import com.example.user.entity.VotingResultStatus;
 import com.example.user.entity.VotingStatus;
 import com.example.user.model.voting.ActiveVotingResponse;
+import com.example.user.model.voting.ClosedVotingResponse;
 import com.example.user.model.voting.FilterRequest;
 import com.example.user.model.voting.TableVotingFormResponse;
 import com.example.user.service.VotingService;
@@ -53,5 +54,12 @@ public class VotingController {
         votingService.updateVote(id, vote);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    @GetMapping("/closed/{id}")
+    public ModelAndView getClosedVotingPage() {
+        return new ModelAndView("voting/closed-voting");
+    }
+    @GetMapping("/closed/get/{id}")
+    public @ResponseBody ClosedVotingResponse getClosedVoting(@PathVariable Long id){
+        return votingService.getClosedVotingResponse(id);
+    }
 }

@@ -3,6 +3,7 @@ package com.example.user.serviceImpl;
 import com.example.user.entity.*;
 import com.example.user.mapper.VotingFormMapper;
 import com.example.user.model.voting.ActiveVotingResponse;
+import com.example.user.model.voting.ClosedVotingResponse;
 import com.example.user.model.voting.FilterRequest;
 import com.example.user.model.voting.TableVotingFormResponse;
 import com.example.user.repository.UserRepository;
@@ -85,15 +86,10 @@ public class VotingServiceImpl implements VotingService {
 
     @Override
     public ActiveVotingResponse getActiveVotingResponse(Long id) {
-        logger.info("getActiveVotingResponse - Getting active voting response by id "+id);
+        logger.info("getActiveVotingResponse - Getting active voting response by voting form id "+id);
         VotingForm votingForm = getVotingFormById(id);
         Long totalVotes = voteRepository.getVotesCountByVotingFormId(id);
-        String username = getAuthenticatedUserUsername();
-        Optional<Vote> vote = voteRepository.findByVotingFormIdAndUserUsername(id, username);
-        UserVote userVote = null;
-        if(vote.isPresent()){
-            userVote = vote.get().getUserVote();
-        }
+        UserVote userVote = getUserVote(id);
         ActiveVotingResponse activeVotingResponse = votingFormMapper.votingToActiveVotingResponse(votingForm, totalVotes, userVote);
         logger.info("getActiveVotingResponse - Active voting response has been got");
         return activeVotingResponse;
@@ -115,6 +111,33 @@ public class VotingServiceImpl implements VotingService {
         }
     }
 
+    @Override
+    public ClosedVotingResponse getClosedVotingResponse(Long id) {
+        logger.info("getClosedVotingResponse - Getting closed voting response by voting form id "+id);
+        VotingForm votingForm = getVotingFormById(id);
+        UserVote userVote = getUserVote(id);
+        List<Long> votesStatistic = getVotesStatistic(id);
+        ClosedVotingResponse closedVotingResponse = votingFormMapper
+                .createClosedVotingResponse(votingForm, userVote, votesStatistic);
+        logger.info("getClosedVotingResponse - Closed voting response has been got");
+        return closedVotingResponse;
+    }
+    UserVote getUserVote(Long votingFormId){
+        String username = getAuthenticatedUserUsername();
+        Optional<Vote> voteOptional = voteRepository.findByVotingFormIdAndUserUsername(votingFormId, username);
+        UserVote userVote = null;
+        if(voteOptional.isPresent()){
+            userVote = voteOptional.get().getUserVote();
+        }
+        return userVote;
+    }
+
+    List<Long> getVotesStatistic(Long votingFormId){
+        Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingFormId);
+        Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingFormId);
+        Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingFormId);
+        return List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount);
+    }
     private VotingForm getVotingFormById(Long id) {
         return votingFormRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Voting form was not found by id "+id));
