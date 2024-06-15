@@ -24,5 +24,5 @@ function setFields(response) {
         $("#" + key).text(value);
     });
     $("#fullName").text(response.lastName+" "+response.firstName+" "+response.middleName);
-    $("#avatar-img").attr("src","../uploads/"+response.avatar);
+    $("#avatar-img").attr("src","uploads/"+response.avatar);
 }
