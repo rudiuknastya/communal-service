@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Контакти</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-md-12 mb-2">
+        <div class="py-2" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+            <h5 class="mb-0" id="firstTitle"></h5>
+        </div>
+    </div>
+    <div id="firstText">
+
+    </div>
+    <div class="col-md-12 my-2">
+        <div class="py-2" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+            <h5 class="mb-0" id="secondTitle"></h5>
+        </div>
+    </div>
+    <div id="secondText">
+
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/contacts-page/contacts-page.js}"></script>
+</html>
