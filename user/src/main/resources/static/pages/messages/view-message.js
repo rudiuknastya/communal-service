@@ -13,8 +13,8 @@ function getMessage() {
             console.log(response);
             setFields(response);
         },
-        error: function (error) {
-            printErrorMessageToField(error);
+        error: function () {
+            toastr.error(errorMessage);
         }
     });
 }
@@ -34,4 +34,19 @@ function formatDate(date) {
     return datePart + " "+timePart;
 }
 
-
+$("#delete-button").on("click", function () {
+    blockCardDody();
+    $.ajax({
+        type: "POST",
+        url: "delete/"+id,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function (response) {
+            window.location = "../messages";
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+});

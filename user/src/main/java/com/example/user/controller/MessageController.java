@@ -3,6 +3,7 @@ package com.example.user.controller;
 import com.example.user.model.general.SelectSearchRequest;
 import com.example.user.model.messages.ChairmanResponse;
 import com.example.user.model.messages.MessageRequest;
+import com.example.user.model.messages.ViewMessageResponse;
 import com.example.user.service.ChairmanService;
 import com.example.user.service.MessageService;
 import jakarta.validation.Valid;
@@ -37,4 +38,18 @@ public class MessageController {
     public @ResponseBody Page<ChairmanResponse> getChairmen(SelectSearchRequest selectSearchRequest){
         return chairmanService.getChairmanResponsesForSelect(selectSearchRequest);
     }
+    @GetMapping("/{id}")
+    public ModelAndView getViewMessagePage(){
+        return new ModelAndView("messages/view-message");
+    }
+    @GetMapping("/get/{id}")
+    public @ResponseBody ViewMessageResponse getMessageForView(@PathVariable Long id){
+        return messageService.getViewMessageResponse(id);
+    }
+    @PostMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteMessage(@PathVariable Long id){
+        messageService.deleteMessage(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

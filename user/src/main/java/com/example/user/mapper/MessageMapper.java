@@ -4,6 +4,7 @@ import com.example.user.entity.Chairman;
 import com.example.user.entity.Message;
 import com.example.user.entity.User;
 import com.example.user.model.messages.MessageRequest;
+import com.example.user.model.messages.ViewMessageResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,4 +21,5 @@ public interface MessageMapper {
     @Mapping(target = "deleted", ignore = true)
     Message messageRequestToMessage(MessageRequest messageRequest, LocalDateTime creationDate,
                                     User user, Chairman chairman);
+    ViewMessageResponse messageToViewMessageResponse(Message message);
 }

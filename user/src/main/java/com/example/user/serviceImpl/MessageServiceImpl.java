@@ -5,6 +5,7 @@ import com.example.user.entity.Message;
 import com.example.user.entity.User;
 import com.example.user.mapper.MessageMapper;
 import com.example.user.model.messages.MessageRequest;
+import com.example.user.model.messages.ViewMessageResponse;
 import com.example.user.repository.ChairmanRepository;
 import com.example.user.repository.MessageRepository;
 import com.example.user.repository.UserRepository;
@@ -48,5 +49,27 @@ public class MessageServiceImpl implements MessageService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUsernameAndDeletedIsFalse(userDetails.getUsername()).orElseThrow(()-> new EntityNotFoundException("User was not found by username "+userDetails.getUsername()));
         return user;
+    }
+
+    @Override
+    public ViewMessageResponse getViewMessageResponse(Long id) {
+        logger.info("getViewMessageResponse() - Getting view message response by id "+id);
+        Message message = getMessageById(id);
+        ViewMessageResponse viewMessageResponse = messageMapper.messageToViewMessageResponse(message);
+        logger.info("getViewMessageResponse() - View message response has been got");
+        return viewMessageResponse;
+    }
+
+    @Override
+    public void deleteMessage(Long id) {
+        logger.info("deleteMessage() - Deleting message by id "+id);
+        Message message = getMessageById(id);
+        message.setDeleted(true);
+        messageRepository.save(message);
+        logger.info("deleteMessage() - Message has been deleted");
+    }
+    private Message getMessageById(Long id){
+        return messageRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Message was not found by id "+id));
     }
 }

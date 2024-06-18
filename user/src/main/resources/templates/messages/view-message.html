@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Зворотній зв'язок</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h5 id="subject"></h5>
+    <div class="d-flex justify-content-end mb-3" id="date"></div>
+    <div id="text"></div>
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" id="delete-button">
+            <i class="tf-icons ti ti-trash"></i>Видалити
+        </button>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/messages/view-message.js}"></script>
+</html>
