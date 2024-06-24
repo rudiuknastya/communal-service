@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Рахунки</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 class="mb-0">Рахунки</h3>
+    <div class="d-flex justify-content-end" style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
+        <button type="button" class="btn btn-outline-secondary m-1" id="clear-filters">
+            Очистити
+        </button>
+    </div>
+    <div class="table-responsive" id="dropdownParent">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr class="table-primary text-center">
+                <th>#</th>
+                <th>Номер квитанції</th>
+                <th>Дата</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="px-2">
+                    <input type="search" id="filter-by-number" class="form-control">
+                </td>
+                <td>
+                    <div class="row">
+                        Від
+                        <div class="col-5">
+                            <input type="text" id="filter-by-creationDateFrom" class="form-control">
+                        </div>
+                        до
+                        <div class="col-5">
+                            <input type="text" id="filter-by-creationDateTo" class="form-control">
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between mt-4">
+        <div class="d-flex justify-content-start align-items-center" id="paginationElements"></div>
+        <ul class="pagination justify-content-end"></ul>
+    </div>
+</div>
+<script layout:fragment="script" th:src="@{/pages/invoices/invoices.js}"></script>
+
+</body>
+</html>
