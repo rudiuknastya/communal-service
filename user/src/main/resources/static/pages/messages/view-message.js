@@ -30,8 +30,8 @@ function setFields(response) {
 function formatDate(date) {
     const splitDate = date.split("T");
     const datePart = moment(splitDate[0], 'YYYY-MM-DD').format('DD.MM.YYYY');
-    const timePart = moment(splitDate[1], 'HH:MM:SS').format('HH:MM');
-    return datePart + " "+timePart;
+    const timePart = splitDate[1].split(":");
+    return datePart + " "+timePart[0]+":"+timePart[1];
 }
 
 $("#delete-button").on("click", function () {

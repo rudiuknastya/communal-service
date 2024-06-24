@@ -166,27 +166,6 @@ function getTable(toExcelButton) {
         i++;
     });
     table.push(row);
-    // $('#myTHead tr').find('th').not(':first-child').not(':last-child').each(function () {
-    //     let text = $(this).text();
-    //     head.push({
-    //         v: text,
-    //         t: "s",
-    //         s: {font: {bold: true}, border: BORDER_ALL, alignment: {horizontal: 'center'}}
-    //     });
-    // });
-
-    // $('tr[data-href]').each(function () {
-    //     let row = []
-    //     $(this).find('td').not(":last-child").not(':first-child').each(function () {
-    //         let text = $(this).text();
-    //         row.push({
-    //             v: text,
-    //             t: "s",
-    //             s: {border: BORDER_ALL, alignment: {horizontal: 'center'}}
-    //         });
-    //     });
-    //     table.push(row);
-    // });
     return table;
 }
 

@@ -1,9 +1,7 @@
 package com.example.user.controller;
 
 import com.example.user.model.general.SelectSearchRequest;
-import com.example.user.model.messages.ChairmanResponse;
-import com.example.user.model.messages.MessageRequest;
-import com.example.user.model.messages.ViewMessageResponse;
+import com.example.user.model.messages.*;
 import com.example.user.service.ChairmanService;
 import com.example.user.service.MessageService;
 import jakarta.validation.Valid;
@@ -51,5 +49,17 @@ public class MessageController {
         messageService.deleteMessage(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    @GetMapping("")
+    public ModelAndView getMessagesPage(){
+        return new ModelAndView("messages/messages");
+    }
+    @GetMapping("/get")
+    public @ResponseBody Page<TableMessageResponse> getMessages(FilterRequest filterRequest){
+        return messageService.getMessageResponsesForTable(filterRequest);
+    }
+    @DeleteMapping("/delete-messages")
+    public @ResponseBody ResponseEntity<?> deleteMessages(@RequestParam(name = "messageIds[]", required = false) Long[] messageIds){
+        messageService.deleteMessages(messageIds);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
