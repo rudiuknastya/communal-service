@@ -45,7 +45,7 @@ function drawTable(response) {
         let tdCount = $("td").length;
         $("tbody").append(`<tr class="tr"><td colspan="${tdCount}" class="text-center">${dataNotFound}</td>></tr>`);
     } else {
-        let i = response.pageable.pageNumber+1;
+        let i = (response.size * response.pageable.pageNumber) + 1;
         for (let form of response.content) {
             $("tbody")
                 .append(
@@ -80,7 +80,10 @@ function drawTable(response) {
     buildPagination(response, "getVotingForms");
 }
 function formatDate(date) {
-    return moment(date, 'YYYY-MM-DD HH:MM').format('DD.MM.YYYY HH:MM')
+    const splitDate = date.split("T");
+    const datePart = moment(splitDate[0], 'YYYY-MM-DD').format('DD.MM.YYYY');
+    const timePart = splitDate[1].split(":");
+    return datePart + " "+timePart[0]+":"+timePart[1];
 }
 
 function getStatusSpan(status) {

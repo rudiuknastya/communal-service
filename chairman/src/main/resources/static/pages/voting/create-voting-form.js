@@ -82,12 +82,13 @@ function collectData() {
         const startDate = formattedStartDate.split(" ");
         formData.append("startDate", startDate[0]+"T"+startDate[1]);
     }
-    if ($("#endDate").val().localeCompare('') === 0) {
+    let endDate = $("#endDate").val()
+    if (endDate.localeCompare('') === 0) {
         formData.append("endDate", '');
     } else {
-        let formattedEndDate = moment($("#endDate").val(), 'DD.MM.YYYY HH:MM').format('YYYY-MM-DD HH:MM');
-        const endDate = formattedEndDate.split(" ");
-        formData.append("endDate", endDate[0]+"T"+endDate[1]);
+        const splitEndDate = endDate.split(" ");
+        let formattedDate = moment(splitEndDate[0], 'DD.MM.YYYY').format('YYYY-MM-DD');
+        formData.append("endDate", formattedDate+"T"+splitEndDate[1]);
     }
     for (let pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
