@@ -122,6 +122,13 @@ public class VotingServiceImpl implements VotingService {
         logger.info("getClosedVotingResponse - Closed voting response has been got");
         return closedVotingResponse;
     }
+    List<Long> getVotesStatistic(Long votingFormId){
+        Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingFormId);
+        Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingFormId);
+        Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingFormId);
+        return List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount);
+    }
+
     UserVote getUserVote(Long votingFormId){
         String username = getAuthenticatedUserUsername();
         Optional<Vote> voteOptional = voteRepository.findByVotingFormIdAndUserUsername(votingFormId, username);
@@ -130,13 +137,6 @@ public class VotingServiceImpl implements VotingService {
             userVote = voteOptional.get().getUserVote();
         }
         return userVote;
-    }
-
-    List<Long> getVotesStatistic(Long votingFormId){
-        Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingFormId);
-        Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingFormId);
-        Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingFormId);
-        return List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount);
     }
     private VotingForm getVotingFormById(Long id) {
         return votingFormRepository.findById(id)

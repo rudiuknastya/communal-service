@@ -1,12 +1,11 @@
 package com.example.chairman.serviceImp;
 
-import com.example.chairman.entity.Vote;
-import com.example.chairman.entity.VotingForm;
-import com.example.chairman.entity.VotingStatus;
+import com.example.chairman.entity.*;
 import com.example.chairman.mapper.VotingFormMapper;
 import com.example.chairman.model.voting.*;
 import com.example.chairman.repository.VoteRepository;
 import com.example.chairman.repository.VotingFormRepository;
+import com.example.chairman.service.ScheduleService;
 import com.example.chairman.service.VotingService;
 import com.example.chairman.specification.VoteSpecification;
 import com.example.chairman.specification.specificationFormer.VoteSpecificationFormer;
@@ -29,20 +28,23 @@ public class VotingServiceImpl implements VotingService {
     private final VotingFormRepository votingFormRepository;
     private final VotingFormMapper votingFormMapper;
     private final VoteRepository voteRepository;
+    private final ScheduleService scheduleService;
     private final Logger logger = LogManager.getLogger(VotingServiceImpl.class);
 
     public VotingServiceImpl(VotingFormRepository votingFormRepository, VotingFormMapper votingFormMapper,
-                             VoteRepository voteRepository) {
+                             VoteRepository voteRepository, ScheduleService scheduleService) {
         this.votingFormRepository = votingFormRepository;
         this.votingFormMapper = votingFormMapper;
         this.voteRepository = voteRepository;
+        this.scheduleService = scheduleService;
     }
 
     @Override
     public void createVotingForm(VotingFormDto votingFormDto) {
         logger.info("createVotingForm - Creating voting form "+ votingFormDto.toString());
         VotingForm votingForm = votingFormMapper.votingFormDtoToVotingForm(votingFormDto);
-        votingFormRepository.save(votingForm);
+        VotingForm savedVotingForm = votingFormRepository.save(votingForm);
+        scheduleService.scheduleJob(savedVotingForm.getId(), votingFormDto.endDate());
         logger.info("createVotingForm - Voting form has been created");
     }
 
@@ -61,6 +63,7 @@ public class VotingServiceImpl implements VotingService {
         VotingForm votingForm = getVotingForm(id);
         votingFormMapper.updateVotingForm(votingForm, votingFormDto);
         votingFormRepository.save(votingForm);
+        scheduleService.updateSchedule(id, votingFormDto.endDate());
         logger.info("updateVotingForm - Voting form has been updated");
     }
 
@@ -84,10 +87,8 @@ public class VotingServiceImpl implements VotingService {
                 tableVotingFormResponse = votingFormMapper
                         .votingFormToTableVotingFormResponse(votingForm,votesCount.toString());
             } else {
-                Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingForm.getId());
-                Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingForm.getId());
-                Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingForm.getId());
-                String voted = agreeVotesCount+"/"+abstainVotesCount+"/"+disagreeVotesCount;
+                List<Long> votes = getVotingStatistic(votingForm.getId());
+                String voted = votes.get(0)+"/"+votes.get(2)+"/"+votes.get(1);
                 tableVotingFormResponse = votingFormMapper
                         .votingFormToTableVotingFormResponse(votingForm, voted);
             }
@@ -107,16 +108,12 @@ public class VotingServiceImpl implements VotingService {
         logger.info("getViewVotingFormResponse - Getting view voting form response by id "+id);
         VotingForm votingForm = getVotingForm(id);
         Long voted = voteRepository.getVotesCountByVotingFormId(votingForm.getId());
-        Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(votingForm.getId());
-        Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(votingForm.getId());
-        Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(votingForm.getId());
+        List<Long> statistic = getVotingStatistic(votingForm.getId());
         ViewVotingFormResponse votingFormResponse = votingFormMapper
-                .votingFormToViewVotingFormResponse(votingForm, voted,
-                        List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount));
+                .votingFormToViewVotingFormResponse(votingForm, voted, statistic);
         logger.info("getViewVotingFormResponse - View voting form response has been got");
         return votingFormResponse;
     }
-
     @Override
     public Page<VotedUserResponse> getVotedUserResponsesForTable(Long id, UsersFilterRequest usersFilterRequest) {
         logger.info("getVotedUserResponsesForTable - Getting voted user responses for table by id "+id+" "+usersFilterRequest.toString());
@@ -142,9 +139,36 @@ public class VotingServiceImpl implements VotingService {
         votingFormRepository.save(votingForm);
         logger.info("deleteVotingForm - Voting form has been deleted");
     }
+    @Override
+    public void closeVoting(Long votingFormId) {
+        logger.info("closeVoting - Closing voting with id "+votingFormId);
+        VotingForm votingForm = getVotingForm(votingFormId);
+        Long quorum = voteRepository.calculateQuorum(votingFormId);
+        if(quorum == null || quorum < votingForm.getQuorum()){
+            votingForm.setResultStatus(VotingResultStatus.REJECTED);
+        } else {
+            Long agreeCount = voteRepository.countByVotingFormIdAndUserVote(votingFormId, UserVote.AGREE);
+            Long disagreeCount = voteRepository.countByVotingFormIdAndUserVote(votingFormId, UserVote.DISAGREE);
+            if(agreeCount > disagreeCount){
+                votingForm.setResultStatus(VotingResultStatus.ACCEPTED);
+            } else {
+                votingForm.setResultStatus(VotingResultStatus.REJECTED);
+            }
+        }
+        votingForm.setStatus(VotingStatus.CLOSED);
+        votingFormRepository.save(votingForm);
+        logger.info("closeVoting - Voting has been closed");
+    }
 
     private VotingForm getVotingForm(Long id) {
         return votingFormRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Voting form was not found by id "+id));
     }
+    private List<Long> getVotingStatistic(Long formId){
+        Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(formId);
+        Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(formId);
+        Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(formId);
+        return List.of(agreeVotesCount, disagreeVotesCount, abstainVotesCount);
+    }
+
 }

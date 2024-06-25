@@ -1,5 +1,6 @@
 package com.example.chairman.repository;
 
+import com.example.chairman.entity.UserVote;
 import com.example.chairman.entity.Vote;
 import com.example.chairman.entity.VotingForm;
 import org.springframework.data.domain.Page;
@@ -20,4 +21,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long>, JpaSpecificat
     Long getDisagreeVoteCountByVotingFormId(@Param("id") Long id);
     @Query(value = "SELECT count(id) FROM votes where voting_form_id = :id and user_vote='ABSTAIN'", nativeQuery = true)
     Long getAbstainVoteCountByVotingFormId(@Param("id") Long id);
+    Long countByVotingFormIdAndUserVote(Long id, UserVote userVote);
+    @Query(value = "SELECT sum(area) FROM votes join users u on u.id = votes.user_id where voting_form_id = :id", nativeQuery = true)
+    Long calculateQuorum(@Param("id")Long votingFormId);
 }
