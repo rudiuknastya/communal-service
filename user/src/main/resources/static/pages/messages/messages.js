@@ -39,7 +39,7 @@ function drawTable(response) {
         let tdCount = $("td").length;
         $("tbody").append(`<tr class="tr"><td colspan="${tdCount}" class="text-center">${dataNotFound}</td>></tr>`);
     } else {
-        let i = response.pageable.pageNumber+1;
+        let i = (response.size * response.pageable.pageNumber) + 1;
         for (let message of response.content) {
             $("tbody")
                 .append(

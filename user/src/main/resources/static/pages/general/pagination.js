@@ -86,7 +86,7 @@ function buildPaginationElements(from, to, method, numberOfElements, size, total
         </select>`
     );
     let showed = "Показано від " + from + " до " + to + " з " + totalElements + " елементів"
-    if(numberOfElements === size){
+    if(numberOfElements === 1){
         showed = "Показано " + from + " з " + totalElements + " елементів"
     }
     $("#paginationElements").append(
