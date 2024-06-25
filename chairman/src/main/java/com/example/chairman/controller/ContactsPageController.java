@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/chairman/contacts")
+@RequestMapping("/contacts")
 public class ContactsPageController {
     private final ContactsPageService contactsPageService;
 

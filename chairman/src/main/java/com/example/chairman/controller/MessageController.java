@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("chairman/messages")
+@RequestMapping("/messages")
 public class MessageController {
     private final MessageService messageService;
 

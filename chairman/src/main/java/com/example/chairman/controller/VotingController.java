@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("chairman/voting")
+@RequestMapping("/voting")
 public class VotingController {
     private final VotingService votingService;
 

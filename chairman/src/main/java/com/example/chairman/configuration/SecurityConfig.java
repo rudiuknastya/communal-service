@@ -22,21 +22,21 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/assets/**", "/pages/**",
-                                "/chairman/forgotPassword", "/chairman/sentToken",
-                                "/chairman/changePassword", "/chairman/tokenExpired",
-                                "/chairman/success").permitAll()
-                        .requestMatchers("/chairman/**").hasRole("CHAIRMAN")
+                                "/forgotPassword", "/sentToken",
+                                "/changePassword", "/tokenExpired",
+                                "/success").permitAll()
+                        .requestMatchers("/**").hasRole("CHAIRMAN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/chairman/login")
-                        .defaultSuccessUrl("/chairman/users", true)
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/users", true)
                         .permitAll()
                 )
                 .rememberMe((rm) -> rm
                         .tokenRepository(persistentTokenRepository()))
                 .logout((logout) -> logout
-                        .logoutUrl("/chairman/logout")
+                        .logoutUrl("/logout")
                         .permitAll());
         return http.build();
     }

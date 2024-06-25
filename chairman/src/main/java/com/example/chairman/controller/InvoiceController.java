@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("chairman/invoices")
+@RequestMapping("/invoices")
 public class InvoiceController {
     private final InvoiceService invoiceService;
     private final UserService userService;

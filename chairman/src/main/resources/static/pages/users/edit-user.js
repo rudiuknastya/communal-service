@@ -33,7 +33,7 @@ function setFields(response) {
     $('#street').append(streetOption).trigger('change');
     let numberOption = new Option(response.number, response.number, true, true);
     $('#number').append(numberOption).trigger('change');
-    $("#avatar-img").attr("src","../../../uploads/"+response.avatar);
+    $("#avatar-img").attr("src","../../uploads/"+response.avatar);
 }
 
 function initializeInputMasks() {

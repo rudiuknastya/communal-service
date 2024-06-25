@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/chairman")
 public class AuthenticationController {
     private final ChairmanPasswordResetTokenService passwordResetTokenService;
     private final MailService mailService;

@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <!-- /Logo -->
-                    <form id="formAuthentication" class="mb-3" th:action = "@{/chairman/login}" method="post">
+                    <form id="formAuthentication" class="mb-3" th:action = "@{/login}" method="post">
                         <div th:if="${param.error}" class="text-danger text-center">
                             <p th:if="${#strings.contains(session.SPRING_SECURITY_LAST_EXCEPTION, 'DisabledException')}">
                                 Користувач вимкнений
@@ -62,7 +62,7 @@
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label" for="password">Пароль</label>
-                                <a th:href="@{/chairman/forgotPassword}">
+                                <a th:href="@{/forgotPassword}">
                                     <small>Забули Пароль?</small>
                                 </a>
                             </div>
