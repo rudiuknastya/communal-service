@@ -26,7 +26,7 @@ function setFields(response) {
             $("#" + key).val(value);
     });
     $("#faAuthentication").prop("checked", response.faAuthentication);
-    $("#avatar-img").attr("src", "../uploads/" + response.avatar);
+    $("#avatar-img").attr("src", "uploads/" + response.avatar);
 }
 
 $("#save-button").on("click", function () {

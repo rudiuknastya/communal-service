@@ -29,20 +29,21 @@ public class SecurityConfig {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http
                     .authorizeHttpRequests((authorize) -> authorize
-                            .requestMatchers("/assets/**", "/pages/**", "/admin/login/2fa").permitAll()
-                            .requestMatchers("/admin/**").hasRole("ADMIN")
-                            .requestMatchers("/admin/login/2fa").hasRole("PRE_AUTH_ADMIN")
+                            .requestMatchers("/assets/**", "/pages/**",
+                                    "/login/2fa").permitAll()
+                            .requestMatchers("/**").hasRole("ADMIN")
+                            .requestMatchers("/login/2fa").hasRole("PRE_AUTH_ADMIN")
                             .anyRequest().authenticated()
                     )
                     .formLogin((form) -> form
-                            .loginPage("/admin/login")
+                            .loginPage("/login")
                             .successHandler(authenticationSuccessHandler())
                             .permitAll()
                     )
                     .rememberMe((rm) -> rm
                             .tokenRepository(persistentTokenRepository()))
                     .logout((logout) -> logout
-                            .logoutUrl("/admin/logout")
+                            .logoutUrl("/logout")
                             .permitAll());
             return http.build();
         }

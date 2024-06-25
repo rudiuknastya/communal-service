@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
 public class AuthenticationController {
     private final MFATokenService mfaTokenService;
     private final AdminService adminService;

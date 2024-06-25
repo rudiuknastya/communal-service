@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/admin/houses")
+@RequestMapping("/houses")
 public class HouseController {
     private final ChairmanService chairmanService;
     private final HouseService houseService;

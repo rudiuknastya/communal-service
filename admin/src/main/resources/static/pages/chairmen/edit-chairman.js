@@ -28,7 +28,7 @@ function setFields(response) {
     });
     let option = new Option(getStatus(response.status), response.status, true, true);
     $('#status').append(option).trigger('change');
-    $("#avatar-img").attr("src","../../../uploads/"+response.avatar);
+    $("#avatar-img").attr("src","../../uploads/"+response.avatar);
 }
 function initializeInputMask() {
     new Cleave('.phoneNumber', {

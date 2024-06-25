@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/admin/profile")
+@RequestMapping("/profile")
 public class AdminController {
     private final AdminService adminService;
     private  final MFATokenService mfaTokenService;

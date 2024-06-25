@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/admin/chairmen")
+@RequestMapping("/chairmen")
 public class ChairmanController {
     private final ChairmanService chairmanService;
 

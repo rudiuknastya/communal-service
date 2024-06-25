@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin/users")
+@RequestMapping("/users")
 public class UserController {
     private final HouseService houseService;
     private final UserService userService;

@@ -35,11 +35,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (admin.isFaAuthentication()){
             admin.setRole("ROLE_PRE_AUTH_ADMIN");
             authorities.add(new SimpleGrantedAuthority("ROLE_PRE_AUTH_ADMIN"));
-            response.sendRedirect(request.getContextPath()+"/admin/login/2fa");
+            response.sendRedirect(request.getContextPath()+"/login/2fa");
         } else {
             admin.setRole("ROLE_ADMIN");
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            response.sendRedirect(request.getContextPath()+"/admin/users");
+            response.sendRedirect(request.getContextPath()+"/users");
         }
         adminRepository.save(admin);
         Authentication newAuth = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), authorities);

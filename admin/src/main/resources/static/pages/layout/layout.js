@@ -14,7 +14,7 @@ $(document).ready(function () {
     const currentUrl = window.location.href;
     const myArray = currentUrl.split("/");
     let root = myArray[3];
-    $("#nav-avatar").attr("src", "/"+root+"/uploads/"+authenticatedAvatar);
+    $("#nav-avatar").attr("src", "/"+root+"/"+myArray[4]+"/uploads/"+authenticatedAvatar);
     $('.menu-item a').each(function (i, item) {
         if (currHref.includes($(item).attr('href'))) {
             $(item).parent().addClass('active');
