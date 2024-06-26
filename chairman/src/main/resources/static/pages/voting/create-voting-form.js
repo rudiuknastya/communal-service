@@ -75,12 +75,13 @@ function collectData() {
     });
     let status = $("#status").val() == null? '': $("#status").val();
     formData.append("status", status);
-    if ($("#startDate").val().localeCompare('') === 0) {
+    let startDate = $("#startDate").val()
+    if (startDate.localeCompare('') === 0) {
         formData.append("startDate", '');
     } else {
-        let formattedStartDate = moment($("#startDate").val(), 'DD.MM.YYYY HH:MM').format('YYYY-MM-DD HH:MM');
-        const startDate = formattedStartDate.split(" ");
-        formData.append("startDate", startDate[0]+"T"+startDate[1]);
+        const splitStartDate = startDate.split(" ");
+        let formattedDate = moment(splitStartDate[0], 'DD.MM.YYYY').format('YYYY-MM-DD');
+        formData.append("startDate", formattedDate+"T"+splitStartDate[1]);
     }
     let endDate = $("#endDate").val()
     if (endDate.localeCompare('') === 0) {
