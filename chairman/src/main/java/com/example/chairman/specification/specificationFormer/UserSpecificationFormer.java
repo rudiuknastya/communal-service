@@ -1,10 +1,13 @@
 package com.example.chairman.specification.specificationFormer;
 
 
+import com.example.chairman.entity.House;
 import com.example.chairman.entity.User;
 import com.example.chairman.model.general.SelectSearchRequest;
 import com.example.chairman.model.user.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 import static com.example.chairman.specification.UserSpecification.*;
 
@@ -60,6 +63,13 @@ public class UserSpecificationFormer {
             if (fullName.length == 3) {
                 userSpecification = userSpecification.and(byMiddleName(fullName[2]));
             }
+        }
+        return userSpecification;
+    }
+    public static Specification<User> formChatSpecification(List<House> houses){
+        Specification<User> userSpecification = Specification.where(byDeleted());
+        for(House house : houses){
+            userSpecification = userSpecification.and(byHouse(house));
         }
         return userSpecification;
     }

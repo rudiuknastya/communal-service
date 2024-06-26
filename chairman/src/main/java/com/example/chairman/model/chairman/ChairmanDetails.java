@@ -64,4 +64,5 @@ public class ChairmanDetails implements UserDetails {
     public String getAvatar(){
         return chairman.getAvatar();
     }
+    public Long getId(){return chairman.getId();}
 }

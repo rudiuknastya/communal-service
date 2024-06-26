@@ -57,4 +57,8 @@ public interface UserSpecification {
         return (root, query, builder) ->
                 builder.equal(root.get("status"), status);
     }
+    static Specification<User> byHouse(House house){
+        return (root, query, builder) ->
+             builder.equal(root.get("house"), house);
+    }
 }

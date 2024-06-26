@@ -47,7 +47,10 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/editor.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-misc.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css}" />
 
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/app-chat.css}" />
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
 
@@ -60,7 +63,7 @@
     <div class="layout-container">
         <!-- Navbar -->
 
-        <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+        <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar" th:fragment="navbar">
             <div class="container-xxl">
                 <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
                     <div class="app-brand-link gap-2">
@@ -182,7 +185,7 @@
             <!-- Content wrapper -->
             <div class="content-wrapper">
                 <!-- Menu -->
-                <aside id="layout-menu" class="layout-menu-horizontal menu-horizontal menu bg-menu-theme flex-grow-0">
+                <aside id="layout-menu" class="layout-menu-horizontal menu-horizontal menu bg-menu-theme flex-grow-0" th:fragment="menu">
                     <div class="container-xxl d-flex h-100">
                         <ul class="menu-inner d-flex justify-content-center">
                             <li class="menu-item">
