@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      class="light-style layout-navbar-fixed layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      data-template="vertical-menu-template-no-customizer">
+<head th:replace="~{layout/layout :: head}"></head>
+<body>
+<div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
+    <div class="layout-container">
+        <nav th:replace="~{layout/layout :: navbar}"></nav>
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <aside th:replace="~{layout/layout :: menu}"></aside>
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="app-chat card overflow-hidden">
+                        <div class="row g-0">
+                            <!-- Chat & Contacts -->
+                            <div class="col app-chat-contacts app-sidebar flex-grow-0 overflow-hidden border-end"
+                                    id="app-chat-contacts">
+                                <div class="sidebar-header">
+                                    <div class="d-flex align-items-center me-3 me-lg-0">
+                                        <div
+                                                class="flex-shrink-0 avatar avatar-online me-3"
+                                                data-bs-toggle="sidebar"
+                                                data-overlay="app-overlay-ex"
+                                                data-target="#app-chat-sidebar-left"
+                                        >
+                                            <img
+                                                    class="user-avatar rounded-circle cursor-pointer"
+                                                    src="../../assets/img/avatars/1.png"
+                                                    alt="Avatar"
+                                            />
+                                        </div>
+                                        <div class="flex-grow-1 input-group input-group-merge rounded-pill">
+                                            <span class="input-group-text" id="basic-addon-search31"><i class="ti ti-search"></i></span>
+                                            <input
+                                                    type="text"
+                                                    class="form-control chat-search-input"
+                                                    placeholder="Search..."
+                                                    aria-label="Search..."
+                                                    aria-describedby="basic-addon-search31"
+                                            />
+                                        </div>
+                                    </div>
+                                    <i
+                                            class="ti ti-x cursor-pointer d-lg-none d-block position-absolute mt-2 me-1 top-0 end-0"
+                                            data-overlay
+                                            data-bs-toggle="sidebar"
+                                            data-target="#app-chat-contacts"
+                                    ></i>
+                                </div>
+                                <hr class="container-m-nx m-0" />
+                                <div class="sidebar-body">
+                                    <!-- Chats -->
+                                    <ul class="list-unstyled chat-contact-list" id="chat-list">
+                                        <li class="chat-contact-list-item">
+                                            <a class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 avatar">
+                                                    <img src="../../assets/img/avatars/13.png" alt="Avatar" class="rounded-circle" />
+                                                </div>
+                                                <div class="chat-contact-info flex-grow-1 ms-2">
+                                                    <h6 class="chat-contact-name text-truncate m-0">Waldemar Mannering</h6>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="chat-contact-list-item active">
+                                            <a class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 avatar">
+                                                    <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                                </div>
+                                                <div class="chat-contact-info flex-grow-1 ms-2">
+                                                    <h6 class="chat-contact-name text-truncate m-0">Felecia Rower</h6>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="chat-contact-list-item">
+                                            <a class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 avatar">
+                                                    <span class="avatar-initial rounded-circle bg-label-success">CM</span>
+                                                </div>
+                                                <div class="chat-contact-info flex-grow-1 ms-2">
+                                                    <h6 class="chat-contact-name text-truncate m-0">Calvin Moore</h6>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /Chat contacts -->
+
+                            <!-- Chat History -->
+                            <div class="col app-chat-history bg-body">
+                                <div class="chat-history-wrapper">
+                                    <div class="chat-history-header border-bottom">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex overflow-hidden align-items-center">
+                                                <i
+                                                        class="ti ti-menu-2 ti-sm cursor-pointer d-lg-none d-block me-2"
+                                                        data-bs-toggle="sidebar"
+                                                        data-overlay
+                                                        data-target="#app-chat-contacts"
+                                                ></i>
+                                                <div class="flex-shrink-0 avatar">
+                                                    <img
+                                                            src="../../assets/img/avatars/2.png"
+                                                            alt="Avatar"
+                                                            class="rounded-circle"
+                                                            data-bs-toggle="sidebar"
+                                                            data-overlay
+                                                            data-target="#app-chat-sidebar-right"
+                                                    />
+                                                </div>
+                                                <div class="chat-contact-info flex-grow-1 ms-2">
+                                                    <h6 class="m-0">Felecia Rower</h6>
+                                                    <small class="user-status text-muted">NextJS developer</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-history-body bg-body">
+                                        <ul class="list-unstyled chat-history">
+                                            <li class="chat-message chat-message-right">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">How can we help? We're here for you! 😄</p>
+                                                        </div>
+                                                        <div class="text-end text-muted mt-1">
+                                                            <i class="ti ti-checks ti-xs me-1 text-success"></i>
+                                                            <small>10:00 AM</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-avatar flex-shrink-0 ms-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="user-avatar flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">Hey John, I am looking for the best admin template.</p>
+                                                            <p class="mb-0">Could you please help me to find it out? 🤔</p>
+                                                        </div>
+                                                        <div class="chat-message-text mt-2">
+                                                            <p class="mb-0">It should be Bootstrap 5 compatible.</p>
+                                                        </div>
+                                                        <div class="text-muted mt-1">
+                                                            <small>10:02 AM</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message chat-message-right">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">Vuexy has all the components you'll ever need in a app.</p>
+                                                        </div>
+                                                        <div class="text-end text-muted mt-1">
+                                                            <i class="ti ti-checks ti-xs me-1 text-success"></i>
+                                                            <small>10:03 AM</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-avatar flex-shrink-0 ms-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="user-avatar flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">Looks clean and fresh UI. 😃</p>
+                                                        </div>
+                                                        <div class="chat-message-text mt-2">
+                                                            <p class="mb-0">It's perfect for my next project.</p>
+                                                        </div>
+                                                        <div class="chat-message-text mt-2">
+                                                            <p class="mb-0">How can I purchase it?</p>
+                                                        </div>
+                                                        <div class="text-muted mt-1">
+                                                            <small>10:05 AM</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message chat-message-right">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">Thanks, you can purchase it.</p>
+                                                        </div>
+                                                        <div class="text-end text-muted mt-1">
+                                                            <i class="ti ti-checks ti-xs me-1 text-success"></i>
+                                                            <small>10:06 AM</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-avatar flex-shrink-0 ms-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="user-avatar flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">I will purchase it for sure. 👍</p>
+                                                        </div>
+                                                        <div class="chat-message-text mt-2">
+                                                            <p class="mb-0">Thanks.</p>
+                                                        </div>
+                                                        <div class="text-muted mt-1">
+                                                            <small>10:08 AM</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message chat-message-right">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">Great, Feel free to get in touch.</p>
+                                                        </div>
+                                                        <div class="text-end text-muted mt-1">
+                                                            <i class="ti ti-checks ti-xs me-1 text-success"></i>
+                                                            <small>10:10 AM</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-avatar flex-shrink-0 ms-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="user-avatar flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="chat-message-wrapper flex-grow-1">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">Do you have design files for Vuexy?</p>
+                                                        </div>
+                                                        <div class="text-muted mt-1">
+                                                            <small>10:15 AM</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="chat-message chat-message-right">
+                                                <div class="d-flex overflow-hidden">
+                                                    <div class="chat-message-wrapper flex-grow-1 w-50">
+                                                        <div class="chat-message-text">
+                                                            <p class="mb-0">
+                                                                Yes that's correct documentation file, Design files are included with the template.
+                                                            </p>
+                                                        </div>
+                                                        <div class="text-end text-muted mt-1">
+                                                            <i class="ti ti-checks ti-xs me-1"></i>
+                                                            <small>10:15 AM</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-avatar flex-shrink-0 ms-3">
+                                                        <div class="avatar avatar-sm">
+                                                            <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- Chat message form -->
+                                    <div class="chat-history-footer shadow-sm">
+                                        <form class="form-send-message d-flex justify-content-between align-items-center">
+                                            <input
+                                                    class="form-control message-input border-0 me-3 shadow-none"
+                                                    placeholder="Type your message here"
+                                            />
+                                            <div class="message-actions d-flex align-items-center">
+                                                <i class="speech-to-text ti ti-microphone ti-sm cursor-pointer"></i>
+                                                <label for="attach-doc" class="form-label mb-0">
+                                                    <i class="ti ti-photo ti-sm cursor-pointer mx-3"></i>
+                                                    <input type="file" id="attach-doc" hidden />
+                                                </label>
+                                                <button class="btn btn-primary d-flex send-msg-btn">
+                                                    <i class="ti ti-send me-md-1 me-0"></i>
+                                                    <span class="align-middle d-md-inline-block d-none">Send</span>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Chat History -->
+
+                            <div class="app-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+<script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+<script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+<script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
+<script th:src="@{/assets/vendor/libs/cleavejs/cleave.js}"></script>
+<script th:src="@{/assets/vendor/libs/moment/moment.js}"></script>
+<script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
+<script th:src="@{/assets/vendor/libs/quill/katex.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/i18n/uk.js"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/uk.js"></script>
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.min.js"></script>
+<script th:src="@{/assets/vendor/libs/quill/quill.js}"></script>
+<script th:src="@{/assets/vendor/libs/chartjs/chartjs.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+<script th:src="@{/assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/app-chat.js}"></script>
+<script th:src="@{/pages/layout/layout.js}"></script>
+<script th:src="@{/pages/general/validation.js}"></script>
+<script th:src="@{/pages/general/custom-block-ui.js}"></script>
+<script th:src="@{/pages/general/pagination.js}"></script>
+
+<script th:inline="javascript">
+    const authenticatedAvatar = [[${#authentication.principal.avatar}]];
+</script>
+</html>
