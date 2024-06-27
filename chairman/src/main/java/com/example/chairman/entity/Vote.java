@@ -1,5 +1,6 @@
 package com.example.chairman.entity;
 
+import com.example.chairman.entity.enums.UserVote;
 import jakarta.persistence.*;
 
 @Entity

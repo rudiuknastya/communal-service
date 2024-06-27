@@ -1,5 +1,6 @@
 package com.example.chairman.entity;
 
+import com.example.chairman.entity.enums.UserStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

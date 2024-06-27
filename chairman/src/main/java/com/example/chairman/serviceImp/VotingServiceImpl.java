@@ -1,13 +1,15 @@
 package com.example.chairman.serviceImp;
 
 import com.example.chairman.entity.*;
+import com.example.chairman.entity.enums.UserVote;
+import com.example.chairman.entity.enums.VotingResultStatus;
+import com.example.chairman.entity.enums.VotingStatus;
 import com.example.chairman.mapper.VotingFormMapper;
 import com.example.chairman.model.voting.*;
 import com.example.chairman.repository.VoteRepository;
 import com.example.chairman.repository.VotingFormRepository;
 import com.example.chairman.service.ScheduleService;
 import com.example.chairman.service.VotingService;
-import com.example.chairman.specification.VoteSpecification;
 import com.example.chairman.specification.specificationFormer.VoteSpecificationFormer;
 import com.example.chairman.specification.specificationFormer.VotingFormSpecificationFormer;
 import jakarta.persistence.EntityNotFoundException;

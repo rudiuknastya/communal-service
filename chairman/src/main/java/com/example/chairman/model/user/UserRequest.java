@@ -1,6 +1,6 @@
 package com.example.chairman.model.user;
 
-import com.example.chairman.entity.UserStatus;
+import com.example.chairman.entity.enums.UserStatus;
 import com.example.chairman.validation.general.image.ImageExtensionValid;
 import com.example.chairman.validation.general.password.PasswordPatternValid;
 import com.example.chairman.validation.general.password.PasswordsEqual;

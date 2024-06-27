@@ -1,6 +1,6 @@
 package com.example.chairman.controller;
 
-import com.example.chairman.entity.UserStatus;
+import com.example.chairman.entity.enums.UserStatus;
 import com.example.chairman.model.general.SelectSearchRequest;
 import com.example.chairman.model.user.FilterRequest;
 import com.example.chairman.model.user.TableUserResponse;

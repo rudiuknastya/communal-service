@@ -1,6 +1,6 @@
 package com.example.chairman.model.voting;
 
-import com.example.chairman.entity.UserVote;
+import com.example.chairman.entity.enums.UserVote;
 
 import java.math.BigDecimal;
 

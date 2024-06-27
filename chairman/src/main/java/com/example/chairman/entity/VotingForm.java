@@ -1,5 +1,7 @@
 package com.example.chairman.entity;
 
+import com.example.chairman.entity.enums.VotingResultStatus;
+import com.example.chairman.entity.enums.VotingStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

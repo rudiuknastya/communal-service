@@ -1,11 +1,10 @@
 package com.example.chairman.model.voting;
 
-import com.example.chairman.entity.VotingStatus;
+import com.example.chairman.entity.enums.VotingStatus;
 import com.example.chairman.validation.voting.EndDateValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 @EndDateValid(

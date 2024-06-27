@@ -1,8 +1,8 @@
 package com.example.chairman.controller;
 
-import com.example.chairman.entity.UserVote;
-import com.example.chairman.entity.VotingResultStatus;
-import com.example.chairman.entity.VotingStatus;
+import com.example.chairman.entity.enums.UserVote;
+import com.example.chairman.entity.enums.VotingResultStatus;
+import com.example.chairman.entity.enums.VotingStatus;
 import com.example.chairman.model.voting.*;
 import com.example.chairman.service.VotingService;
 import jakarta.validation.Valid;

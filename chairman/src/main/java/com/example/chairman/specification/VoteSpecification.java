@@ -1,6 +1,7 @@
 package com.example.chairman.specification;
 
 import com.example.chairman.entity.*;
+import com.example.chairman.entity.enums.UserVote;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 

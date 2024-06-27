@@ -1,8 +1,8 @@
 package com.example.chairman.specification;
 
 import com.example.chairman.entity.VotingForm;
-import com.example.chairman.entity.VotingResultStatus;
-import com.example.chairman.entity.VotingStatus;
+import com.example.chairman.entity.enums.VotingResultStatus;
+import com.example.chairman.entity.enums.VotingStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
