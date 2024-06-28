@@ -47,7 +47,7 @@ function initializeEndDateFlatPicker(endDate) {
         locale: "uk",
         enableTime: true,
         dateFormat: 'd.m.Y H:i',
-        defaultDate: moment(endDate, 'YYYY-MM-DD HH:MM').format('DD.MM.YYYY HH:MM')
+        defaultDate: moment(endDate, 'YYYY-MM-DD hh:mm').format('DD.MM.YYYY hh:mm')
     });
 }
 

@@ -10,13 +10,13 @@ function initializeFlatPickers() {
         locale: "uk",
         enableTime: true,
         dateFormat: 'd.m.Y H:i',
-        minDate: moment().format('DD.MM.YYYY HH:MM')
+        minDate: moment().format('DD.MM.YYYY hh:mm')
     });
     $("#endDate").flatpickr({
         locale: "uk",
         enableTime: true,
         dateFormat: 'd.m.Y H:i',
-        minDate: moment().format('DD.MM.YYYY HH:MM')
+        minDate: moment().format('DD.MM.YYYY hh:mm')
     });
 }
 
