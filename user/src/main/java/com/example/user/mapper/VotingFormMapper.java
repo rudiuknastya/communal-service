@@ -1,7 +1,7 @@
 package com.example.user.mapper;
 
 import com.example.user.entity.User;
-import com.example.user.entity.UserVote;
+import com.example.user.entity.enums.UserVote;
 import com.example.user.entity.Vote;
 import com.example.user.entity.VotingForm;
 import com.example.user.model.voting.ActiveVotingResponse;

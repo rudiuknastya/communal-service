@@ -1,6 +1,8 @@
 package com.example.user.serviceImpl;
 
 import com.example.user.entity.*;
+import com.example.user.entity.enums.UserVote;
+import com.example.user.entity.enums.VotingStatus;
 import com.example.user.mapper.VotingFormMapper;
 import com.example.user.model.voting.ActiveVotingResponse;
 import com.example.user.model.voting.ClosedVotingResponse;

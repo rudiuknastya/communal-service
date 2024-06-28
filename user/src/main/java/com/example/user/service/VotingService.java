@@ -1,6 +1,6 @@
 package com.example.user.service;
 
-import com.example.user.entity.UserVote;
+import com.example.user.entity.enums.UserVote;
 import com.example.user.model.voting.ActiveVotingResponse;
 import com.example.user.model.voting.ClosedVotingResponse;
 import com.example.user.model.voting.FilterRequest;

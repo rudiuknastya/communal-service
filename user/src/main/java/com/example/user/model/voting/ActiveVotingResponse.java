@@ -1,6 +1,6 @@
 package com.example.user.model.voting;
 
-import com.example.user.entity.UserVote;
+import com.example.user.entity.enums.UserVote;
 
 public record ActiveVotingResponse(
         String subject,

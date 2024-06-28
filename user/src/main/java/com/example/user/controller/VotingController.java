@@ -1,8 +1,8 @@
 package com.example.user.controller;
 
-import com.example.user.entity.UserVote;
-import com.example.user.entity.VotingResultStatus;
-import com.example.user.entity.VotingStatus;
+import com.example.user.entity.enums.UserVote;
+import com.example.user.entity.enums.VotingResultStatus;
+import com.example.user.entity.enums.VotingStatus;
 import com.example.user.model.voting.ActiveVotingResponse;
 import com.example.user.model.voting.ClosedVotingResponse;
 import com.example.user.model.voting.FilterRequest;

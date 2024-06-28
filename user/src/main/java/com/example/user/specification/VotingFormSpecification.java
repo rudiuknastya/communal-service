@@ -1,8 +1,8 @@
 package com.example.user.specification;
 
 import com.example.user.entity.VotingForm;
-import com.example.user.entity.VotingResultStatus;
-import com.example.user.entity.VotingStatus;
+import com.example.user.entity.enums.VotingResultStatus;
+import com.example.user.entity.enums.VotingStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;

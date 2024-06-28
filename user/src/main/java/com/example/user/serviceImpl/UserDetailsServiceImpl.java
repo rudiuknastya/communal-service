@@ -1,7 +1,7 @@
 package com.example.user.serviceImpl;
 
 import com.example.user.entity.User;
-import com.example.user.entity.UserStatus;
+import com.example.user.entity.enums.UserStatus;
 import com.example.user.model.user.MyUserDetails;
 import com.example.user.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
