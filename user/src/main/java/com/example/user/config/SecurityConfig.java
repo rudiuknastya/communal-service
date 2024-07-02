@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/assets/**", "/pages/**",
                                 "/forgotPassword", "/sentToken",
                                 "/changePassword", "/chairman/tokenExpired",
-                                "/success").permitAll()
+                                "/success", "/register").permitAll()
                         .requestMatchers("/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )

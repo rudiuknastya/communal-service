@@ -12,6 +12,7 @@ import java.util.List;
 public class MyUserDetails implements UserDetails {
     private final User user;
     private boolean enabled = true;
+    private boolean accountNonLocked = true;
     public MyUserDetails(User user) {
         this.user = user;
     }
@@ -40,7 +41,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @Override
@@ -56,7 +57,9 @@ public class MyUserDetails implements UserDetails {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
+    public void setAccountNonLocked(boolean accountNonLocked){
+        this.accountNonLocked = accountNonLocked;
+    }
     public String getFullName(){
         return user.getLastName()+" "+user.getFirstName()+" "+user.getMiddleName();
     }

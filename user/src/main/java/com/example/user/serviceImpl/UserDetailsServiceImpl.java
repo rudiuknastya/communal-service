@@ -28,6 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user.getStatus().equals(UserStatus.DISABLED)){
             myUserDetails.setEnabled(false);
         }
+        if(user.getStatus().equals(UserStatus.NEW)){
+            myUserDetails.setAccountNonLocked(false);
+        }
         logger.info("loadUserByUsername() - User was found");
         return myUserDetails;
     }
