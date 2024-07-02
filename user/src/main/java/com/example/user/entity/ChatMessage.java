@@ -1,6 +1,11 @@
 package com.example.user.entity;
 
+import com.example.user.entity.enums.ContentType;
+import com.example.user.entity.enums.Sender;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "chat_messages")
@@ -8,15 +13,21 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 2000, nullable = false)
+    private String content;
+    @Column(nullable = false)
+    private LocalDate creationDate;
+    @Column(nullable = false)
+    private LocalTime creationTime;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ContentType contentType;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Sender sender;
     @ManyToOne
-    @JoinColumn(name = "chat_text_id", referencedColumnName = "id", nullable = false)
-    private ChatText chatText;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "chairman_id", referencedColumnName = "id", nullable = false)
-    private Chairman chairman;
+    @JoinColumn(nullable = false)
+    private Chat chat;
 
     public Long getId() {
         return id;
@@ -26,27 +37,51 @@ public class ChatMessage {
         this.id = id;
     }
 
-    public ChatText getChatText() {
-        return chatText;
+    public String getContent() {
+        return content;
     }
 
-    public void setChatText(ChatText chatText) {
-        this.chatText = chatText;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public User getUser() {
-        return user;
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Chairman getChairman() {
-        return chairman;
+    public LocalTime getCreationTime() {
+        return creationTime;
     }
 
-    public void setChairman(Chairman chairman) {
-        this.chairman = chairman;
+    public void setCreationTime(LocalTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
+    }
+
+    public Sender getSender() {
+        return sender;
+    }
+
+    public void setSender(Sender sender) {
+        this.sender = sender;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 }
