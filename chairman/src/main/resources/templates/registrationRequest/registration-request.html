@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Заявки</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h4 class="text-center">Заявка на реєстрацію</h4>
+    <div class="mb-3">
+        <span class="fw-bold">ПІБ:</span> <span id="fullName"></span>
+    </div>
+    <div class="mb-3">
+        <span class="fw-bold">Адреса:</span> <span id="address"></span>
+    </div>
+    <div class="mb-3">
+        <span class="fw-bold">Номер квартири:</span> <span id="apartmentNumber"></span>
+    </div>
+    <div class="mb-3">
+        <span class="fw-bold">Площа квартири:</span> <span id="area"></span>
+    </div>
+    <div class="mb-3">
+        <span class="fw-bold">Особистий рахунок:</span> <span id="personalAccount"></span>
+    </div>
+    <div class="mb-3">
+        <span class="fw-bold">Номер телефону:</span> <span id="phoneNumber"></span>
+    </div>
+    <div class="mb-3">
+        <span class="fw-bold">Email:</span> <span id="email"></span>
+    </div>
+    <div class="mb-3">
+        <button type="button" class="btn btn-success" id="accept-button">Прийняти</button>
+        <button type="button" class="btn btn-danger ms-3" id="reject-button">Відхилити</button>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pages/registrationRequest/registration-request.js}"></script>
+</html>

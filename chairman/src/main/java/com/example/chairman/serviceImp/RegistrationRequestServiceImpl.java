@@ -1,12 +1,17 @@
 package com.example.chairman.serviceImp;
 
 import com.example.chairman.entity.RegistrationRequest;
+import com.example.chairman.entity.enums.RequestStatus;
+import com.example.chairman.entity.enums.UserStatus;
 import com.example.chairman.mapper.RegistrationRequestMapper;
 import com.example.chairman.model.registrationRequest.FilterRequest;
+import com.example.chairman.model.registrationRequest.RegistrationRequestResponse;
 import com.example.chairman.model.registrationRequest.TableRegistrationRequestResponse;
 import com.example.chairman.repository.RegistrationRequestRepository;
+import com.example.chairman.repository.UserRepository;
 import com.example.chairman.service.RegistrationRequestService;
 import com.example.chairman.specification.specificationFormer.RegistrationRequestSpecificationFormer;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -22,11 +27,15 @@ import java.util.List;
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
     private final RegistrationRequestRepository registrationRequestRepository;
     private final RegistrationRequestMapper registrationRequestMapper;
+    private final UserRepository userRepository;
     private final Logger logger = LogManager.getLogger(RegistrationRequestServiceImpl.class);
 
-    public RegistrationRequestServiceImpl(RegistrationRequestRepository registrationRequestRepository, RegistrationRequestMapper registrationRequestMapper) {
+    public RegistrationRequestServiceImpl(RegistrationRequestRepository registrationRequestRepository,
+                                          RegistrationRequestMapper registrationRequestMapper,
+                                          UserRepository userRepository) {
         this.registrationRequestRepository = registrationRequestRepository;
         this.registrationRequestMapper = registrationRequestMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -55,5 +64,41 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
         }
         registrationRequestRepository.saveAll(registrationRequests);
         logger.info("deleteRequestsByIds - Registration requests have been deleted");
+    }
+
+    @Override
+    public RegistrationRequestResponse getRegistrationRequest(Long id) {
+        logger.info("getRegistrationRequest - Getting registration request by id "+id);
+        RegistrationRequest registrationRequest = getRegistrationRequestById(id);
+        RegistrationRequestResponse registrationRequestResponse = registrationRequestMapper.registrationRequestToRegistrationRequestResponse(registrationRequest);
+        logger.info("getRegistrationRequest - Registration request has been got");
+        return registrationRequestResponse;
+    }
+
+    @Override
+    public void acceptRegistrationRequest(Long id) {
+        logger.info("acceptRegistrationRequest - Accepting registration request with id "+id);
+        RegistrationRequest registrationRequest = getRegistrationRequestById(id);
+        registrationRequest.setStatus(RequestStatus.ACCEPTED);
+        registrationRequest.getUser().setStatus(UserStatus.ACTIVE);
+        userRepository.save(registrationRequest.getUser());
+        registrationRequestRepository.save(registrationRequest);
+        logger.info("acceptRegistrationRequest - Registration request has been accepted");
+    }
+
+    @Override
+    public void rejectRegistrationRequest(Long id) {
+        logger.info("rejectRegistrationRequest - Rejecting registration request with id "+id);
+        RegistrationRequest registrationRequest = getRegistrationRequestById(id);
+        registrationRequest.setStatus(RequestStatus.REJECTED);
+        registrationRequest.getUser().setStatus(UserStatus.DISABLED);
+        userRepository.save(registrationRequest.getUser());
+        registrationRequestRepository.save(registrationRequest);
+        logger.info("rejectRegistrationRequest - Registration request has been rejected");
+    }
+
+    private RegistrationRequest getRegistrationRequestById(Long id){
+        return registrationRequestRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Registration request was not found by id "+id));
     }
 }
