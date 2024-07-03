@@ -1,18 +1,12 @@
 package com.example.admin.model.user;
 
-import com.example.admin.entity.UserStatus;
-import com.example.admin.validation.general.groups.Create;
-import com.example.admin.validation.general.groups.Edit;
+import com.example.admin.entity.enums.UserStatus;
 import com.example.admin.validation.general.image.ImageExtensionValid;
 import com.example.admin.validation.general.password.PasswordPatternValid;
 import com.example.admin.validation.general.password.PasswordsEqual;
-import com.example.admin.validation.user.email.CreateEmailUnique;
 import com.example.admin.validation.user.email.EditEmailUnique;
-import com.example.admin.validation.user.personalAccount.CreatePersonalAccountUnique;
 import com.example.admin.validation.user.personalAccount.EditPersonalAccountUnique;
-import com.example.admin.validation.user.phone.CreatePhoneUnique;
 import com.example.admin.validation.user.phone.EditPhoneUnique;
-import com.example.admin.validation.user.username.CreateUsernameUnique;
 import com.example.admin.validation.user.username.EditUsernameUnique;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

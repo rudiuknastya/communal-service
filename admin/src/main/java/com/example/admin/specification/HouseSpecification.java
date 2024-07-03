@@ -2,7 +2,7 @@ package com.example.admin.specification;
 
 import com.example.admin.entity.Chairman;
 import com.example.admin.entity.House;
-import com.example.admin.entity.HouseStatus;
+import com.example.admin.entity.enums.HouseStatus;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;

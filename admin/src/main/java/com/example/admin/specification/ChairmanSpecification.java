@@ -1,7 +1,7 @@
 package com.example.admin.specification;
 
 import com.example.admin.entity.Chairman;
-import com.example.admin.entity.ChairmanStatus;
+import com.example.admin.entity.enums.ChairmanStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface ChairmanSpecification {

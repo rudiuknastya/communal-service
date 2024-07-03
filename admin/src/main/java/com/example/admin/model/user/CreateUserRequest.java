@@ -1,6 +1,6 @@
 package com.example.admin.model.user;
 
-import com.example.admin.entity.UserStatus;
+import com.example.admin.entity.enums.UserStatus;
 import com.example.admin.validation.general.image.ImageExtensionValid;
 import com.example.admin.validation.general.password.PasswordsEqual;
 import com.example.admin.validation.user.email.CreateEmailUnique;

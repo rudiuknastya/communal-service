@@ -1,6 +1,6 @@
 package com.example.admin.controller;
 
-import com.example.admin.entity.UserStatus;
+import com.example.admin.entity.enums.UserStatus;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.HouseNumberResponse;
 import com.example.admin.model.user.*;

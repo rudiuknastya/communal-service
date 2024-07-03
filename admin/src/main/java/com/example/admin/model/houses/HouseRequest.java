@@ -1,6 +1,6 @@
 package com.example.admin.model.houses;
 
-import com.example.admin.entity.HouseStatus;
+import com.example.admin.entity.enums.HouseStatus;
 import com.example.admin.validation.general.groups.Create;
 import com.example.admin.validation.house.CreateHouseUnique;
 import com.example.admin.validation.general.groups.Edit;

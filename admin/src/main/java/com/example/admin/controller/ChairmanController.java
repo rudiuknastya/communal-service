@@ -1,6 +1,6 @@
 package com.example.admin.controller;
 
-import com.example.admin.entity.ChairmanStatus;
+import com.example.admin.entity.enums.ChairmanStatus;
 import com.example.admin.model.chairmen.*;
 import com.example.admin.service.ChairmanService;
 import jakarta.validation.Valid;

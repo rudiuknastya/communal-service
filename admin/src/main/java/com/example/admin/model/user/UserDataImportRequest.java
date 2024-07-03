@@ -1,6 +1,6 @@
 package com.example.admin.model.user;
 
-import com.example.admin.entity.UserStatus;
+import com.example.admin.entity.enums.UserStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

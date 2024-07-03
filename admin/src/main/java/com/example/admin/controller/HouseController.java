@@ -1,13 +1,12 @@
 package com.example.admin.controller;
 
-import com.example.admin.entity.HouseStatus;
+import com.example.admin.entity.enums.HouseStatus;
 import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.*;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.service.HouseService;
 import com.example.admin.validation.general.groups.Create;
 import com.example.admin.validation.general.groups.Edit;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

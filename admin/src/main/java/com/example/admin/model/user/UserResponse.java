@@ -1,6 +1,6 @@
 package com.example.admin.model.user;
 
-import com.example.admin.entity.UserStatus;
+import com.example.admin.entity.enums.UserStatus;
 import com.example.admin.model.houses.HouseNumberResponse;
 
 import java.math.BigDecimal;

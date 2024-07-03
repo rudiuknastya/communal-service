@@ -1,6 +1,6 @@
 package com.example.admin.model.chairmen;
 
-import com.example.admin.entity.ChairmanStatus;
+import com.example.admin.entity.enums.ChairmanStatus;
 import com.example.admin.validation.chairman.email.EditEmailUnique;
 import com.example.admin.validation.chairman.phoneNumber.EditPhoneNumberUnique;
 import com.example.admin.validation.chairman.username.EditUsernameUnique;

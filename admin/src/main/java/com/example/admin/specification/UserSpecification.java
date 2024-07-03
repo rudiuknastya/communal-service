@@ -2,7 +2,7 @@ package com.example.admin.specification;
 
 import com.example.admin.entity.House;
 import com.example.admin.entity.User;
-import com.example.admin.entity.UserStatus;
+import com.example.admin.entity.enums.UserStatus;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 

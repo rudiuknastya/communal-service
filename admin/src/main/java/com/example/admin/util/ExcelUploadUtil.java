@@ -1,6 +1,6 @@
 package com.example.admin.util;
 
-import com.example.admin.entity.UserStatus;
+import com.example.admin.entity.enums.UserStatus;
 import com.example.admin.model.user.HouseDataImportDto;
 import com.example.admin.model.user.UserDataImportRequest;
 import com.example.admin.validation.user.UserDataImportValidator;

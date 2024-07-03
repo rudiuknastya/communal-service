@@ -1,6 +1,6 @@
 package com.example.admin.model.chairmen;
 
-import com.example.admin.entity.ChairmanStatus;
+import com.example.admin.entity.enums.ChairmanStatus;
 
 public record FilterRequest(
         int page,

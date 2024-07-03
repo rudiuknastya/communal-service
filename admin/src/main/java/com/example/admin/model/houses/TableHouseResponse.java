@@ -1,6 +1,6 @@
 package com.example.admin.model.houses;
 
-import com.example.admin.entity.HouseStatus;
+import com.example.admin.entity.enums.HouseStatus;
 
 public record TableHouseResponse(
         Long id,
