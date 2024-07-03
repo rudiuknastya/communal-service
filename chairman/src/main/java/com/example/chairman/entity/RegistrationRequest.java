@@ -1,6 +1,6 @@
-package com.example.user.entity;
+package com.example.chairman.entity;
 
-import com.example.user.entity.enums.RequestStatus;
+import com.example.chairman.entity.enums.RequestStatus;
 import jakarta.persistence.*;
 
 @Entity

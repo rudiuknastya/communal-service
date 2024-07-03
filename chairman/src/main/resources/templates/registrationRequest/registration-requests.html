@@ -2,11 +2,17 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
-    <title>Зворотній зв'язок</title>
+    <title>Заявки</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h3>Отримані повідомлення</h3>
+    <div class="d-flex justify-content-between mb-3">
+        <h3 class="mb-0">Заявки на реєстрацію</h3>
+        <button type="button" class="btn btn-label-danger me-2" id="delete-button">
+            <i class="ti ti-trash me-1"></i>
+            Видалити
+        </button>
+    </div>
     <div class="d-flex justify-content-end" style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
         <button type="button" class="btn btn-outline-secondary m-1" id="clear-filters">
             Очистити
@@ -16,39 +22,24 @@
         <table class="table table-bordered table-hover">
             <thead>
             <tr class="table-primary text-center">
+                <th><input class="form-check-input" type="checkbox" value="" id="mainCheck"></th>
                 <th>#</th>
-                <th>Відправник</th>
-                <th>№ квартири</th>
-                <th>Номер телефону</th>
-                <th>Тема повідомлення</th>
-                <th>Дата</th>
+                <th>ПІБ</th>
+                <th>Email</th>
+                <th>Статус</th>
                 <th></th>
             </tr>
             <tr>
                 <td></td>
-                <td class="px-2">
+                <td></td>
+                <td>
                     <input type="search" id="filter-by-fullName" class="form-control">
                 </td>
-                <td class="px-2">
-                    <input type="search" id="filter-by-apartmentNumber" class="form-control">
-                </td>
-                <td class="px-2">
-                    <input type="search" id="filter-by-phoneNumber" class="form-control">
-                </td>
-                <td class="px-2">
-                    <input type="search" id="filter-by-subject" class="form-control">
+                <td>
+                    <input type="search" id="filter-by-email" class="form-control">
                 </td>
                 <td>
-                    <div class="row">
-                        Від
-                    <div class="col-5">
-                    <input type="text" id="filter-by-dateFrom" class="form-control">
-                    </div>
-                        до
-                    <div class="col-5">
-                    <input type="text" id="filter-by-dateTo" class="form-control">
-                    </div>
-                    </div>
+                    <select id="filter-by-status" class="form-control"></select>
                 </td>
                 <td></td>
             </tr>
@@ -63,5 +54,5 @@
     </div>
 </div>
 </body>
-<script layout:fragment="script" th:src="@{/pages/messages/messages.js}"></script>
+<script layout:fragment="script" th:src="@{/pages/registrationRequest/registration-requests.js}"></script>
 </html>
