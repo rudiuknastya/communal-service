@@ -35,7 +35,7 @@ public interface UserSpecification {
             return builder.equal(houseJoin.get("street"), street);
         };
     }
-    static Specification<User> byHouseNumber(Long houseNumber){
+    static Specification<User> byHouseNumber(String houseNumber){
         return (root, query, builder) -> {
             Join<User, House> houseJoin = root.join("house");
             return builder.equal(houseJoin.get("number"), houseNumber);

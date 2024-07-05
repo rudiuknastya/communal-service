@@ -29,16 +29,19 @@ public class ChairmanServiceImpl implements ChairmanService {
     private final ChairmanRepository chairmanRepository;
     private final HouseRepository houseRepository;
     private final ChairmanMapper chairmanMapper;
+    private final ChairmanSpecificationFormer chairmanSpecificationFormer;
     private final UploadFileUtil uploadFileUtil;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger(ChairmanServiceImpl.class);
 
     public ChairmanServiceImpl(ChairmanRepository chairmanRepository,
                                HouseRepository houseRepository, ChairmanMapper chairmanMapper,
+                               ChairmanSpecificationFormer chairmanSpecificationFormer,
                                UploadFileUtil uploadFileUtil, PasswordEncoder passwordEncoder) {
         this.chairmanRepository = chairmanRepository;
         this.houseRepository = houseRepository;
         this.chairmanMapper = chairmanMapper;
+        this.chairmanSpecificationFormer = chairmanSpecificationFormer;
         this.uploadFileUtil = uploadFileUtil;
         this.passwordEncoder = passwordEncoder;
     }
@@ -72,7 +75,7 @@ public class ChairmanServiceImpl implements ChairmanService {
         return tableChairmanResponsePage;
     }
     private Page<Chairman> getFilteredChairmen(FilterRequest filterRequest, Pageable pageable){
-        Specification<Chairman> specification = ChairmanSpecificationFormer.formSpecification(filterRequest);
+        Specification<Chairman> specification = chairmanSpecificationFormer.formTableSpecification(filterRequest);
         return chairmanRepository.findAll(specification, pageable);
     }
 
@@ -135,7 +138,7 @@ public class ChairmanServiceImpl implements ChairmanService {
     public Page<ChairmanNameResponse> getChairmanNameResponses(SelectSearchRequest selectSearchRequest) {
         logger.info("getChairmanNameResponses - Getting chairman name responses "+selectSearchRequest.toString());
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Page<Chairman> chairmen = chairmanRepository.findAll(ChairmanSpecificationFormer.formSelectSpecification(selectSearchRequest), pageable);
+        Page<Chairman> chairmen = chairmanRepository.findAll(chairmanSpecificationFormer.formSelectSpecification(selectSearchRequest), pageable);
         List<ChairmanNameResponse> chairmanNameResponses = chairmanMapper.chairmanListToChairmanNameResponseList(chairmen.getContent());
         Page<ChairmanNameResponse> chairmanNameResponsePage = new PageImpl<>(chairmanNameResponses, pageable, chairmen.getTotalElements());
         logger.info("getChairmanNameResponses - Chairman name responses have been got");

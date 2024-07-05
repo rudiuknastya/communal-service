@@ -29,14 +29,17 @@ public class HouseServiceImpl implements HouseService {
     private final ChairmanRepository chairmanRepository;
     private final UserRepository userRepository;
     private final HouseMapper houseMapper;
+    private final HouseSpecificationFormer houseSpecificationFormer;
     private final Logger logger = LogManager.getLogger(HouseServiceImpl.class);
 
     public HouseServiceImpl(HouseRepository houseRepository, ChairmanRepository chairmanRepository,
-                            UserRepository userRepository, HouseMapper houseMapper) {
+                            UserRepository userRepository, HouseMapper houseMapper,
+                            HouseSpecificationFormer houseSpecificationFormer) {
         this.houseRepository = houseRepository;
         this.chairmanRepository = chairmanRepository;
         this.userRepository = userRepository;
         this.houseMapper = houseMapper;
+        this.houseSpecificationFormer = houseSpecificationFormer;
     }
 
     @Override
@@ -60,7 +63,8 @@ public class HouseServiceImpl implements HouseService {
     }
 
     private Page<House> getFilteredHouses(FilterRequest filterRequest, Pageable pageable) {
-        Specification<House> houseSpecification = HouseSpecificationFormer.formSpecification(filterRequest);
+        Specification<House> houseSpecification = houseSpecificationFormer
+                .formTableSpecification(filterRequest);
         return houseRepository.findAll(houseSpecification, pageable);
     }
 
@@ -87,7 +91,7 @@ public class HouseServiceImpl implements HouseService {
     public Page<String> getCities(SelectSearchRequest selectSearchRequest) {
         logger.info("getCities - Getting cities for select "+selectSearchRequest.toString());
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Specification<House> houseSpecification = HouseSpecificationFormer
+        Specification<House> houseSpecification = houseSpecificationFormer
                 .formCitySelectSpecification(selectSearchRequest);
         Page<House> housePage = houseRepository.findAll(houseSpecification,pageable);
         List<String> cities = houseMapper.houseListToCityStringList(housePage.getContent());
@@ -100,7 +104,7 @@ public class HouseServiceImpl implements HouseService {
     public Page<String> getStreets(SelectSearchRequest selectSearchRequest, String city, String number) {
         logger.info("getStreets - Getting streets for select "+selectSearchRequest.toString()+" city: "+city+" number: "+number);
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Specification<House> houseSpecification = HouseSpecificationFormer
+        Specification<House> houseSpecification = houseSpecificationFormer
                 .formStreetSelectSpecification(selectSearchRequest, city, number);
         Page<House> housePage = houseRepository.findAll(houseSpecification,pageable);
         List<String> streets = houseMapper.houseListToStreetStringList(housePage.getContent());
@@ -113,7 +117,7 @@ public class HouseServiceImpl implements HouseService {
     public Page<HouseNumberResponse> getNumbers(SelectSearchRequest selectSearchRequest, String city, String street) {
         logger.info("getNumbers - Getting numbers for select "+selectSearchRequest.toString()+" city: "+city+" street: "+street);
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Specification<House> houseSpecification = HouseSpecificationFormer
+        Specification<House> houseSpecification = houseSpecificationFormer
                 .formNumberSelectSpecification(selectSearchRequest, city, street);
         Page<House> housePage = houseRepository.findAll(houseSpecification, pageable);
         List<HouseNumberResponse> houseNumberResponses = houseMapper.houseListToHouseNumberResponseList(housePage.getContent());

@@ -8,7 +8,7 @@ public record FilterRequest(
         String fullName,
         String city,
         String street,
-        Long houseNumber,
+        String houseNumber,
         Long apartmentNumber,
         String personalAccount,
         String phoneNumber,

@@ -30,17 +30,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final HouseRepository houseRepository;
     private final UserMapper userMapper;
+    private final UserSpecificationFormer userSpecificationFormer;
     private final UploadFileUtil uploadFileUtil;
     private final ExcelUploadUtil excelUploadUtil;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, HouseRepository houseRepository,
-                           UserMapper userMapper, UploadFileUtil uploadFileUtil,
-                           ExcelUploadUtil excelUploadUtil, PasswordEncoder passwordEncoder) {
+                           UserMapper userMapper, UserSpecificationFormer userSpecificationFormer,
+                           UploadFileUtil uploadFileUtil, ExcelUploadUtil excelUploadUtil,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.houseRepository = houseRepository;
         this.userMapper = userMapper;
+        this.userSpecificationFormer = userSpecificationFormer;
         this.uploadFileUtil = uploadFileUtil;
         this.excelUploadUtil = excelUploadUtil;
         this.passwordEncoder = passwordEncoder;
@@ -77,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private Page<User> getFilteredUsers(FilterRequest filterRequest, Pageable pageable) {
-        Specification<User> userSpecification = UserSpecificationFormer.formSpecification(filterRequest);
+        Specification<User> userSpecification = userSpecificationFormer.formTableSpecification(filterRequest);
         return userRepository.findAll(userSpecification, pageable);
     }
     @Override

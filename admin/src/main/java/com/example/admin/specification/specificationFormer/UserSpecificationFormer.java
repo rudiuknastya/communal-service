@@ -3,11 +3,12 @@ package com.example.admin.specification.specificationFormer;
 import com.example.admin.entity.User;
 import com.example.admin.model.user.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.admin.specification.UserSpecification.*;
-
+@Component
 public class UserSpecificationFormer {
-    public static Specification<User> formSpecification(FilterRequest filterRequest){
+    public Specification<User> formTableSpecification(FilterRequest filterRequest){
         Specification<User> userSpecification = Specification.where(byDeleted());
         if(!filterRequest.fullName().isEmpty()){
             String[] fullName = filterRequest.fullName().split(" ");
@@ -27,7 +28,7 @@ public class UserSpecificationFormer {
         if (!filterRequest.street().isEmpty()){
             userSpecification = userSpecification.and(byHouseStreet(filterRequest.street()));
         }
-        if (filterRequest.houseNumber() != null){
+        if (!filterRequest.houseNumber().isEmpty()){
             userSpecification = userSpecification.and(byHouseNumber(filterRequest.houseNumber()));
         }
         if (filterRequest.apartmentNumber() != null){
