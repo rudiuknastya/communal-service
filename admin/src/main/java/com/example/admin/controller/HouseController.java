@@ -72,7 +72,7 @@ public class HouseController {
     }
 
     @GetMapping("/edit/get/{id}")
-    public @ResponseBody HouseResponse getCreateHousePage(@PathVariable Long id) {
+    public @ResponseBody HouseResponse getHouseForEdit(@PathVariable Long id) {
         return houseService.getHouseResponse(id);
     }
 

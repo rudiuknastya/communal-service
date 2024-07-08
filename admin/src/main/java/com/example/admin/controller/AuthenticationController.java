@@ -38,7 +38,7 @@ public class AuthenticationController {
         }
     }
     @GetMapping("/login/2fa")
-    public ModelAndView get2FAPage(@RequestParam(name="error", required = false) String error) {
+    public ModelAndView get2FAPage() {
         return new ModelAndView("authentication/2fa");
     }
     @PostMapping("/login/2fa")
