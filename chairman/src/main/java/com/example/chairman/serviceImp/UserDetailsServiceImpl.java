@@ -1,7 +1,7 @@
 package com.example.chairman.serviceImp;
 
 import com.example.chairman.entity.Chairman;
-import com.example.chairman.entity.ChairmanStatus;
+import com.example.chairman.entity.enums.ChairmanStatus;
 import com.example.chairman.model.chairman.ChairmanDetails;
 import com.example.chairman.repository.ChairmanRepository;
 import org.apache.logging.log4j.LogManager;
