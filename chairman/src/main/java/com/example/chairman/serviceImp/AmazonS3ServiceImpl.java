@@ -36,17 +36,6 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public void uploadFile(String name, File file) {
-        logger.info("uploadFile() - Uploading file "+file.getName());
-        try {
-            amazonS3.putObject(bucketName, name, new FileInputStream(file), null);
-            logger.info("uploadFile() - File has been uploaded");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    @Override
     public S3Object getS3Object(String fileName) {
         logger.info("getFile() - Getting file "+fileName);
         S3Object s3Object = amazonS3.getObject(bucketName, fileName);
