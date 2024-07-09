@@ -3,11 +3,12 @@ package com.example.chairman.specification.specificationFormer;
 import com.example.chairman.entity.Vote;
 import com.example.chairman.model.voting.UsersFilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.chairman.specification.VoteSpecification.*;
-
+@Component
 public class VoteSpecificationFormer {
-    public static Specification<Vote> formSpecification(Long id, UsersFilterRequest usersFilterRequest){
+    public Specification<Vote> formTableSpecification(Long id, UsersFilterRequest usersFilterRequest){
         Specification<Vote> voteSpecification = Specification.where(byVotingFormId(id));
         if(!usersFilterRequest.fullName().isEmpty()){
             String[] fullName = usersFilterRequest.fullName().split(" ");

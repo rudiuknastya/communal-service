@@ -31,14 +31,17 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UploadFileUtil uploadFileUtil;
+    private final UserSpecificationFormer userSpecificationFormer;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper,
-                           UploadFileUtil uploadFileUtil, PasswordEncoder passwordEncoder) {
+                           UploadFileUtil uploadFileUtil, UserSpecificationFormer userSpecificationFormer,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.uploadFileUtil = uploadFileUtil;
+        this.userSpecificationFormer = userSpecificationFormer;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -85,7 +88,7 @@ public class UserServiceImpl implements UserService {
         return tableUserResponsePage;
     }
     private Page<User> getFilteredUsers(FilterRequest filterRequest, Pageable pageable) {
-        Specification<User> userSpecification = UserSpecificationFormer.formSpecification(filterRequest);
+        Specification<User> userSpecification = userSpecificationFormer.formTableSpecification(filterRequest);
         return userRepository.findAll(userSpecification, pageable);
     }
 

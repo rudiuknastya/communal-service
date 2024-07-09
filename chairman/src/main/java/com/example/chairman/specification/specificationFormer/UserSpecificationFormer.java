@@ -6,13 +6,14 @@ import com.example.chairman.entity.User;
 import com.example.chairman.model.general.SelectSearchRequest;
 import com.example.chairman.model.user.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static com.example.chairman.specification.UserSpecification.*;
-
+@Component
 public class UserSpecificationFormer {
-    public static Specification<User> formSpecification(FilterRequest filterRequest){
+    public Specification<User> formTableSpecification(FilterRequest filterRequest){
         Specification<User> userSpecification = Specification.where(byDeleted());
         if(!filterRequest.fullName().isEmpty()){
             String[] fullName = filterRequest.fullName().split(" ");

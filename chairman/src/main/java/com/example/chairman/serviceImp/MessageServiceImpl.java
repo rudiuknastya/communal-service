@@ -24,11 +24,14 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
+    private final MessageSpecificationFormer messageSpecificationFormer;
     private final Logger logger = LogManager.getLogger(MessageServiceImpl.class);
 
-    public MessageServiceImpl(MessageRepository messageRepository, MessageMapper messageMapper) {
+    public MessageServiceImpl(MessageRepository messageRepository, MessageMapper messageMapper,
+                              MessageSpecificationFormer messageSpecificationFormer) {
         this.messageRepository = messageRepository;
         this.messageMapper = messageMapper;
+        this.messageSpecificationFormer = messageSpecificationFormer;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private Page<Message> getFilteredMessages(FilterRequest filterRequest, Pageable pageable) {
-        Specification<Message> messageSpecification = MessageSpecificationFormer.formSpecification(filterRequest);
+        Specification<Message> messageSpecification = messageSpecificationFormer.formTableSpecification(filterRequest);
         return messageRepository.findAll(messageSpecification, pageable);
     }
 

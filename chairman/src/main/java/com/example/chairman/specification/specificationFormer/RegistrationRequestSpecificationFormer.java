@@ -3,11 +3,12 @@ package com.example.chairman.specification.specificationFormer;
 import com.example.chairman.entity.RegistrationRequest;
 import com.example.chairman.model.registrationRequest.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.chairman.specification.RegistrationRequestSpecification.*;
-
+@Component
 public class RegistrationRequestSpecificationFormer {
-    public static Specification<RegistrationRequest> formTableSpecification(FilterRequest filterRequest){
+    public Specification<RegistrationRequest> formTableSpecification(FilterRequest filterRequest){
         Specification<RegistrationRequest> registrationRequestSpecification = Specification.where(byDeleted());
         if (!filterRequest.email().isEmpty()){
             registrationRequestSpecification = registrationRequestSpecification

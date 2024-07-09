@@ -27,14 +27,15 @@ import java.util.List;
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
     private final RegistrationRequestRepository registrationRequestRepository;
     private final RegistrationRequestMapper registrationRequestMapper;
+    private final RegistrationRequestSpecificationFormer registrationRequestSpecificationFormer;
     private final UserRepository userRepository;
     private final Logger logger = LogManager.getLogger(RegistrationRequestServiceImpl.class);
 
-    public RegistrationRequestServiceImpl(RegistrationRequestRepository registrationRequestRepository,
-                                          RegistrationRequestMapper registrationRequestMapper,
-                                          UserRepository userRepository) {
+    public RegistrationRequestServiceImpl(RegistrationRequestRepository registrationRequestRepository, RegistrationRequestMapper registrationRequestMapper,
+                                          RegistrationRequestSpecificationFormer registrationRequestSpecificationFormer, UserRepository userRepository) {
         this.registrationRequestRepository = registrationRequestRepository;
         this.registrationRequestMapper = registrationRequestMapper;
+        this.registrationRequestSpecificationFormer = registrationRequestSpecificationFormer;
         this.userRepository = userRepository;
     }
 
@@ -51,7 +52,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
     }
 
     private Page<RegistrationRequest> getFilteredRegistrationRequests(Pageable pageable, FilterRequest filterRequest) {
-        Specification<RegistrationRequest> registrationRequestSpecification = RegistrationRequestSpecificationFormer.formTableSpecification(filterRequest);
+        Specification<RegistrationRequest> registrationRequestSpecification = registrationRequestSpecificationFormer.formTableSpecification(filterRequest);
         return registrationRequestRepository.findAll(registrationRequestSpecification, pageable);
     }
 

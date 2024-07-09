@@ -33,14 +33,17 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final UserRepository userRepository;
     private final InvoiceMapper invoiceMapper;
+    private final InvoiceSpecificationFormer invoiceSpecificationFormer;
     private final UploadFileUtil uploadFileUtil;
     private final Logger logger = LogManager.getLogger(InvoiceServiceImpl.class);
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, UserRepository userRepository,
-                              InvoiceMapper invoiceMapper, UploadFileUtil uploadFileUtil) {
+                              InvoiceMapper invoiceMapper, InvoiceSpecificationFormer invoiceSpecificationFormer,
+                              UploadFileUtil uploadFileUtil) {
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
         this.invoiceMapper = invoiceMapper;
+        this.invoiceSpecificationFormer = invoiceSpecificationFormer;
         this.uploadFileUtil = uploadFileUtil;
     }
 
@@ -68,7 +71,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private Page<Invoice> getFilteredInvoices(FilterRequest filterRequest, Pageable pageable) {
-        Specification<Invoice> invoiceSpecification = InvoiceSpecificationFormer.formSpecification(filterRequest);
+        Specification<Invoice> invoiceSpecification = invoiceSpecificationFormer.formTableSpecification(filterRequest);
         return invoiceRepository.findAll(invoiceSpecification, pageable);
     }
 

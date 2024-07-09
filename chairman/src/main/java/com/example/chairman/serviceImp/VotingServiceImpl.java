@@ -30,14 +30,19 @@ public class VotingServiceImpl implements VotingService {
     private final VotingFormRepository votingFormRepository;
     private final VotingFormMapper votingFormMapper;
     private final VoteRepository voteRepository;
+    private final VotingFormSpecificationFormer votingFormSpecificationFormer;
+    private final VoteSpecificationFormer voteSpecificationFormer;
     private final ScheduleService scheduleService;
     private final Logger logger = LogManager.getLogger(VotingServiceImpl.class);
 
     public VotingServiceImpl(VotingFormRepository votingFormRepository, VotingFormMapper votingFormMapper,
-                             VoteRepository voteRepository, ScheduleService scheduleService) {
+                             VoteRepository voteRepository, VotingFormSpecificationFormer votingFormSpecificationFormer,
+                             VoteSpecificationFormer voteSpecificationFormer, ScheduleService scheduleService) {
         this.votingFormRepository = votingFormRepository;
         this.votingFormMapper = votingFormMapper;
         this.voteRepository = voteRepository;
+        this.votingFormSpecificationFormer = votingFormSpecificationFormer;
+        this.voteSpecificationFormer = voteSpecificationFormer;
         this.scheduleService = scheduleService;
     }
 
@@ -100,8 +105,8 @@ public class VotingServiceImpl implements VotingService {
     }
 
     private Page<VotingForm> getFilteredVotingForms(FilterRequest filterRequest, Pageable pageable) {
-        Specification<VotingForm> votingFormSpecification = VotingFormSpecificationFormer
-                .formSpecification(filterRequest);
+        Specification<VotingForm> votingFormSpecification = votingFormSpecificationFormer
+                .formTableSpecification(filterRequest);
         return votingFormRepository.findAll(votingFormSpecification, pageable);
     }
 
@@ -129,7 +134,7 @@ public class VotingServiceImpl implements VotingService {
     }
 
     private Page<Vote> getFilteredVotes(Long id, UsersFilterRequest usersFilterRequest, Pageable pageable) {
-        Specification<Vote> voteSpecification = VoteSpecificationFormer.formSpecification(id, usersFilterRequest);
+        Specification<Vote> voteSpecification = voteSpecificationFormer.formTableSpecification(id, usersFilterRequest);
         return voteRepository.findAll(voteSpecification, pageable);
     }
 

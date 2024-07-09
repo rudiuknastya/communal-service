@@ -3,11 +3,12 @@ package com.example.chairman.specification.specificationFormer;
 import com.example.chairman.entity.Invoice;
 import com.example.chairman.model.invoice.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.chairman.specification.InvoiceSpecification.*;
-
+@Component
 public class InvoiceSpecificationFormer {
-    public static Specification<Invoice> formSpecification(FilterRequest filterRequest){
+    public Specification<Invoice> formTableSpecification(FilterRequest filterRequest){
         Specification<Invoice> invoiceSpecification = Specification.where(byDeleted());
         if (!filterRequest.number().isEmpty()){
             invoiceSpecification = invoiceSpecification.and(byNumber(filterRequest.number()));

@@ -4,11 +4,12 @@ package com.example.chairman.specification.specificationFormer;
 import com.example.chairman.entity.House;
 import com.example.chairman.model.general.SelectSearchRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.chairman.specification.HouseSpecification.*;
-
+@Component
 public class HouseSpecificationFormer {
-    public static Specification<House> formCitySelectSpecification(SelectSearchRequest selectSearchRequest){
+    public Specification<House> formCitySelectSpecification(SelectSearchRequest selectSearchRequest){
         Specification<House> houseSpecification = Specification.where(null);
         if(!selectSearchRequest.search().isEmpty()){
             houseSpecification = houseSpecification.and(byCityLike(selectSearchRequest.search()));
@@ -16,7 +17,7 @@ public class HouseSpecificationFormer {
         houseSpecification = houseSpecification.and(groupByCity());
         return houseSpecification;
     }
-    public static Specification<House> formStreetSelectSpecification(SelectSearchRequest selectSearchRequest,
+    public Specification<House> formStreetSelectSpecification(SelectSearchRequest selectSearchRequest,
                                                                      String city, String number){
         Specification<House> houseSpecification = Specification.where(byCityEquals(city));
         if(!selectSearchRequest.search().isEmpty()){
@@ -29,7 +30,7 @@ public class HouseSpecificationFormer {
         }
         return houseSpecification;
     }
-    public static Specification<House> formNumberSelectSpecification(SelectSearchRequest selectSearchRequest,
+    public Specification<House> formNumberSelectSpecification(SelectSearchRequest selectSearchRequest,
                                                                      String city, String street){
         Specification<House> houseSpecification = Specification.where(byDeleted().and(byCityEquals(city)));
         if(!selectSearchRequest.search().isEmpty()){

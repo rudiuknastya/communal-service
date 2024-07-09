@@ -3,10 +3,12 @@ package com.example.chairman.specification.specificationFormer;
 import com.example.chairman.entity.Message;
 import com.example.chairman.model.message.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.chairman.specification.MessageSpecification.*;
+@Component
 public class MessageSpecificationFormer {
-    public static Specification<Message> formSpecification(FilterRequest filterRequest){
+    public Specification<Message> formTableSpecification(FilterRequest filterRequest){
         Specification<Message> messageSpecification = Specification.where(byDeleted());
         if(!filterRequest.fullName().isEmpty()){
             String[] fullName = filterRequest.fullName().split(" ");
