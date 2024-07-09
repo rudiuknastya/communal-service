@@ -51,11 +51,11 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public VotingFormDto getVotingFormDto(Long id) {
-        logger.info("getVotingFormDto - Getting voting form dto by id "+id);
+    public VotingFormDto getVotingFormForEdit(Long id) {
+        logger.info("getVotingFormForEdit - Getting voting form dto for edit by id "+id);
         VotingForm votingForm = getVotingForm(id);
         VotingFormDto votingFormDto = votingFormMapper.votingFormToVotingFormDto(votingForm);
-        logger.info("getVotingFormDto - Voting form dto has been got");
+        logger.info("getVotingFormForEdit - Voting form dto for edit has been got");
         return votingFormDto;
     }
 

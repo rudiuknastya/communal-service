@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -76,7 +76,7 @@ public class ChairmanPasswordResetTokenServiceImpl implements ChairmanPasswordRe
         boolean isValid = chairmanPasswordResetToken.isPresent()
                 && !chairmanPasswordResetToken.get().isUsed()
                 && !chairmanPasswordResetToken.get().getExpirationDate()
-                .isBefore(Instant.now());
+                .isBefore(LocalDateTime.now());
         logger.info("isPasswordResetTokenValid - Password reset token has been checked");
         return isValid;
     }

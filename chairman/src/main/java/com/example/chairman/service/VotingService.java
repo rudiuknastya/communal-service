@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 public interface VotingService {
     void createVotingForm(VotingFormDto votingFormDto);
-    VotingFormDto getVotingFormDto(Long id);
+    VotingFormDto getVotingFormForEdit(Long id);
     void updateVotingForm(VotingFormDto votingFormDto, Long id);
     Page<TableVotingFormResponse> getVotingFormResponsesForTable(FilterRequest filterRequest);
     ViewVotingFormResponse getViewVotingFormResponse(Long id);

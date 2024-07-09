@@ -42,7 +42,6 @@ public class ChatController {
     public @ResponseBody Page<ChatMessageResponse> getChatMessages(PageRequest pageRequest,
                                                                    @PathVariable("userId") Long userId,
                                                                    @PathVariable("chairmanId") Long chairmanId){
-        System.out.println(pageRequest.toString());
         return chatMessageService.getChatMessages(pageRequest, userId, chairmanId);
     }
     @MessageMapping("/chat")

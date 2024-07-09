@@ -52,18 +52,18 @@ public class VotingController {
         return new ModelAndView("voting/edit-voting-form");
     }
     @GetMapping("/edit/get/{id}")
-    public @ResponseBody VotingFormDto getVotingFormForEDIT(@PathVariable Long id){
-        return votingService.getVotingFormDto(id);
+    public @ResponseBody VotingFormDto getVotingFormForEdit(@PathVariable Long id){
+        return votingService.getVotingFormForEdit(id);
     }
     @PostMapping("/edit/{id}")
-    public @ResponseBody ResponseEntity<?> getEditVotingFormPage(@PathVariable Long id,
+    public @ResponseBody ResponseEntity<?> updateVotingForm(@PathVariable Long id,
                                                                  @Valid @ModelAttribute
                                                                  VotingFormDto votingFormDto){
         votingService.updateVotingForm(votingFormDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ModelAndView getVotingFormForViewPage(){
+    public ModelAndView getViewVotingFormPage(){
         return new ModelAndView("voting/view-voting-form");
     }
 

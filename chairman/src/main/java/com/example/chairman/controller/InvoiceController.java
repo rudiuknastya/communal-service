@@ -39,7 +39,7 @@ public class InvoiceController {
         return new ModelAndView("invoices/create-invoice");
     }
     @GetMapping("/get-users")
-    public @ResponseBody Page<UserNameResponse> getUsers(SelectSearchRequest selectSearchRequest){
+    public @ResponseBody Page<UserNameResponse> getUsersForSelect(SelectSearchRequest selectSearchRequest){
         return userService.getUserNameResponses(selectSearchRequest);
     }
     @GetMapping("/get-number")

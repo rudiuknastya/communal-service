@@ -21,7 +21,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         this.scheduler = scheduler;
     }
     @PostConstruct
-    private void init(){
+    private void startScheduler(){
         try {
             scheduler.start();
         } catch (SchedulerException e) {
@@ -29,7 +29,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
     @PreDestroy
-    private void preDestroy(){
+    private void shutScheduler(){
         try {
             scheduler.shutdown();
         } catch (SchedulerException e) {

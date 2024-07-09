@@ -36,7 +36,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendToken(String token, EmailRequest emailRequest ) {
+    public void sendChairmanPasswordResetToken(String token, EmailRequest emailRequest ) {
         logger.info("sendToken() - Sending token " + token + " to email " + emailRequest.email());
         String subject = "Встановлення нового паролю";
         Content content = new Content("text/html", buildContent(token));

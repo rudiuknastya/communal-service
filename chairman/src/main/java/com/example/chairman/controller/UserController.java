@@ -53,17 +53,17 @@ public class UserController {
         return UserStatus.values();
     }
     @GetMapping("/get-cities")
-    public @ResponseBody Page<String> getCities(SelectSearchRequest selectSearchRequest){
+    public @ResponseBody Page<String> getHouseCities(SelectSearchRequest selectSearchRequest){
         return houseService.getCities(selectSearchRequest);
     }
     @GetMapping("/get-streets")
-    public @ResponseBody Page<String> getStreets(SelectSearchRequest selectSearchRequest,
+    public @ResponseBody Page<String> getHouseStreets(SelectSearchRequest selectSearchRequest,
                                                  @RequestParam("city") String city,
                                                  @RequestParam(name = "number", required = false) String number){
         return houseService.getStreets(selectSearchRequest, city, number);
     }
     @GetMapping("/get-numbers")
-    public @ResponseBody Page<String> getNumber(SelectSearchRequest selectSearchRequest,
+    public @ResponseBody Page<String> getHouseNumbers(SelectSearchRequest selectSearchRequest,
                                                              @RequestParam("city") String city,
                                                              @RequestParam(name = "street", required = false) String street){
         return houseService.getNumbers(selectSearchRequest, city, street);

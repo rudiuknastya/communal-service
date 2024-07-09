@@ -4,7 +4,6 @@ import com.example.chairman.model.authentication.EmailRequest;
 import com.example.chairman.model.authentication.ForgotPasswordRequest;
 import com.example.chairman.service.ChairmanPasswordResetTokenService;
 import com.example.chairman.service.MailService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +47,7 @@ public class AuthenticationController {
     @PostMapping("/forgotPassword")
     public @ResponseBody ResponseEntity<?> sendPasswordResetToken(@Valid EmailRequest emailRequest) {
         String token = passwordResetTokenService.createOrUpdatePasswordResetToken(emailRequest);
-        mailService.sendToken(token,emailRequest);
+        mailService.sendChairmanPasswordResetToken(token,emailRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/sentToken")
@@ -61,7 +60,7 @@ public class AuthenticationController {
         }
     }
     @GetMapping("/changePassword")
-    public ModelAndView changePassword(@RequestParam("token")String token){
+    public ModelAndView getChangePasswordPage(@RequestParam("token")String token){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             if (passwordResetTokenService.isPasswordResetTokenValid(token)) {
@@ -77,7 +76,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/changePassword")
-    public @ResponseBody ResponseEntity<?> setNewPassword(@RequestParam("token")String token,
+    public @ResponseBody ResponseEntity<?> changePassword(@RequestParam("token")String token,
                                                           @Valid @ModelAttribute ForgotPasswordRequest forgotPasswordRequest){
         if(passwordResetTokenService.isPasswordResetTokenValid(token)){
             passwordResetTokenService.updatePassword(token, forgotPasswordRequest.password());
