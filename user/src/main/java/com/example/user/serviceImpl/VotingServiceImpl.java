@@ -4,11 +4,11 @@ import com.example.user.entity.*;
 import com.example.user.entity.enums.UserVote;
 import com.example.user.entity.enums.VotingStatus;
 import com.example.user.mapper.VotingFormMapper;
+import com.example.user.model.user.MyUserDetails;
 import com.example.user.model.voting.ActiveVotingResponse;
 import com.example.user.model.voting.ClosedVotingResponse;
 import com.example.user.model.voting.FilterRequest;
 import com.example.user.model.voting.TableVotingFormResponse;
-import com.example.user.repository.UserRepository;
 import com.example.user.repository.VoteRepository;
 import com.example.user.repository.VotingFormRepository;
 import com.example.user.service.VotingService;
@@ -33,16 +33,16 @@ import java.util.Optional;
 public class VotingServiceImpl implements VotingService {
     private final VotingFormRepository votingFormRepository;
     private final VoteRepository voteRepository;
-    private final UserRepository userRepository;
     private final VotingFormMapper votingFormMapper;
+    private final VotingFormSpecificationFormer votingFormSpecificationFormer;
     private final Logger logger = LogManager.getLogger(VotingServiceImpl.class);
 
     public VotingServiceImpl(VotingFormRepository votingFormRepository, VoteRepository voteRepository,
-                             UserRepository userRepository, VotingFormMapper votingFormMapper) {
+                             VotingFormMapper votingFormMapper, VotingFormSpecificationFormer votingFormSpecificationFormer) {
         this.votingFormRepository = votingFormRepository;
         this.voteRepository = voteRepository;
-        this.userRepository = userRepository;
         this.votingFormMapper = votingFormMapper;
+        this.votingFormSpecificationFormer = votingFormSpecificationFormer;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class VotingServiceImpl implements VotingService {
         }
         return tableVotingFormResponses;
     }
-    String getVoted(Long id){
+    private String getVoted(Long id){
         Long agreeVotesCount = voteRepository.getAgreeVoteCountByVotingFormId(id);
         Long disagreeVotesCount = voteRepository.getDisagreeVoteCountByVotingFormId(id);
         Long abstainVotesCount = voteRepository.getAbstainVoteCountByVotingFormId(id);
@@ -81,8 +81,8 @@ public class VotingServiceImpl implements VotingService {
     }
 
     private Page<VotingForm> getFilteredVotingForms(FilterRequest filterRequest, Pageable pageable) {
-        Specification<VotingForm> votingFormSpecification = VotingFormSpecificationFormer
-                .formSpecification(filterRequest);
+        Specification<VotingForm> votingFormSpecification = votingFormSpecificationFormer
+                .formTableSpecification(filterRequest);
         return votingFormRepository.findAll(votingFormSpecification, pageable);
     }
 
@@ -103,7 +103,7 @@ public class VotingServiceImpl implements VotingService {
         Optional<Vote> voteOptional = voteRepository.findByVotingFormIdAndUserUsername(id, username);
         if(voteOptional.isEmpty()){
             VotingForm votingForm = getVotingFormById(id);
-            User user = userRepository.findByUsernameAndDeletedIsFalse(username).orElseThrow(()-> new EntityNotFoundException("User was not found by username "+username));
+            User user = getAuthenticatedUser();
             Vote vote = votingFormMapper.createVote(votingForm, user, userVote);
             voteRepository.save(vote);
         } else {
@@ -148,5 +148,9 @@ public class VotingServiceImpl implements VotingService {
     private String getAuthenticatedUserUsername() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userDetails.getUsername();
+    }
+    private User getAuthenticatedUser(){
+        MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return myUserDetails.getUser();
     }
 }

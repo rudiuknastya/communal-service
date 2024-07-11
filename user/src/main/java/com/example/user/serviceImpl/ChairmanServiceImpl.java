@@ -22,10 +22,14 @@ import java.util.List;
 public class ChairmanServiceImpl implements ChairmanService {
     private final ChairmanRepository chairmanRepository;
     private final ChairmanMapper chairmanMapper;
+    private final ChairmanSpecificationFormer chairmanSpecificationFormer;
     private final Logger logger = LogManager.getLogger(ChairmanServiceImpl.class);
-    public ChairmanServiceImpl(ChairmanRepository chairmanRepository, ChairmanMapper chairmanMapper) {
+
+    public ChairmanServiceImpl(ChairmanRepository chairmanRepository, ChairmanMapper chairmanMapper,
+                               ChairmanSpecificationFormer chairmanSpecificationFormer) {
         this.chairmanRepository = chairmanRepository;
         this.chairmanMapper = chairmanMapper;
+        this.chairmanSpecificationFormer = chairmanSpecificationFormer;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class ChairmanServiceImpl implements ChairmanService {
         return chairmanResponsePage;
     }
     private Page<Chairman> getFilteredChairmen(Pageable pageable, SelectSearchRequest selectSearchRequest){
-        Specification<Chairman> chairmanSpecification = ChairmanSpecificationFormer.formSelectSpecification(selectSearchRequest);
+        Specification<Chairman> chairmanSpecification = chairmanSpecificationFormer.formSelectSpecification(selectSearchRequest);
         return chairmanRepository.findAll(chairmanSpecification, pageable);
     }
 }

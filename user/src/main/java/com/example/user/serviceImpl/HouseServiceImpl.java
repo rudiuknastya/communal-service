@@ -22,17 +22,21 @@ import java.util.List;
 public class HouseServiceImpl implements HouseService {
     private final HouseRepository houseRepository;
     private final HouseMapper houseMapper;
+    private final HouseSpecificationFormer houseSpecificationFormer;
     private final Logger logger = LogManager.getLogger(HouseServiceImpl.class);
-    public HouseServiceImpl(HouseRepository houseRepository, HouseMapper houseMapper) {
+
+    public HouseServiceImpl(HouseRepository houseRepository, HouseMapper houseMapper,
+                            HouseSpecificationFormer houseSpecificationFormer) {
         this.houseRepository = houseRepository;
         this.houseMapper = houseMapper;
+        this.houseSpecificationFormer = houseSpecificationFormer;
     }
 
     @Override
     public Page<String> getCitiesForSelect(SelectSearchRequest selectSearchRequest) {
         logger.info("getCitiesForSelect - Getting cities for select "+selectSearchRequest.toString());
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Specification<House> houseSpecification = HouseSpecificationFormer
+        Specification<House> houseSpecification = houseSpecificationFormer
                 .formCitySelectSpecification(selectSearchRequest);
         Page<House> housePage = houseRepository.findAll(houseSpecification, pageable);
         List<String> cities = houseMapper.houseListToCityStringList(housePage.getContent());
@@ -45,7 +49,7 @@ public class HouseServiceImpl implements HouseService {
     public Page<String> getStreetsForSelect(SelectSearchRequest selectSearchRequest, String city, String number) {
         logger.info("getStreetsForSelect - Getting streets for select "+selectSearchRequest.toString()+" city: "+city+" number: "+number);
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Specification<House> houseSpecification = HouseSpecificationFormer
+        Specification<House> houseSpecification = houseSpecificationFormer
                 .formStreetSelectSpecification(selectSearchRequest, city, number);
         Page<House> housePage = houseRepository.findAll(houseSpecification,pageable);
         List<String> streets = houseMapper.houseListToStreetStringList(housePage.getContent());
@@ -58,7 +62,7 @@ public class HouseServiceImpl implements HouseService {
     public Page<HouseNumberResponse> getNumbersForSelect(SelectSearchRequest selectSearchRequest, String city, String street) {
         logger.info("getNumbers - Getting numbers for select "+selectSearchRequest.toString()+" city: "+city+" street: "+street);
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Specification<House> houseSpecification = HouseSpecificationFormer
+        Specification<House> houseSpecification = houseSpecificationFormer
                 .formNumberSelectSpecification(selectSearchRequest, city, street);
         Page<House> housePage = houseRepository.findAll(houseSpecification, pageable);
         List<HouseNumberResponse> houseNumberResponses = houseMapper.houseListToHouseNumberResponseList(housePage.getContent());

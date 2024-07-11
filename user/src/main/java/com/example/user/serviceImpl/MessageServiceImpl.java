@@ -8,9 +8,9 @@ import com.example.user.model.messages.FilterRequest;
 import com.example.user.model.messages.MessageRequest;
 import com.example.user.model.messages.TableMessageResponse;
 import com.example.user.model.messages.ViewMessageResponse;
+import com.example.user.model.user.MyUserDetails;
 import com.example.user.repository.ChairmanRepository;
 import com.example.user.repository.MessageRepository;
-import com.example.user.repository.UserRepository;
 import com.example.user.service.MessageService;
 import com.example.user.specification.specificationFormer.MessageSpecificationFormer;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,16 +32,16 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final ChairmanRepository chairmanRepository;
-    private final UserRepository userRepository;
     private final MessageMapper messageMapper;
+    private final MessageSpecificationFormer messageSpecificationFormer;
     private final Logger logger = LogManager.getLogger(MessageServiceImpl.class);
 
     public MessageServiceImpl(MessageRepository messageRepository, ChairmanRepository chairmanRepository,
-                              UserRepository userRepository, MessageMapper messageMapper) {
+                              MessageMapper messageMapper, MessageSpecificationFormer messageSpecificationFormer) {
         this.messageRepository = messageRepository;
         this.chairmanRepository = chairmanRepository;
-        this.userRepository = userRepository;
         this.messageMapper = messageMapper;
+        this.messageSpecificationFormer = messageSpecificationFormer;
     }
 
     @Override
@@ -57,9 +56,8 @@ public class MessageServiceImpl implements MessageService {
         logger.info("createMessage() - Message has been created");
     }
     private User getAuthenticatedUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsernameAndDeletedIsFalse(userDetails.getUsername()).orElseThrow(()-> new EntityNotFoundException("User was not found by username "+userDetails.getUsername()));
-        return user;
+        MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return myUserDetails.getUser();
     }
 
     @Override
@@ -92,7 +90,7 @@ public class MessageServiceImpl implements MessageService {
         return messageResponsePage;
     }
     private Page<Message> getFilteredMessages(FilterRequest filterRequest, Pageable pageable){
-        Specification<Message> messageSpecification = MessageSpecificationFormer.formSpecification(filterRequest);
+        Specification<Message> messageSpecification = messageSpecificationFormer.formTableSpecification(filterRequest);
         return messageRepository.findAll(messageSpecification, pageable);
     }
 

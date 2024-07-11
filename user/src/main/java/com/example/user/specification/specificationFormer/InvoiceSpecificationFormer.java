@@ -4,11 +4,12 @@ import com.example.user.entity.Invoice;
 import com.example.user.entity.User;
 import com.example.user.model.invoice.FilterRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.user.specification.InvoiceSpecification.*;
-
+@Component
 public class InvoiceSpecificationFormer {
-    public static Specification<Invoice> formSpecification(FilterRequest filterRequest, User user){
+    public Specification<Invoice> formTableSpecification(FilterRequest filterRequest, User user){
         Specification<Invoice> invoiceSpecification = Specification.where(byDeleted()).and(byUser(user));
         if (!filterRequest.number().isEmpty()){
             invoiceSpecification = invoiceSpecification.and(byNumber(filterRequest.number()));

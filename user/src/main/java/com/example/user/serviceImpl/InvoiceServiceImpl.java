@@ -28,12 +28,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final UserRepository userRepository;
     private final InvoiceMapper invoiceMapper;
+    private final InvoiceSpecificationFormer invoiceSpecificationFormer;
     private final Logger logger = LogManager.getLogger(InvoiceServiceImpl.class);
+
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, UserRepository userRepository,
-                              InvoiceMapper invoiceMapper) {
+                              InvoiceMapper invoiceMapper, InvoiceSpecificationFormer invoiceSpecificationFormer) {
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
         this.invoiceMapper = invoiceMapper;
+        this.invoiceSpecificationFormer = invoiceSpecificationFormer;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private Page<Invoice> getFilteredInvoices(FilterRequest filterRequest, Pageable pageable) {
         User user = getAuthenticatedUser();
-        Specification<Invoice> invoiceSpecification = InvoiceSpecificationFormer.formSpecification(filterRequest, user);
+        Specification<Invoice> invoiceSpecification = invoiceSpecificationFormer.formTableSpecification(filterRequest, user);
         return invoiceRepository.findAll(invoiceSpecification, pageable);
     }
 

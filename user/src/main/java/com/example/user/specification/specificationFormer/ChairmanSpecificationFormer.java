@@ -3,11 +3,12 @@ package com.example.user.specification.specificationFormer;
 import com.example.user.entity.Chairman;
 import com.example.user.model.general.SelectSearchRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import static com.example.user.specification.ChairmanSpecification.*;
-
+@Component
 public class ChairmanSpecificationFormer {
-    public static Specification<Chairman> formSelectSpecification(SelectSearchRequest selectSearchRequest) {
+    public Specification<Chairman> formSelectSpecification(SelectSearchRequest selectSearchRequest) {
         Specification<Chairman> chairmanSpecification = Specification.where(byDeleted());
         if (!selectSearchRequest.search().isEmpty()){
             String[] fullName = selectSearchRequest.search().split(" ");
