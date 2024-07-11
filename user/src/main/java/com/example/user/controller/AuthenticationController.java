@@ -71,7 +71,7 @@ public class AuthenticationController {
         }
     }
     @GetMapping("/changePassword")
-    public ModelAndView changePassword(@RequestParam("token")String token){
+    public ModelAndView getChangePasswordPage(@RequestParam("token")String token){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             if (passwordResetTokenService.isPasswordResetTokenValid(token)) {
@@ -87,7 +87,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/changePassword")
-    public @ResponseBody ResponseEntity<?> setNewPassword(@RequestParam("token")String token,
+    public @ResponseBody ResponseEntity<?> changePassword(@RequestParam("token")String token,
                                                           @Valid @ModelAttribute ForgotPasswordRequest forgotPasswordRequest){
         if(passwordResetTokenService.isPasswordResetTokenValid(token)){
             passwordResetTokenService.updatePassword(token, forgotPasswordRequest.password());
@@ -128,17 +128,17 @@ public class AuthenticationController {
         return new ModelAndView("authentication/registration-success");
     }
     @GetMapping("/register/get-cities")
-    public @ResponseBody Page<String> getCitiesForRegistration(SelectSearchRequest selectSearchRequest) {
+    public @ResponseBody Page<String> getHouseCitiesForRegistration(SelectSearchRequest selectSearchRequest) {
         return houseService.getCitiesForSelect(selectSearchRequest);
     }
     @GetMapping("/register/get-streets")
-    public @ResponseBody Page<String> getStreetsForRegistration(SelectSearchRequest selectSearchRequest,
+    public @ResponseBody Page<String> getHouseStreetsForRegistration(SelectSearchRequest selectSearchRequest,
                                                                 @RequestParam("city") String city,
                                                                 @RequestParam(name = "number", required = false) String number) {
         return houseService.getStreetsForSelect(selectSearchRequest, city, number);
     }
     @GetMapping("/register/get-numbers")
-    public @ResponseBody Page<HouseNumberResponse> getNumber(SelectSearchRequest selectSearchRequest,
+    public @ResponseBody Page<HouseNumberResponse> getHouseNumbersForRegistration(SelectSearchRequest selectSearchRequest,
                                                              @RequestParam("city") String city,
                                                              @RequestParam(name = "street", required = false) String street){
         return houseService.getNumbersForSelect(selectSearchRequest, city, street);
