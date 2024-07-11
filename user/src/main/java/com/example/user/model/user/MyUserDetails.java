@@ -66,4 +66,5 @@ public class MyUserDetails implements UserDetails {
     public String getAvatar(){
         return user.getAvatar();
     }
+    public User getUser(){return user;}
 }
