@@ -19,6 +19,7 @@ public interface UserMapper {
     @Mapping(target = "house", source = "house")
     @Mapping(target = "status", source = "status")
     @Mapping(target = "avatar", source = "avatar")
+    @Mapping(target = "password", source = "encodedPassword")
     User registerRequestToUser(RegisterRequest registerRequest, House house,
-                               UserStatus status, String avatar);
+                               UserStatus status, String avatar, String encodedPassword);
 }

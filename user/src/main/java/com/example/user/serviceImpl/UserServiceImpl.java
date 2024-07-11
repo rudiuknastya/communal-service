@@ -13,6 +13,7 @@ import com.example.user.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,16 +22,18 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final HouseRepository houseRepository;
     private final RegistrationRequestService registrationRequestService;
+    private final PasswordEncoder passwordEncoder;
     private final UploadFileUtil uploadFileUtil;
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper,
                            HouseRepository houseRepository, RegistrationRequestService registrationRequestService,
-                           UploadFileUtil uploadFileUtil) {
+                           PasswordEncoder passwordEncoder, UploadFileUtil uploadFileUtil) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.houseRepository = houseRepository;
         this.registrationRequestService = registrationRequestService;
+        this.passwordEncoder = passwordEncoder;
         this.uploadFileUtil = uploadFileUtil;
     }
 
@@ -39,7 +42,8 @@ public class UserServiceImpl implements UserService {
         logger.info("register - Registering user "+registerRequest.toString());
         House house = houseRepository.findById(registerRequest.houseId()).orElseThrow(()-> new EntityNotFoundException("House was not found by id "+registerRequest.houseId()));
         String avatar = uploadFileUtil.saveDefaultAvatar();
-        User user = userMapper.registerRequestToUser(registerRequest, house, UserStatus.NEW, avatar);
+        User user = userMapper.registerRequestToUser(registerRequest, house, UserStatus.NEW,
+                avatar, passwordEncoder.encode(registerRequest.password()));
         User savedUser = userRepository.save(user);
         registrationRequestService.createRegistrationRequest(savedUser, house.getChairman());
         logger.info("register - User has been registered");
