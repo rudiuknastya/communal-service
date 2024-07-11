@@ -3,6 +3,7 @@ package com.example.user.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
@@ -14,7 +15,7 @@ public class ChairmanPasswordResetToken {
     @Column(unique = true, nullable = false)
     private String token;
     @Column(nullable = false)
-    private Instant expirationDate;
+    private LocalDateTime expirationDate;
     private boolean used;
     private static final int EXPIRATION = 20;
     @OneToOne
@@ -49,11 +50,11 @@ public class ChairmanPasswordResetToken {
         this.expirationDate = calculateExpirationDate();
     }
 
-    public Instant getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
-    private Instant calculateExpirationDate(){
-        return Instant.now().plus(EXPIRATION, ChronoUnit.MINUTES);
+    private LocalDateTime calculateExpirationDate(){
+        return LocalDateTime.now().plusMinutes(EXPIRATION);
     }
 
     public boolean isUsed() {
