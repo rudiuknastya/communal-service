@@ -25,17 +25,6 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public void uploadMultipartFile(String keyName, MultipartFile file) {
-        logger.info("uploadMultipartFile() - Uploading multipart file "+file.getOriginalFilename());
-        try {
-            amazonS3.putObject(bucketName, keyName, file.getInputStream(), null);
-            logger.info("uploadMultipartFile() - Multipart file has been uploaded");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    @Override
     public void uploadFile(String name, File file) {
         logger.info("uploadFile() - Uploading file "+file.getName());
         try {
@@ -52,12 +41,5 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
         S3Object s3Object = amazonS3.getObject(bucketName, fileName);
         logger.info("getFile() - File has been got");
         return s3Object;
-    }
-
-    @Override
-    public void deleteFile(String fileName) {
-        logger.info("getFile() - Deleting file "+fileName);
-        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
-        logger.info("getFile() - File has been deleted");
     }
 }
