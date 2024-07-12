@@ -6,4 +6,5 @@ import org.springframework.data.domain.Page;
 
 public interface InvoiceService {
     Page<TableInvoiceResponse> getInvoiceResponsesForTable(FilterRequest filterRequest);
+    String getInvoiceFile(Long id);
 }

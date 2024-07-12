@@ -62,6 +62,9 @@ function drawTable(response) {
                                     <button type="button" class="dropdown-item" onclick="printRow(this)">
                                         <i class="ti ti-printer me-1"></i>Роздрукувати
                                     </button>
+                                    <button type="button" class="dropdown-item" onclick="getFile(${invoice.id}, '${invoice.number}')">
+                                        <i class="ti ti-eye me-1"></i>Переглянути файл
+                                    </button>
                                     <button type="button" class="dropdown-item btn justify-content-start" onclick="toExcel(this)">
                                         <i class="ti ti-download me-1"></i>Завантажити в Excel
                                     </button>
@@ -199,3 +202,44 @@ $("#filter-by-creationDateTo").on("change", function () {
     }
     getInvoices(0);
 });
+function getFile(id, number) {
+    $.ajax({
+        type: "GET",
+        url: "invoices/get-file/"+id,
+        data: request,
+        success: function (response) {
+            console.log(response);
+            openViewModal(response, number);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+function openViewModal(file, number) {
+    let fileUrl = "data:application/pdf;base64,"+file+"#toolbar=0";
+    if($("#viewInvoiceModal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="viewInvoiceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <h4 class="text-center">Квитанція № ${number}</h4>
+                     <embed src="${fileUrl}" width="500" height="450" type="application/pdf">
+
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#viewInvoiceModal').modal('show');
+
+}
