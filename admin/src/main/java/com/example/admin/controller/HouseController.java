@@ -5,6 +5,7 @@ import com.example.admin.model.general.SelectSearchRequest;
 import com.example.admin.model.houses.*;
 import com.example.admin.service.ChairmanService;
 import com.example.admin.service.HouseService;
+import com.example.admin.service.NovaPostService;
 import com.example.admin.validation.general.groups.Create;
 import com.example.admin.validation.general.groups.Edit;
 import org.springframework.data.domain.Page;
@@ -19,10 +20,13 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/houses")
 public class HouseController {
     private final ChairmanService chairmanService;
+    private final NovaPostService novaPostService;
     private final HouseService houseService;
 
-    public HouseController(ChairmanService chairmanService, HouseService houseService) {
+    public HouseController(ChairmanService chairmanService, NovaPostService novaPostService,
+                           HouseService houseService) {
         this.chairmanService = chairmanService;
+        this.novaPostService = novaPostService;
         this.houseService = houseService;
     }
 
@@ -86,4 +90,13 @@ public class HouseController {
     public @ResponseBody boolean checkIfPossibleToDelete(@PathVariable Long id) {
         return houseService.checkIfPossibleToDelete(id);
     }
+    @GetMapping("/get-cities")
+    public @ResponseBody Page<CityResponse> getCities(SelectSearchRequest selectSearchRequest) {
+        return novaPostService.getCities(selectSearchRequest);
+    }
+    @GetMapping("/get-streets")
+    public @ResponseBody Page<StreetResponse> getStreets(SelectSearchRequest selectSearchRequest,@RequestParam("cityRef") String cityRef) {
+        return novaPostService.getStreets(selectSearchRequest, cityRef);
+    }
+
 }

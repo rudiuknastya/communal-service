@@ -1,26 +1,5 @@
 let url = window.location.pathname;
 let id = url.substring(url.lastIndexOf('/') + 1);
-let cityRequest = {
-    apiKey: apikey,
-    modelName: "Address",
-    calledMethod: "getCities",
-    methodProperties: {
-        FindByString: "",
-        Limit : "10",
-        Page : "0"
-    }
-}
-let streetRequest = {
-    apiKey: apikey,
-    modelName: "Address",
-    calledMethod: "getStreet",
-    methodProperties: {
-        CityRef: "",
-        FindByString: "",
-        Limit : "10",
-        Page : "0"
-    }
-}
 $(document).ready(function () {
     initializeSelects();
     getHouse();
@@ -39,23 +18,24 @@ function initializeCitySelect() {
         maximumInputLength: 100,
         placeholder: "Оберіть місто",
         ajax: {
-            type: "POST",
-            url: "https://api.novaposhta.ua/v2.0/json/",
+            type: "GET",
+            url: "../get-cities",
             data: function (params) {
-                cityRequest.methodProperties.Page = params.page || 1;
-                cityRequest.methodProperties.FindByString = params.term;
-                return JSON.stringify(cityRequest);
+                return {
+                    search: params.term,
+                    page: params.page || 1
+                };
             },
             processResults: function (response) {
                 return {
-                    results: $.map(response.data, function (item) {
+                    results: $.map(response.content, function (item) {
                         return {
-                            text: item.Description,
-                            id: item.Ref
+                            text: item.city,
+                            id: item.ref
                         }
                     }),
                     pagination: {
-                        more: (cityRequest.methodProperties.Page + 1) < response.info.totalCount
+                        more: (response.pageable.pageNumber + 1) < response.totalPages
                     }
                 };
             }
@@ -69,24 +49,26 @@ function initializeStreetSelect() {
         maximumInputLength: 100,
         placeholder: "Оберіть вулицю",
         ajax: {
-            type: "POST",
-            url: "https://api.novaposhta.ua/v2.0/json/",
+            type: "GET",
+            url: "../get-streets",
             data: function (params) {
-                streetRequest.methodProperties.Page = params.page || 1;
-                streetRequest.methodProperties.FindByString = params.term;
-                streetRequest.methodProperties.CityRef = $("#city").val();
-                return JSON.stringify(streetRequest);
+                return {
+                    search: params.term,
+                    page: params.page || 1,
+                    cityRef: $("#city").val()
+                };
             },
             processResults: function (response) {
+                console.log(response);
                 return {
-                    results: $.map(response.data, function (item) {
+                    results: $.map(response.content, function (item) {
                         return {
-                            text: item.Description,
-                            id: item.Description
+                            text: item.street,
+                            id: item.street
                         }
                     }),
                     pagination: {
-                        more: (streetRequest.methodProperties.Page + 1) < response.info.totalCount
+                        more: (response.pageable.pageNumber + 1) < response.totalPages
                     }
                 };
             }

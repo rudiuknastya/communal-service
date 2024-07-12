@@ -17,7 +17,7 @@ public class ChairmanPasswordResetToken {
     @Column(nullable = false)
     private LocalDateTime expirationDate;
     private boolean used;
-    private final int EXPIRATION = 20;
+    private static final int EXPIRATION = 20;
     @OneToOne
     @JoinColumn(nullable = false, name = "chairman_id", referencedColumnName = "id")
     private Chairman chairman;

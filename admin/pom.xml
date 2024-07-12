@@ -157,6 +157,11 @@
                 <version>1.6.4</version>
             </dependency>
         <!--Password generator -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+        </dependency>
     </dependencies>
 
     <build>
